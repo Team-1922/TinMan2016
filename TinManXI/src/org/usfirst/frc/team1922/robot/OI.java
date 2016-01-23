@@ -2,32 +2,36 @@ package org.usfirst.frc.team1922.robot;
 
 import edu.wpi.first.wpilibj.buttons.Button;
 
+import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
-import org.usfirst.frc.team1922.robot.commands.ExampleCommand;
 import org.w3c.dom.Document;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI extends ConfigurableClass{
+public class OI implements CfgInterface{
 
-	public OI(String uniqueName) {
-		super(uniqueName);
-		// TODO Auto-generated constructor stub
-	}
-
+	private ConfigurableClass mCfgClass = new ConfigurableClass("OI", this);
+	
 	@Override
-	protected boolean DeserializeInternal() {
+	public boolean DeserializeInternal() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	protected void SerializeInternal(Document doc) {
+	public void SerializeInternal(Document doc) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public ConfigurableClass GetCfgClass() {
+		return mCfgClass;
+	}
+
+
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
