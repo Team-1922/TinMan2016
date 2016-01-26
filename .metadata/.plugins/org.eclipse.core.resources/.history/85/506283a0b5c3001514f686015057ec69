@@ -1,0 +1,79 @@
+package org.usfirst.frc.team1922.robot.subsystems;
+
+import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
+import org.w3c.dom.Document;
+
+import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.ozram1922.cfg.CfgInterface;
+import org.ozram1922.cfg.ConfigurableClass;
+/**
+ *
+ */
+
+//TODO: deal with multiple inheritance problem
+public class DriveTrain extends Subsystem implements CfgInterface {
+	
+	/*
+	 * 
+	 * Member Variables
+	 * 
+	 */
+	
+	private ConfigurableClass mCfgInstance = new ConfigurableClass("DriveTrain", this);
+	
+	protected float mXSensitivity = 1.0f;
+	protected float mYSensitivity = 1.0f;
+	
+	protected int mLeftMotor1 = 0;
+	protected int mLeftMotor2 = 1;
+	protected int mRightMotor1 = 2;
+	protected int mRightMotor2 = 3;
+	
+	
+	/*
+	 * 
+	 * Override Functions
+	 * 
+	 */
+
+	@Override
+	public boolean DeserializeInternal() {
+
+		mXSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("XSensitivity"));
+		mYSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("YSensitivity"));
+		
+		mLeftMotor1 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor1"));
+		mLeftMotor2 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor2"));
+		mRightMotor1 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor1"));
+		mRightMotor2 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor2"));
+		
+		return false;
+	}
+
+	@Override
+	public void SerializeInternal(Document doc) {
+
+
+		mXSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("XSensitivity"));
+		mYSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("YSensitivity"));
+		
+		mLeftMotor1 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor1"));
+		mLeftMotor2 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor2"));
+		mRightMotor1 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor1"));
+		mRightMotor2 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor2"));
+		
+	}
+
+	@Override
+	public ConfigurableClass GetCfgClass() {
+		return mCfgInstance;
+	}
+
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        setDefaultCommand(new TeleopDrive());
+    }
+
+}
+

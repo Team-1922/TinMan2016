@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.ozram1922.cfg.ConfigurableClass"/>
+<fullyQualifiedTypeName name="org.usfirst.frc.team1922.robot.commands.TeleopDrive"/>
+<fullyQualifiedTypeName name="org.usfirst.frc.team1922.robot.subsystems.DriveTrain"/>
+<fullyQualifiedTypeName name="java.awt.Robot"/>
+<fullyQualifiedTypeName name="org.ozram1922.cfg.CfgInterface"/>
+<fullyQualifiedTypeName name="org.ozram1922.cfg.CfgLoader"/>
+<fullyQualifiedTypeName name="org.usfirst.frc.team1922.robot.TinManXI"/>
+</qualifiedTypeNameHistroy>

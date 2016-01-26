@@ -1,0 +1,16 @@
+package org.usfirst.frc.team1922.robot.commands;
+
+import edu.wpi.first.wpilibj.command.Command;
+
+public class CommandRetrieval {
+	
+	public Command GetCommandFromName(String name)
+	{
+		switch(name)
+		{
+		case "OverwriteXMLCfg.java":
+			return new OverwriteXMLCfg;
+		}
+	}
+
+}

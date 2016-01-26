@@ -1,10 +1,21 @@
 package org.usfirst.frc.team1922.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.command.Command;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.ozram1922.Tuple;
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
+import org.usfirst.frc.team1922.robot.commands.CommandRetrieval;
+import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -12,24 +23,122 @@ import org.w3c.dom.Document;
  */
 public class OI implements CfgInterface{
 
-	private ConfigurableClass mCfgClass = new ConfigurableClass("OI", this);
+	/*
+	 * 
+	 * Config Variables
+	 * 
+	 */
+	private ConfigurableClass mCfgInstance = new ConfigurableClass("OI", this);
 	
+	protected Map<Tuple<Integer,Integer>, Command> mCommandMap;
+	
+	/*
+	 * 
+	 * Member Variables
+	 * 
+	 */
+	Map<String, Tuple<Integer,Joystick>> mJoysticks;
+	
+	
+	/*
+	 * 
+	 * Member Functions
+	 * 
+	 */
+	
+	public OI()
+	{
+		Reconstruct();
+	}
+	public void Reconstruct()
+	{
+	}
+	
+	public float GetLeftPower()
+	{
+		return mController.getAxis(mLeftAxisId);
+	}
+	
+	public float GetRightPower()
+	{
+		return mController.getAxis(mRightAxis);
+	}
+
+	/*
+	 * 
+	 * Override Functions
+	 * 
+	 */
+
 	@Override
 	public boolean DeserializeInternal() {
-		// TODO Auto-generated method stub
+		
+		//get children
+		NodeList joysticks = mCfgInstance.GetChildren("Joystick");
+		for(int i = 0; i < joysticks.getLength(); ++i)
+		{
+			Element thisElement = (Element)joysticks.item(i);
+			mJoysticks.put(
+					thisElement.getAttribute("Name"), 
+					new Tuple<Integer,Joystick>(
+							Integer.parseInt(thisElement.getAttribute("Id")), 
+							new Joystick(Integer.parseInt(thisElement.getAttribute("Id")))));
+		}
+		
+		//make list of joysticks
+		
+		//make map of buttons and commands
+		NodeList commands = mCfgInstance.GetChildren("Command");
+		for(int i = 0; i < commands.getLength(); ++i)
+		{
+			Element thisElement = (Element)commands.item(i);
+			mCommandMap.put(
+					new Tuple<Integer,Integer>(
+							Integer.parseInt(thisElement.getAttribute("JoystickId")), 
+							Integer.parseInt(thisElement.getAttribute("ButtonId"))), 
+					CommandRetrieval.GetCommandFromName(thisElement.getAttribute("CommandName")));
+		}
+		
+		Reconstruct();
+		
 		return false;
 	}
 
 	@Override
 	public void SerializeInternal(Document doc) {
-		// TODO Auto-generated method stub
+
+	    Iterator<Entry<String, Tuple<Integer,Joystick>>> it = mJoysticks.entrySet().iterator();
+		while(it.hasNext())
+		{
+			Entry<String, Tuple<Integer,Joystick>> pair = (Entry<String, Tuple<Integer,Joystick>>)it.next();
+			Element ej = doc.createElement("Joystick");
+			ej.setAttribute("Name", pair.getKey());
+			ej.setAttribute("Id", Integer.toString(pair.getValue().x));
+			mCfgInstance.AddChild(ej);
+		}
+
+	    Iterator<Entry<Tuple<Integer,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
+		while(it0.hasNext())
+		{
+			Entry<Tuple<Integer,Integer>, Command> pair = (Entry<Tuple<Integer,Integer>, Command>)it0.next();
+			Element ec = doc.createElement("Command");
+			ec.setAttribute("Name", pair.getValue().getName());
+			ec.setAttribute("JoystickId", Integer.toString(pair.getKey().x));
+			ec.setAttribute("ButtonId", Integer.toString(pair.getKey().y));
+			mCfgInstance.AddChild(ec);
+		}
 		
 	}
 
 	@Override
 	public ConfigurableClass GetCfgClass() {
-		return mCfgClass;
+		return mCfgInstance;
 	}
+
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        setDefaultCommand(new TeleopDrive());
+    }
 
 
     //// CREATING BUTTONS
