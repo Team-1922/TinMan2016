@@ -56,12 +56,12 @@ public class OI implements CfgInterface{
 	
 	public float GetLeftPower()
 	{
-		return mController.getAxis(mLeftAxisId);
+		return 0.0f;//TODO: return something
 	}
 	
 	public float GetRightPower()
 	{
-		return mController.getAxis(mRightAxis);
+		return 0.0f;//TODO: return something;
 	}
 
 	/*
@@ -134,11 +134,6 @@ public class OI implements CfgInterface{
 	public ConfigurableClass GetCfgClass() {
 		return mCfgInstance;
 	}
-
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        setDefaultCommand(new TeleopDrive());
-    }
 
 
     //// CREATING BUTTONS
