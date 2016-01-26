@@ -7,4 +7,15 @@
 <fullyQualifiedTypeName name="org.ozram1922.cfg.CfgInterface"/>
 <fullyQualifiedTypeName name="org.ozram1922.cfg.CfgLoader"/>
 <fullyQualifiedTypeName name="org.usfirst.frc.team1922.robot.TinManXI"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.SpeedController"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.CANTalon"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.Joystick"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="org.ozram1922.Tuple"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.command.Command"/>
+<fullyQualifiedTypeName name="org.w3c.dom.NodeList"/>
+<fullyQualifiedTypeName name="javax.lang.model.element.Element"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Element"/>
+<fullyQualifiedTypeName name="org.usfirst.frc.team1922.robot.commands.CommandRetrieval"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
 </qualifiedTypeNameHistroy>
