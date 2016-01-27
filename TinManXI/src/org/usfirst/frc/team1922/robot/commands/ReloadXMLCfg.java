@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1922.robot.commands;
 
-import org.usfirst.frc.team1922.robot.TinManXI;
+import org.usfirst.frc.team1922.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -16,11 +16,11 @@ public class ReloadXMLCfg extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.mCfgLoader.LoadFile(Robot.mCfgFileName);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	TinManXI.mCfgLoader.LoadFile(TinManXI.mCfgFileName);
     }
 
     // Make this return true when this Command no longer needs to run execute()

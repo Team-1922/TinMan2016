@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1922.robot.commands;
 
-import org.usfirst.frc.team1922.robot.TinManXI;
+import org.usfirst.frc.team1922.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -11,7 +11,7 @@ public class TeleopDrive extends Command {
 
     public TeleopDrive() {
         // Use requires() here to declare subsystem dependencies
-        requires(TinManXI.mDriveTrain);
+        requires(Robot.mDriveTrain);
     }
 
     // Called just before this Command runs the first time

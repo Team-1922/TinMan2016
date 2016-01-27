@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import org.ozram1922.cfg.CfgLoader;
+import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
+import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,15 +20,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class TinManXI extends IterativeRobot {
+public class Robot extends IterativeRobot {
 
 	public static DriveTrain mDriveTrain = new DriveTrain();
 	public static OI oi;
 	public static CfgLoader mCfgLoader = new CfgLoader();
-	public static String mCfgFileName = "cfg/TinManXI.cfg.xml";
+	public static String mCfgFileName = "TinManXI.cfg.xml";
 
     Command autonomousCommand;
     SendableChooser chooser;
+    
+    Command mSaveFile;
+    Command mLoadFile;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -41,6 +46,9 @@ public class TinManXI extends IterativeRobot {
 		
 		//load the xml file here
 		mCfgLoader.LoadFile(mCfgFileName);
+		
+		mSaveFile = new OverwriteXMLCfg();
+		mLoadFile = new ReloadXMLCfg();
     }
 	
 	/**
@@ -96,6 +104,8 @@ public class TinManXI extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        
+        mSaveFile.start();
     }
 
     /**

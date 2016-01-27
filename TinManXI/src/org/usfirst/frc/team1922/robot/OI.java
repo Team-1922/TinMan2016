@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1922.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -56,12 +57,14 @@ public class OI implements CfgInterface{
 	
 	public float GetLeftPower()
 	{
-		return 0.0f;//TODO: return something
+		Joystick LeftStick = mJoysticks.get("LeftJoystick").y;
+		return LeftStick.getAxisChannel(AxisType.kY);
 	}
 	
 	public float GetRightPower()
 	{
-		return 0.0f;//TODO: return something;
+		Joystick RightStick = mJoysticks.get("RightJoystick").y;
+		return RightStick.getAxisChannel(AxisType.kY);
 	}
 
 	/*
