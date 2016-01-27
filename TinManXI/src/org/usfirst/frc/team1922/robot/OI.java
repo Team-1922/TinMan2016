@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,14 +32,14 @@ public class OI implements CfgInterface{
 	 */
 	private ConfigurableClass mCfgInstance = new ConfigurableClass("OI", this);
 	
-	protected Map<Tuple<Integer,Integer>, Command> mCommandMap;
+	protected HashMap<Tuple<String,Integer>, Command> mCommandMap = new HashMap<Tuple<String,Integer>, Command>();
 	
 	/*
 	 * 
 	 * Member Variables
 	 * 
 	 */
-	Map<String, Tuple<Integer,Joystick>> mJoysticks;
+	HashMap<String, Tuple<Integer,Joystick>> mJoysticks = new HashMap<String, Tuple<Integer,Joystick>>();
 	
 	
 	/*
@@ -81,6 +82,7 @@ public class OI implements CfgInterface{
 		for(int i = 0; i < joysticks.getLength(); ++i)
 		{
 			Element thisElement = (Element)joysticks.item(i);
+			System.out.println(thisElement);
 			mJoysticks.put(
 					thisElement.getAttribute("Name"), 
 					new Tuple<Integer,Joystick>(
@@ -95,10 +97,11 @@ public class OI implements CfgInterface{
 		for(int i = 0; i < commands.getLength(); ++i)
 		{
 			Element thisElement = (Element)commands.item(i);
+			System.out.println(thisElement);
 			mCommandMap.put(
-					new Tuple<Integer,Integer>(
-							Integer.parseInt(thisElement.getAttribute("JoystickId")), 
-							Integer.parseInt(thisElement.getAttribute("ButtonId"))), 
+					new Tuple<String,Integer>(
+							thisElement.getAttribute("Joystick"), 
+							Integer.parseInt(thisElement.getAttribute("Button"))), 
 					CommandRetrieval.GetCommandFromName(thisElement.getAttribute("CommandName")));
 		}
 		
@@ -120,13 +123,13 @@ public class OI implements CfgInterface{
 			mCfgInstance.AddChild(ej);
 		}
 
-	    Iterator<Entry<Tuple<Integer,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
+	    Iterator<Entry<Tuple<String,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
 		while(it0.hasNext())
 		{
-			Entry<Tuple<Integer,Integer>, Command> pair = (Entry<Tuple<Integer,Integer>, Command>)it0.next();
+			Entry<Tuple<String,Integer>, Command> pair = (Entry<Tuple<String,Integer>, Command>)it0.next();
 			Element ec = doc.createElement("Command");
 			ec.setAttribute("Name", pair.getValue().getName());
-			ec.setAttribute("JoystickId", Integer.toString(pair.getKey().x));
+			ec.setAttribute("JoystickId", pair.getKey().x);
 			ec.setAttribute("ButtonId", Integer.toString(pair.getKey().y));
 			mCfgInstance.AddChild(ec);
 		}
