@@ -3,8 +3,10 @@ package org.usfirst.frc.team1922.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class OI implements CfgInterface{
 	 */
 	HashMap<String, Tuple<Integer,Joystick>> mJoysticks = new HashMap<String, Tuple<Integer,Joystick>>();
 	
+	ArrayList<JoystickButton> mButtonCommands = new ArrayList<JoystickButton>();
 	
 	/*
 	 * 
@@ -54,6 +57,18 @@ public class OI implements CfgInterface{
 	}
 	public void Reconstruct()
 	{
+		//setup all of the command bindings with the loaded XML data
+
+	    Iterator<Entry<Tuple<String,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
+		while(it0.hasNext())
+		{
+			Entry<Tuple<String,Integer>, Command> pair = (Entry<Tuple<String,Integer>, Command>)it0.next();
+			
+			JoystickButton j = new JoystickButton(mJoysticks.get(pair.getKey().x).y, pair.getKey().y) ;
+			j.whenPressed(pair.getValue());
+			mButtonCommands.add(j);
+		}
+		
 	}
 	
 	public float GetLeftPower()
