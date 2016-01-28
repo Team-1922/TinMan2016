@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.ozram1922.cfg.CfgInterface;
@@ -51,20 +52,34 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 	 */
 	public DriveTrain()
 	{
-		Reconstruct();
+		//Reconstruct();
 	}
 	public void Reconstruct()
 	{
-		mLeftMotor1 = new CANTalon(Math.abs(mLeftMotorId1));
+		/*mLeftMotor1 = new CANTalon(Math.abs(mLeftMotorId1));
 		mLeftMotor2 = new CANTalon(Math.abs(mLeftMotorId2));
 		mRightMotor1 = new CANTalon(Math.abs(mRightMotorId1));
-		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));
+		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));*/
+		
+		//the id will typically be over 9000 if we aren't using the motor controller
+		mLeftMotor1 = new Victor(Math.abs(mLeftMotorId1));
+		mLeftMotor2 = new Victor(Math.abs(mLeftMotorId2));
+		mRightMotor1 = new Victor(Math.abs(mRightMotorId1));
+		mRightMotor2 = new Victor(Math.abs(mRightMotorId2));
 		
 		//configure the inversion settings
 		mLeftMotor1.setInverted(mLeftMotorId1 < 0);
 		mLeftMotor2.setInverted(mLeftMotorId2 < 0);
 		mRightMotor1.setInverted(mRightMotorId1 < 0);
 		mRightMotor2.setInverted(mRightMotorId2 < 0);
+	}
+	
+	public void SetPower(double left, double right)
+	{
+		mLeftMotor1.set(left);
+		mLeftMotor2.set(left);
+		mRightMotor1.set(right);
+		mRightMotor2.set(right);
 	}
 	
 	/*
@@ -86,7 +101,7 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 		
 		Reconstruct();
 		
-		return false;
+		return true;
 	}
 
 	@Override

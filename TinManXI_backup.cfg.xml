@@ -5,7 +5,7 @@
 		<Joystick Name="LeftStick" Id="0" />
 		<Joystick Name="RightStick" Id="1" />
 		
-		<Command Joystick="LeftStick" Button="9" Name="DriveForward" />
+		<Command Joystick="LeftStick" Button="9" Name="OverwriteXMLCfg" />
 
 	</OI>
 </root>

@@ -81,7 +81,7 @@ public class CfgLoader
 
          if(!cfg.GetCfgClass().Deserialize(foundElement))
          {
-           //let's pretend this does something useful :)
+        	 System.out.println("Issues loading class!");
          }
        }
 

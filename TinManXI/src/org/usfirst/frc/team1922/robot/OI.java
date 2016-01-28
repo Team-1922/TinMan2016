@@ -16,6 +16,7 @@ import org.ozram1922.Tuple;
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
 import org.usfirst.frc.team1922.robot.commands.CommandRetrieval;
+import org.usfirst.frc.team1922.robot.commands.DriveForward;
 import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,7 +45,9 @@ public class OI implements CfgInterface{
 	HashMap<String, Tuple<Integer,Joystick>> mJoysticks = new HashMap<String, Tuple<Integer,Joystick>>();
 	
 	ArrayList<JoystickButton> mButtonCommands = new ArrayList<JoystickButton>();
-	
+	/*JoystickButton mNewBtn;
+	Joystick mTestJoy = new Joystick(0);
+	DriveForward cmd = new DriveForward();*/
 	/*
 	 * 
 	 * Member Functions
@@ -53,12 +56,11 @@ public class OI implements CfgInterface{
 	
 	public OI()
 	{
-		Reconstruct();
+		//Reconstruct();
 	}
 	public void Reconstruct()
 	{
 		//setup all of the command bindings with the loaded XML data
-
 	    Iterator<Entry<Tuple<String,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
 		while(it0.hasNext())
 		{
@@ -66,8 +68,13 @@ public class OI implements CfgInterface{
 			
 			JoystickButton j = new JoystickButton(mJoysticks.get(pair.getKey().x).y, pair.getKey().y) ;
 			j.whenPressed(pair.getValue());
+			System.out.println(pair.getValue().toString());
 			mButtonCommands.add(j);
 		}
+		
+		
+		//mNewBtn = new JoystickButton(mTestJoy, 9);
+		//mNewBtn.whenPressed(cmd);
 		
 	}
 	
@@ -91,13 +98,13 @@ public class OI implements CfgInterface{
 
 	@Override
 	public boolean DeserializeInternal() {
+		//System.out.println("TEST AGAIN");
 		
 		//get children
 		NodeList joysticks = mCfgInstance.GetChildren("Joystick");
 		for(int i = 0; i < joysticks.getLength(); ++i)
 		{
 			Element thisElement = (Element)joysticks.item(i);
-			System.out.println(thisElement);
 			mJoysticks.put(
 					thisElement.getAttribute("Name"), 
 					new Tuple<Integer,Joystick>(
@@ -112,17 +119,17 @@ public class OI implements CfgInterface{
 		for(int i = 0; i < commands.getLength(); ++i)
 		{
 			Element thisElement = (Element)commands.item(i);
-			System.out.println(thisElement);
+			//Command thisCommand = CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name"));
 			mCommandMap.put(
 					new Tuple<String,Integer>(
 							thisElement.getAttribute("Joystick"), 
 							Integer.parseInt(thisElement.getAttribute("Button"))), 
-					CommandRetrieval.GetCommandFromName(thisElement.getAttribute("CommandName")));
+					CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name")));
 		}
 		
 		Reconstruct();
 		
-		return false;
+		return true;
 	}
 
 	@Override

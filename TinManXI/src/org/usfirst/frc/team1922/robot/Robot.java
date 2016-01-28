@@ -47,6 +47,8 @@ public class Robot extends IterativeRobot {
 		//load the xml file here
 		mCfgLoader.LoadFile(mCfgFileName);
 		
+		System.out.println("TEST");
+		
 		mSaveFile = new OverwriteXMLCfg();
 		mLoadFile = new ReloadXMLCfg();
     }

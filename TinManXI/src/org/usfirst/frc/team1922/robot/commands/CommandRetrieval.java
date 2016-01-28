@@ -12,6 +12,8 @@ public class CommandRetrieval {
 			return new OverwriteXMLCfg();
 		case "ReloadXMLCfg":
 			return new ReloadXMLCfg();
+		case "DriveForward":
+			return new DriveForward();
 		default:
 			return null;
 		}
