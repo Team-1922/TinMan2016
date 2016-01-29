@@ -3,7 +3,6 @@ package org.usfirst.frc.team1922.robot.subsystems;
 import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 import org.w3c.dom.Document;
 
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -127,6 +126,13 @@ public class DriveTrain extends Subsystem implements CfgInterface {
         // Set the default command for a subsystem here.
         setDefaultCommand(new TeleopDrive());
     }
+	@Override
+	public void MakeCfgClassesNull() {
+		mLeftMotor1 = null;
+		mLeftMotor2 = null;
+		mRightMotor1 = null;
+		mRightMotor2 = null;
+	}
 
 }
 

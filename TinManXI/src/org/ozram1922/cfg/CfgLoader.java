@@ -14,7 +14,6 @@ import org.xml.sax.InputSource;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /*
@@ -44,6 +43,15 @@ public class CfgLoader
   //returns false ONLY if an exception is thown.  If the config file does not have complete data, it will not throw
   public boolean LoadFile(String filePath)
   {
+	//delete all of the 'things' before we load (to avoid GC not running in time)
+	for(CfgInterface i : mCfgClasses)
+	{
+		i.MakeCfgClassesNull();
+	}
+	
+	//Collect garbage
+	System.gc();  
+	
     // create a new DocumentBuilderFactory
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 

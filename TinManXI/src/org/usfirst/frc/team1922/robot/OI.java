@@ -2,22 +2,18 @@ package org.usfirst.frc.team1922.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.ozram1922.Tuple;
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
 import org.usfirst.frc.team1922.robot.commands.CommandRetrieval;
-import org.usfirst.frc.team1922.robot.commands.DriveForward;
-import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -161,6 +157,12 @@ public class OI implements CfgInterface{
 	@Override
 	public ConfigurableClass GetCfgClass() {
 		return mCfgInstance;
+	}
+	@Override
+	public void MakeCfgClassesNull() {
+		mCommandMap = null;
+		mJoysticks = null;
+		mButtonCommands = null;		
 	}
 
 
