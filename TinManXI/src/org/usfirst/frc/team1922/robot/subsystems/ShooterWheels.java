@@ -23,14 +23,15 @@ public class ShooterWheels extends Subsystem {
 	 */
 	
 	//rpmToEnc: the ratio to convert rps's to encoder samples
-	public ShooterWheels(int talonID, float p, float i, float d, float f, float rpsToEnc)
+	public ShooterWheels()
+	{
+	}
+	
+	public void Reconstruct(int talonID, float p, float i, float d, float rpsToEnc)
 	{
 		mRpsToEnc = rpsToEnc;
 		mWheels = new CANTalon(talonID);
-		mWheels.setP(p);
-		mWheels.setI(i);
-		mWheels.setD(d);
-		mWheels.setF(f);
+		mWheels.setPID(p, i, d);
 	}
 	
 	//Set the speed of the motor in rps (handled by PID control on the talon

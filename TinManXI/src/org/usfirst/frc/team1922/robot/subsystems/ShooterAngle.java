@@ -30,7 +30,11 @@ public class ShooterAngle {
 	 * potOffset: the offset (in degrees) to get the ratio to align with 0
 	 * 
 	 */
-	ShooterAngle(float p, float i, float d, float f, 
+	ShooterAngle()
+	{
+	}
+	
+	public void Reconstruct(float p, float i, float d, 
 			int potId, float potMultRatio, float potOffset,
 			int talonID)
 	{
@@ -38,7 +42,6 @@ public class ShooterAngle {
 		mPotOffset = potOffset;
 		mAngleMotor = new CANTalon(talonID);
 		mAngleMotor.setPID(p, i, d);
-		mAngleMotor.setF(f);
 	}
 	
 	public void SetAngle(double deg)
