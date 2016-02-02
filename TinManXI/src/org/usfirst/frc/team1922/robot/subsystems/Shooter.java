@@ -40,7 +40,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mWheelsI = 0.0f;
 	protected float mWheelsD = 0.0f;
 	protected float mWheelsF = 0.0f;
-	protected float mRpsToEnc = 1.0f;
+	protected int mWheelsEncToRot = 1;
 	
 	protected float mLateralP = 0.0f;
 	protected float mLateralI = 0.0f;
@@ -69,7 +69,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 				mAngleMotorId);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, 
-				mRpsToEnc);
+				mWheelsEncToRot);
 		mShooterLateral.Reconstruct(
 				mLateralP, mLateralI, mLateralD, mWindageAdj, mLateralTolerance);
 	}
@@ -123,7 +123,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mWheelsI = Float.parseFloat(shooterWheelsElement.getAttribute("I"));
 		mWheelsD = Float.parseFloat(shooterWheelsElement.getAttribute("D"));
 		
-		mRpsToEnc = Float.parseFloat(shooterWheelsElement.getAttribute("RpsToEncSamples"));
+		mWheelsEncToRot = Integer.parseInt(shooterWheelsElement.getAttribute("EncSamplesPerRotation"));
 				
 		
 		
@@ -165,7 +165,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		shooterWheelsElement.setAttribute("I", Float.toString(mWheelsI));
 		shooterWheelsElement.setAttribute("D", Float.toString(mWheelsD));
 		
-		shooterWheelsElement.setAttribute("RpsToEncSamples", Float.toString(mRpsToEnc));
+		shooterWheelsElement.setAttribute("EncSamplesPerRotation", Integer.toString(mWheelsEncToRot));
 		
 		mCfgClass.AddChild(shooterWheelsElement);
 

@@ -14,7 +14,6 @@ public class ShooterWheels extends Subsystem {
 	 * 
 	 */
 	protected CANTalon mWheels;
-	protected float mRpsToEnc;
 	
 	/*
 	 * 
@@ -27,17 +26,17 @@ public class ShooterWheels extends Subsystem {
 	{
 	}
 	
-	public void Reconstruct(int talonID, float p, float i, float d, float rpsToEnc)
+	public void Reconstruct(int talonID, float p, float i, float d, int encUnitsPerRot)
 	{
-		mRpsToEnc = rpsToEnc;
 		mWheels = new CANTalon(talonID);
+		mWheels.configEncoderCodesPerRev(encUnitsPerRot);
 		mWheels.setPID(p, i, d);
 	}
 	
-	//Set the speed of the motor in rps (handled by PID control on the talon
+	//Set the speed of the motor in rpm (handled by PID control on the talon
 	public void SetSpeed(double speed)
 	{
-		mWheels.setSetpoint(mRpsToEnc * speed);
+		mWheels.setSetpoint(speed);
 	}
 
     public void initDefaultCommand() 
