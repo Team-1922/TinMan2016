@@ -43,5 +43,10 @@ public class ShooterWheels extends Subsystem {
     public void initDefaultCommand() 
     {
     }
+
+
+	public void MakeCfgClassesNull() {
+		mWheels = null;
+	}
 }
 

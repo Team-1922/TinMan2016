@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
  */
 public class ShooterLateral extends PIDSubsystem {
 	
+	//zero is NOT centered, the center of the image is (i think 640 wide)
 	protected float mPIDWindageAdj;
 
     // Initialize your subsystem here
@@ -15,10 +16,10 @@ public class ShooterLateral extends PIDSubsystem {
     	super("Shooter Lateral", 0, 0, 0);//just because we have to
     }
     
-    public void Reconstruct(float p, float i, float d, float windageAdj)
+    public void Reconstruct(float microP, float microI, float microD, float macroP, float macroI, float macroD, float windageAdj)
     {
     	mPIDWindageAdj = windageAdj;
-    	getPIDController().setPID(p, i, d);
+    	getPIDController().setPID(macroP, macroI, macroD);
     	
     	setSetpoint(mPIDWindageAdj);
     }
@@ -45,4 +46,9 @@ public class ShooterLateral extends PIDSubsystem {
     {
     
     }
+
+
+	public void MakeCfgClassesNull() {
+		//this may do something
+	}
 }

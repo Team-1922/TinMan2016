@@ -28,24 +28,27 @@ public class Shooter extends Subsystem implements CfgInterface {
 	 * Cfg Member Variables
 	 * 
 	 */
-	protected float mAngleP;
-	protected float mAngleI;
-	protected float mAngleD;
-	protected int mAnglePotId;
-	protected float mAnglePotMultRatio;
-	protected float mAnglePotOffset;
-	protected int mAngleMotorId;
+	protected float mAngleP = 0.0f;
+	protected float mAngleI = 0.0f;
+	protected float mAngleD = 0.0f;
+	protected float mAnglePotMultRatio = 1.0f;
+	protected float mAnglePotOffset = 0.0f;
+	protected int mAngleMotorId = 5;
 
-	protected int mWheelsId;
-	protected float mWheelsP;
-	protected float mWheelsI;
-	protected float mWheelsD;
-	protected float mRpsToEnc;
+	protected int mWheelsId = 6;
+	protected float mWheelsP = 0.0f;
+	protected float mWheelsI = 0.0f;
+	protected float mWheelsD = 0.0f;
+	protected float mWheelsF = 0.0f;
+	protected float mRpsToEnc = 1.0f;
 	
-	protected float mLateralP;
-	protected float mLateralI;
-	protected float mLateralD;
-	protected float mWindageAdj;
+	protected float mLateralMicroP = 0.0f;
+	protected float mLateralMicroI = 0.0f;
+	protected float mLateralMicroD = 0.0f;
+	protected float mLateralMacroP = 0.0f;
+	protected float mLateralMacroI = 0.0f;
+	protected float mLateralMacroD = 0.0f;
+	protected float mWindageAdj = 0.0f;
 
 	/*
 	 * 
@@ -64,12 +67,14 @@ public class Shooter extends Subsystem implements CfgInterface {
 	{
 		//load the shooter angle
 		mShooterAngle.Reconstruct(mAngleP, mAngleI, mAngleD,
-				mAnglePotId, mAnglePotMultRatio, mAnglePotOffset,
+				mAnglePotMultRatio, mAnglePotOffset,
 				mAngleMotorId);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, 
 				mRpsToEnc);
-		mShooterLateral.Reconstruct(mLateralP, mLateralI, mLateralD, mWindageAdj);
+		mShooterLateral.Reconstruct(
+				mLateralMicroP, mLateralMicroI, mLateralMicroD, 
+				mLateralMacroP, mLateralMacroI, mLateralMacroD, mWindageAdj);
 	}
 
     public void initDefaultCommand() 
@@ -101,22 +106,21 @@ public class Shooter extends Subsystem implements CfgInterface {
 	@Override
 	public boolean DeserializeInternal() {
 
-		Element shooterAngleElement = (Element) mCfgClass.GetNthChild("ShooterAngle", 0);
+		Element shooterAngleElement = (Element) mCfgClass.GetNthChild("Angle", 0);
 		
 		mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
 		mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
 		mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
 		
-		mAnglePotId = Integer.parseInt(shooterAngleElement.getAttribute("PotId"));
 		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
 		mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset"));
 		mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
 
 		
 		
-		Element shooterWheelsElement = (Element) mCfgClass.GetNthChild("ShooterWheels", 0);
+		Element shooterWheelsElement = (Element) mCfgClass.GetNthChild("Wheels", 0);
 		
-		mWheelsId = Integer.parseInt(mCfgClass.GetAttribute("MotorId"));
+		mWheelsId = Integer.parseInt(shooterWheelsElement.getAttribute("MotorId"));
 		
 		mWheelsP = Float.parseFloat(shooterWheelsElement.getAttribute("P"));
 		mWheelsI = Float.parseFloat(shooterWheelsElement.getAttribute("I"));
@@ -126,13 +130,17 @@ public class Shooter extends Subsystem implements CfgInterface {
 				
 		
 		
-		Element shooterLateralElement = (Element) mCfgClass.GetNthChild("ShooterLateral", 0);
+		Element shooterLateralElement = (Element) mCfgClass.GetNthChild("Lateral", 0);
 		
 		mWindageAdj = Float.parseFloat(shooterLateralElement.getAttribute("Windage"));
 		
-		mLateralP = Float.parseFloat(shooterLateralElement.getAttribute("P"));
-		mLateralI = Float.parseFloat(shooterLateralElement.getAttribute("I"));
-		mLateralD = Float.parseFloat(shooterLateralElement.getAttribute("D"));
+		mLateralMicroP = Float.parseFloat(shooterLateralElement.getAttribute("MicroP"));
+		mLateralMicroI = Float.parseFloat(shooterLateralElement.getAttribute("MicroI"));
+		mLateralMicroD = Float.parseFloat(shooterLateralElement.getAttribute("MicroD"));
+		
+		mLateralMacroP = Float.parseFloat(shooterLateralElement.getAttribute("MacroP"));
+		mLateralMacroI = Float.parseFloat(shooterLateralElement.getAttribute("MacroI"));
+		mLateralMacroD = Float.parseFloat(shooterLateralElement.getAttribute("MacroD"));
 		
 		Reconstruct();
 		return true;
@@ -142,13 +150,12 @@ public class Shooter extends Subsystem implements CfgInterface {
 	public void SerializeInternal(Document doc) 
 	{
 		//Cfg for the Angle
-		Element shooterAngleElement = doc.createElement("ShooterAngle");
+		Element shooterAngleElement = doc.createElement("Angle");
 		
 		shooterAngleElement.setAttribute("P", Float.toString(mAngleP));
 		shooterAngleElement.setAttribute("I", Float.toString(mAngleI));
 		shooterAngleElement.setAttribute("D", Float.toString(mAngleD));
 
-		shooterAngleElement.setAttribute("PotId", Integer.toString(mAnglePotId));
 		shooterAngleElement.setAttribute("AngleTo5v", Float.toString(mAnglePotMultRatio));
 		shooterAngleElement.setAttribute("PotOffset", Float.toString(mAnglePotOffset));
 		shooterAngleElement.setAttribute("MotorId", Integer.toString(mAngleMotorId));
@@ -157,7 +164,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		
 		//Cfg for the wheels
-		Element shooterWheelsElement = doc.createElement("ShooterAngle");
+		Element shooterWheelsElement = doc.createElement("Wheels");
 		
 		shooterWheelsElement.setAttribute("MotorId", Integer.toString(mWheelsId));
 		
@@ -174,9 +181,13 @@ public class Shooter extends Subsystem implements CfgInterface {
 		Element shooterLateralElement = doc.createElement("ShooterLateral");
 		
 		shooterLateralElement.setAttribute("Windage", Float.toString(mWindageAdj));
-		shooterLateralElement.setAttribute("P", Float.toString(mLateralP));
-		shooterLateralElement.setAttribute("I", Float.toString(mLateralI));
-		shooterLateralElement.setAttribute("D", Float.toString(mLateralD));
+		shooterLateralElement.setAttribute("MicroP", Float.toString(mLateralMicroP));
+		shooterLateralElement.setAttribute("MicroI", Float.toString(mLateralMicroI));
+		shooterLateralElement.setAttribute("MicroD", Float.toString(mLateralMicroD));
+		
+		shooterLateralElement.setAttribute("MacroP", Float.toString(mLateralMacroP));
+		shooterLateralElement.setAttribute("MacroI", Float.toString(mLateralMacroI));
+		shooterLateralElement.setAttribute("MacroD", Float.toString(mLateralMacroD));
 		
 		mCfgClass.AddChild(shooterLateralElement);
 
@@ -191,8 +202,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 
 	@Override
 	public void MakeCfgClassesNull() {
-		//mShooterWheels = null;
-		//mShooterAngle = null;		
+		mShooterAngle.MakeCfgClassesNull();
+		mShooterWheels.MakeCfgClassesNull();
+		mShooterLateral.MakeCfgClassesNull();
 	}
 }
 

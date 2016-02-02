@@ -8,4 +8,9 @@
 		<Command Joystick="LeftStick" Button="9" Name="DriveForward" />
 
 	</OI>
+	<Shooter>
+		<Angle P="0.0" I="0.0" D="0.0" AngleTo5v="1.0" PotOffset="0.0" MotorId="5" />
+		<Wheels MotorId="6" P=".015" I="0.0" D="0.0" F=".029" RpsToEncSamples="1.0" />
+		<Lateral Windage="320" MicroP="0.0" MicroI="0.0" MicroD="0.0" MacroP="0.0" MacroI="0.0" MacroD="0.0" />
+	</Shooter>
 </root>

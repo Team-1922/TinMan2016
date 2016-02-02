@@ -34,8 +34,8 @@ public class ShooterAngle {
 	{
 	}
 	
-	public void Reconstruct(float p, float i, float d, 
-			int potId, float potMultRatio, float potOffset,
+	public void Reconstruct(float p, float i, float d,
+			float potMultRatio, float potOffset,
 			int talonID)
 	{
 		mPotMultRatio = potMultRatio;
@@ -53,4 +53,9 @@ public class ShooterAngle {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
+
+
+	public void MakeCfgClassesNull() {
+		mAngleMotor = null;
+	}
 }
