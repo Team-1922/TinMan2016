@@ -3,8 +3,7 @@ package org.usfirst.frc.team1922.robot.subsystems;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 /**
- *This class cannot be connected to a single CANTalon, because this will have control
- *	over both the drive train AND the micro-lateral shooter adjustments
+ *This class is connected to ONLY the micro adjustment
  */
 public class ShooterLateral extends PIDSubsystem {
 	
@@ -16,10 +15,11 @@ public class ShooterLateral extends PIDSubsystem {
     	super("Shooter Lateral", 0, 0, 0);//just because we have to
     }
     
-    public void Reconstruct(float microP, float microI, float microD, float macroP, float macroI, float macroD, float windageAdj)
+    public void Reconstruct(float p, float i, float d, float windageAdj, float tolerance)
     {
     	mPIDWindageAdj = windageAdj;
-    	getPIDController().setPID(macroP, macroI, macroD);
+    	getPIDController().setPID(p, i, d);
+    	getPIDController().setAbsoluteTolerance(tolerance);
     	
     	setSetpoint(mPIDWindageAdj);
     }

@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.ozram1922.cfg.CfgInterface;
@@ -14,7 +15,7 @@ import org.ozram1922.cfg.ConfigurableClass;
  */
 
 //TODO: deal with multiple inheritance problem
-public class DriveTrain extends Subsystem implements CfgInterface {
+public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	
 	/*
 	 * 
@@ -32,6 +33,11 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 	protected int mLeftMotorId2 = 2;
 	protected int mRightMotorId1 = 3;
 	protected int mRightMotorId2 = 4;
+	
+	protected float mP;
+	protected float mI;
+	protected float mD;
+	protected float mTolerance;
 	
 	
 	/*
@@ -51,6 +57,7 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 	 */
 	public DriveTrain()
 	{
+		super(0,0,0);
 		//Reconstruct();
 	}
 	public void Reconstruct()
@@ -71,6 +78,9 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 		mLeftMotor2.setInverted(mLeftMotorId2 < 0);
 		mRightMotor1.setInverted(mRightMotorId1 < 0);
 		mRightMotor2.setInverted(mRightMotorId2 < 0);
+		
+		getPIDController().setPID(mP, mI, mD);
+		getPIDController().setAbsoluteTolerance(mTolerance);
 	}
 	
 	public void SetPower(double left, double right)
@@ -98,6 +108,11 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 		mRightMotorId1 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor1"));
 		mRightMotorId2 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor2"));
 		
+		mP = Float.parseFloat(mCfgInstance.GetAttribute("P"));
+		mI = Float.parseFloat(mCfgInstance.GetAttribute("I"));
+		mD = Float.parseFloat(mCfgInstance.GetAttribute("D"));
+		mTolerance = Float.parseFloat(mCfgInstance.GetAttribute("Tolerance"));
+		
 		Reconstruct();
 		
 		return true;
@@ -114,6 +129,12 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 		mCfgInstance.SetAttribute("LeftMotor2", Integer.toString(mLeftMotorId2));
 		mCfgInstance.SetAttribute("RightMotor1", Integer.toString(mRightMotorId1));
 		mCfgInstance.SetAttribute("RightMotor2", Integer.toString(mRightMotorId2));
+		
+		mCfgInstance.SetAttribute("P", Float.toString(mP));
+		mCfgInstance.SetAttribute("I", Float.toString(mI));
+		mCfgInstance.SetAttribute("D", Float.toString(mD));
+		
+		mCfgInstance.SetAttribute("Tolerance", Float.toString(mTolerance));
 		
 	}
 
@@ -132,6 +153,16 @@ public class DriveTrain extends Subsystem implements CfgInterface {
 		mLeftMotor2 = null;
 		mRightMotor1 = null;
 		mRightMotor2 = null;
+	}
+	@Override
+	protected double returnPIDInput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	protected void usePIDOutput(double output) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

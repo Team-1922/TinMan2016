@@ -42,13 +42,11 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mWheelsF = 0.0f;
 	protected float mRpsToEnc = 1.0f;
 	
-	protected float mLateralMicroP = 0.0f;
-	protected float mLateralMicroI = 0.0f;
-	protected float mLateralMicroD = 0.0f;
-	protected float mLateralMacroP = 0.0f;
-	protected float mLateralMacroI = 0.0f;
-	protected float mLateralMacroD = 0.0f;
+	protected float mLateralP = 0.0f;
+	protected float mLateralI = 0.0f;
+	protected float mLateralD = 0.0f;
 	protected float mWindageAdj = 0.0f;
+	protected float mLateralTolerance = 0.0f;
 
 	/*
 	 * 
@@ -73,8 +71,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 				mWheelsP, mWheelsI, mWheelsD, 
 				mRpsToEnc);
 		mShooterLateral.Reconstruct(
-				mLateralMicroP, mLateralMicroI, mLateralMicroD, 
-				mLateralMacroP, mLateralMacroI, mLateralMacroD, mWindageAdj);
+				mLateralP, mLateralI, mLateralD, mWindageAdj, mLateralTolerance);
 	}
 
     public void initDefaultCommand() 
@@ -134,13 +131,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		mWindageAdj = Float.parseFloat(shooterLateralElement.getAttribute("Windage"));
 		
-		mLateralMicroP = Float.parseFloat(shooterLateralElement.getAttribute("MicroP"));
-		mLateralMicroI = Float.parseFloat(shooterLateralElement.getAttribute("MicroI"));
-		mLateralMicroD = Float.parseFloat(shooterLateralElement.getAttribute("MicroD"));
-		
-		mLateralMacroP = Float.parseFloat(shooterLateralElement.getAttribute("MacroP"));
-		mLateralMacroI = Float.parseFloat(shooterLateralElement.getAttribute("MacroI"));
-		mLateralMacroD = Float.parseFloat(shooterLateralElement.getAttribute("MacroD"));
+		mLateralP = Float.parseFloat(shooterLateralElement.getAttribute("P"));
+		mLateralI = Float.parseFloat(shooterLateralElement.getAttribute("I"));
+		mLateralD = Float.parseFloat(shooterLateralElement.getAttribute("D"));
 		
 		Reconstruct();
 		return true;
@@ -181,13 +174,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 		Element shooterLateralElement = doc.createElement("ShooterLateral");
 		
 		shooterLateralElement.setAttribute("Windage", Float.toString(mWindageAdj));
-		shooterLateralElement.setAttribute("MicroP", Float.toString(mLateralMicroP));
-		shooterLateralElement.setAttribute("MicroI", Float.toString(mLateralMicroI));
-		shooterLateralElement.setAttribute("MicroD", Float.toString(mLateralMicroD));
-		
-		shooterLateralElement.setAttribute("MacroP", Float.toString(mLateralMacroP));
-		shooterLateralElement.setAttribute("MacroI", Float.toString(mLateralMacroI));
-		shooterLateralElement.setAttribute("MacroD", Float.toString(mLateralMacroD));
+		shooterLateralElement.setAttribute("P", Float.toString(mLateralP));
+		shooterLateralElement.setAttribute("I", Float.toString(mLateralI));
+		shooterLateralElement.setAttribute("D", Float.toString(mLateralD));
 		
 		mCfgClass.AddChild(shooterLateralElement);
 
