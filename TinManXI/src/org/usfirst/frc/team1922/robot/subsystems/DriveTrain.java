@@ -1,20 +1,17 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.usfirst.frc.team1922.robot.Robot;
 import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 import org.w3c.dom.Document;
 
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.command.Subsystem;
-
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
 /**
- *
+ *	NOTE: the PID on this class in ONLY designed to work for rotation motion;
+ *		Any other attempt to use PID will spectacularly fail
  */
-
-//TODO: deal with multiple inheritance problem
 public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	
 	/*
@@ -45,10 +42,10 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	 * Actual Member Variables
 	 * 
 	 */
-	protected SpeedController mLeftMotor1;
-	protected SpeedController mLeftMotor2;
-	protected SpeedController mRightMotor1;
-	protected SpeedController mRightMotor2;
+	protected CANTalon mLeftMotor1;
+	protected CANTalon mLeftMotor2;
+	protected CANTalon mRightMotor1;
+	protected CANTalon mRightMotor2;
 	
 	/*
 	 * 
@@ -68,10 +65,10 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));*/
 		
 		//the id will typically be over 9000 if we aren't using the motor controller
-		mLeftMotor1 = new Victor(Math.abs(mLeftMotorId1));
-		mLeftMotor2 = new Victor(Math.abs(mLeftMotorId2));
-		mRightMotor1 = new Victor(Math.abs(mRightMotorId1));
-		mRightMotor2 = new Victor(Math.abs(mRightMotorId2));
+		mLeftMotor1 = new CANTalon(Math.abs(mLeftMotorId1));
+		mLeftMotor2 = new CANTalon(Math.abs(mLeftMotorId2));
+		mRightMotor1 = new CANTalon(Math.abs(mRightMotorId1));
+		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));
 		
 		//configure the inversion settings
 		mLeftMotor1.setInverted(mLeftMotorId1 < 0);
@@ -81,6 +78,8 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 		
 		getPIDController().setPID(mP, mI, mD);
 		getPIDController().setAbsoluteTolerance(mTolerance);
+		
+		setSetpoint(Robot.mGlobShooterLatUtils.GetWindage());
 	}
 	
 	public void SetPower(double left, double right)
@@ -156,13 +155,19 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	}
 	@Override
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Robot.mGlobShooterLatUtils.GetBestWindow().mCenterY;
 	}
+	
+	//positive = cw; set to spin about a central axis
 	@Override
 	protected void usePIDOutput(double output) {
-		// TODO Auto-generated method stub
 		
+		//output is the 'spin'
+		mLeftMotor1.set(output);
+		mLeftMotor2.set(output);
+
+		mRightMotor1.set(-output);
+		mRightMotor2.set(-output);
 	}
 
 }

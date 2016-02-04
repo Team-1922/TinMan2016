@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.usfirst.frc.team1922.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 /**
@@ -7,21 +9,18 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
  */
 public class ShooterLateral extends PIDSubsystem {
 	
-	//zero is NOT centered, the center of the image is (i think 640 wide)
-	protected float mPIDWindageAdj;
 
     // Initialize your subsystem here
     public ShooterLateral() {
     	super("Shooter Lateral", 0, 0, 0);//just because we have to
     }
     
-    public void Reconstruct(float p, float i, float d, float windageAdj, float tolerance)
+    public void Reconstruct(float p, float i, float d, float tolerance)
     {
-    	mPIDWindageAdj = windageAdj;
     	getPIDController().setPID(p, i, d);
     	getPIDController().setAbsoluteTolerance(tolerance);
     	
-    	setSetpoint(mPIDWindageAdj);
+    	setSetpoint(Robot.mGlobShooterLatUtils.GetWindage());
     }
     
     public void initDefaultCommand() {

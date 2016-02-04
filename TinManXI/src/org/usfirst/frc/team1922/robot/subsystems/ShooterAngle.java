@@ -7,15 +7,23 @@ import edu.wpi.first.wpilibj.CANTalon;
  */
 public class ShooterAngle {
 
+	enum Position
+	{
+		kIntake,
+		kLow,
+		kMed,
+		kHigh
+	}
+	
 	/*
 	 * 
 	 * Member Variables
 	 * 
 	 */
-	protected CANTalon mAngleMotor;
+	//protected CANTalon mAngleMotor;
 	
-	protected float mPotMultRatio;
-	protected float mPotOffset;
+	//protected float mPotMultRatio;
+	//protected float mPotOffset;
 	
 	
 	/*
@@ -38,15 +46,16 @@ public class ShooterAngle {
 			float potMultRatio, float potOffset,
 			int talonID)
 	{
-		mPotMultRatio = potMultRatio;
-		mPotOffset = potOffset;
-		mAngleMotor = new CANTalon(talonID);
-		mAngleMotor.setPID(p, i, d);
+		//mPotMultRatio = potMultRatio;
+		//mPotOffset = potOffset;
+		//mAngleMotor = new CANTalon(talonID);
+		//mAngleMotor.setPID(p, i, d);
 	}
 	
-	public void SetAngle(double deg)
+	public void setPosition(Position pos)
 	{
-		mAngleMotor.setSetpoint((deg + mPotOffset) * mPotMultRatio);
+		//mAngleMotor.setSetpoint((deg + mPotOffset) * mPotMultRatio);
+		//TODO:
 	}
     
     public void initDefaultCommand() {
@@ -56,6 +65,6 @@ public class ShooterAngle {
 
 
 	public void MakeCfgClassesNull() {
-		mAngleMotor = null;
+		//mAngleMotor = null;
 	}
 }

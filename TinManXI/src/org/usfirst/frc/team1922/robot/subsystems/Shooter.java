@@ -2,12 +2,16 @@ package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
+import org.usfirst.frc.team1922.robot.commands.UpdateLateralPIDSwitch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
+ * 
+ * This controls the switching between the Drive train and the ShovelLateral PID
  *
  */
 public class Shooter extends Subsystem implements CfgInterface {
@@ -21,6 +25,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected ShooterAngle mShooterAngle;
 	protected ShooterWheels mShooterWheels;
 	protected ShooterLateral mShooterLateral;
+	
+	protected UpdateLateralPIDSwitch mPIDUpdateCmd = new UpdateLateralPIDSwitch();
     
 	
 	/*
@@ -45,7 +51,6 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mLateralP = 0.0f;
 	protected float mLateralI = 0.0f;
 	protected float mLateralD = 0.0f;
-	protected float mWindageAdj = 0.0f;
 	protected float mLateralTolerance = 0.0f;
 
 	/*
@@ -71,7 +76,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 				mWheelsP, mWheelsI, mWheelsD, 
 				mWheelsEncToRot);
 		mShooterLateral.Reconstruct(
-				mLateralP, mLateralI, mLateralD, mWindageAdj, mLateralTolerance);
+				mLateralP, mLateralI, mLateralD, mLateralTolerance);
 	}
 
     public void initDefaultCommand() 
@@ -80,14 +85,30 @@ public class Shooter extends Subsystem implements CfgInterface {
         //setDefaultCommand(new MySpecialCommand());
     }
     
-    //setpoint: angle in degrees
-    public void SetAngleSetpoint(double setpoint)
+    //setpoint: position to give
+    public void SetAngleSetpoint(ShooterAngle.Position setpoint)
     {
     	if(mShooterAngle != null)
-    		mShooterAngle.SetAngle(setpoint);
+    		mShooterAngle.setPosition(setpoint);
     }
     
-    //set the wheels speed in rps
+    public void EnableLateralPID()
+    {
+    	mPIDUpdateCmd.start();
+    }
+    
+    public void DisableLateralPID()
+    {
+    	mPIDUpdateCmd.stop();
+    }
+    
+    //sets the state of lateralPID control
+    public PIDSubsystem GetLateralPID()
+    {
+    	return mShooterLateral;
+    }
+    
+    //set the wheels speed in rpm
     public void SetWheelsSpeed(double speed)
     {
     	if(mShooterWheels != null)
@@ -128,8 +149,6 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		
 		Element shooterLateralElement = (Element) mCfgClass.GetNthChild("Lateral", 0);
-		
-		mWindageAdj = Float.parseFloat(shooterLateralElement.getAttribute("Windage"));
 		
 		mLateralP = Float.parseFloat(shooterLateralElement.getAttribute("P"));
 		mLateralI = Float.parseFloat(shooterLateralElement.getAttribute("I"));
@@ -173,7 +192,6 @@ public class Shooter extends Subsystem implements CfgInterface {
 		//Cfg for the lateral adjustment (this is an interesting one, because it depends potentially on the drive train too)
 		Element shooterLateralElement = doc.createElement("ShooterLateral");
 		
-		shooterLateralElement.setAttribute("Windage", Float.toString(mWindageAdj));
 		shooterLateralElement.setAttribute("P", Float.toString(mLateralP));
 		shooterLateralElement.setAttribute("I", Float.toString(mLateralI));
 		shooterLateralElement.setAttribute("D", Float.toString(mLateralD));

@@ -10,6 +10,9 @@ import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team1922.robot.subsystems.Shooter;
+import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,6 +26,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static DriveTrain mDriveTrain = new DriveTrain();
+	public static Shooter mShooter = new Shooter();
+	public static ShooterLateralUtilities mGlobShooterLatUtils = new ShooterLateralUtilities();
 	public static OI oi;
 	public static CfgLoader mCfgLoader = new CfgLoader();
 	public static String mCfgFileName = "TinManXI.cfg.xml";
@@ -41,13 +46,15 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		
 		//register XML loading classes here
+		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
 		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(oi);
+		mCfgLoader.RegisterCfgClass(mShooter);
 		
 		//load the xml file here
 		mCfgLoader.LoadFile(mCfgFileName);
 		
-		System.out.println("TEST");
+		//System.out.println("TEST");
 		
 		mSaveFile = new OverwriteXMLCfg();
 		mLoadFile = new ReloadXMLCfg();
@@ -97,6 +104,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	//in order to make sure the network tables update first, it is not a command
+    	mGlobShooterLatUtils.UpdateCycle();
+    	
         Scheduler.getInstance().run();
     }
 
@@ -114,6 +124,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	//in order to make sure the network tables update first, it is not a command
+    	mGlobShooterLatUtils.UpdateCycle();
+    	
         Scheduler.getInstance().run();
     }
     
