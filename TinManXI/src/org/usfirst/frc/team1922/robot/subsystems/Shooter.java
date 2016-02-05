@@ -34,12 +34,16 @@ public class Shooter extends Subsystem implements CfgInterface {
 	 * Cfg Member Variables
 	 * 
 	 */
-	protected float mAngleP = 0.0f;
+	/*protected float mAngleP = 0.0f;
 	protected float mAngleI = 0.0f;
 	protected float mAngleD = 0.0f;
 	protected float mAnglePotMultRatio = 1.0f;
 	protected float mAnglePotOffset = 0.0f;
-	protected int mAngleMotorId = 5;
+	protected int mAngleMotorId = 5;*/
+	
+	protected int mAngleFeedSol = 0;
+	protected int mAngleSolFront = 0;
+	protected int mAngleSolRear = 0;
 
 	protected int mWheelsId = 6;
 	protected float mWheelsP = 0.0f;
@@ -69,9 +73,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	public void Reconstruct()
 	{
 		//load the shooter angle
-		mShooterAngle.Reconstruct(mAngleP, mAngleI, mAngleD,
-				mAnglePotMultRatio, mAnglePotOffset,
-				mAngleMotorId);
+		mShooterAngle.Reconstruct(mAngleFeedSol, mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, 
 				mWheelsEncToRot);
@@ -126,13 +128,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 
 		Element shooterAngleElement = (Element) mCfgClass.GetNthChild("Angle", 0);
 		
-		mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
-		mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
-		mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
-		
-		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
-		mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset"));
-		mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
+		mAngleFeedSol = Integer.parseInt(shooterAngleElement.getAttribute("FeedSol"));
+		mAngleSolFront = Integer.parseInt(shooterAngleElement.getAttribute("FrontSol"));
+		mAngleSolRear = Integer.parseInt(shooterAngleElement.getAttribute("RearSol"));
 
 		
 		
@@ -164,13 +162,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 		//Cfg for the Angle
 		Element shooterAngleElement = doc.createElement("Angle");
 		
-		shooterAngleElement.setAttribute("P", Float.toString(mAngleP));
-		shooterAngleElement.setAttribute("I", Float.toString(mAngleI));
-		shooterAngleElement.setAttribute("D", Float.toString(mAngleD));
-
-		shooterAngleElement.setAttribute("AngleTo5v", Float.toString(mAnglePotMultRatio));
-		shooterAngleElement.setAttribute("PotOffset", Float.toString(mAnglePotOffset));
-		shooterAngleElement.setAttribute("MotorId", Integer.toString(mAngleMotorId));
+		shooterAngleElement.setAttribute("FeedSol", Float.toString(mAngleFeedSol));
+		shooterAngleElement.setAttribute("FrontSol", Float.toString(mAngleSolFront));
+		shooterAngleElement.setAttribute("RearSol", Float.toString(mAngleSolRear));
 		
 		mCfgClass.AddChild(shooterAngleElement);
 		
