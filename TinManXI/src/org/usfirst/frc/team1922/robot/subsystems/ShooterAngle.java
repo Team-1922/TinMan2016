@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Solenoid;
 
 /**
@@ -8,7 +7,6 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class ShooterAngle {
 
-	Solenoid mFeedSol;
 	Solenoid mAngleSolFront;
 	Solenoid mAngleSolRear;
 	
@@ -22,7 +20,6 @@ public class ShooterAngle {
 	
 	enum SolTypes
 	{
-		kFeed,
 		kAngleFront,
 		kAngleRear
 	}
@@ -55,9 +52,8 @@ public class ShooterAngle {
 	}
 	
 	//default solenoids are RETRACTED when false
-	public void Reconstruct(int feedSol, int angleSolFront, int angleSolRear)
+	public void Reconstruct(int angleSolFront, int angleSolRear)
 	{
-		mFeedSol = new Solenoid(feedSol);
 		mAngleSolFront = new Solenoid(angleSolFront);
 		mAngleSolRear = new Solenoid(angleSolRear);
 		//mPotMultRatio = potMultRatio;
@@ -103,18 +99,10 @@ public class ShooterAngle {
 		case kAngleRear:
 			mAngleSolRear.set(val);
 			break;
-		case kFeed:
-			mFeedSol.set(val);
-			break;
 		default:
 			break;
 		
 		}
-	}
-	
-	public void SetFeedSolenoid(boolean enabled)
-	{
-		mFeedSol.set(enabled);
 	}
     
     public void initDefaultCommand() {
@@ -124,7 +112,9 @@ public class ShooterAngle {
 
 
 	public void MakeCfgClassesNull() {
-		mFeedSol = null;
+		mAngleSolFront.free();
+		mAngleSolRear.free();
+		
 		mAngleSolFront = null;
 		mAngleSolRear = null;
 		//mAngleMotor = null;

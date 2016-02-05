@@ -57,6 +57,7 @@ public class ShooterWheels extends Subsystem {
 
 
 	public void MakeCfgClassesNull() {
+		mWheels.delete();
 		mWheels = null;
 	}
 }

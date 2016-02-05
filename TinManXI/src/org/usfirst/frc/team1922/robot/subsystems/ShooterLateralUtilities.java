@@ -123,7 +123,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 	@Override
 	public void MakeCfgClassesNull() {
-		
 	}
 }
 
