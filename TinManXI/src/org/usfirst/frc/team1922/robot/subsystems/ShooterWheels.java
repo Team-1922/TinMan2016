@@ -38,6 +38,11 @@ public class ShooterWheels extends Subsystem {
 	{
 		mWheels.setSetpoint(speed);
 	}
+	
+	public boolean IsSpunUp()
+	{
+		return mWheels.getEncVelocity() == mWheels.getSetpoint();
+	}
 
     public void initDefaultCommand() 
     {

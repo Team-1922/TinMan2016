@@ -117,6 +117,26 @@ public class Shooter extends Subsystem implements CfgInterface {
     		mShooterWheels.SetSpeed(speed);
     }
     
+    public void SetAngle(ShooterAngle.Position angle)
+    {
+    	mShooterAngle.setPosition(angle);
+    }
+    
+    public ShooterAngle GetShooterAngle()
+    {
+    	return mShooterAngle;
+    }
+    
+    public ShooterWheels GetShooterWheels()
+    {
+    	return mShooterWheels;
+    }
+    
+    public ShooterLateral GetShooterLateral()
+    {
+    	return mShooterLateral;
+    }
+    
     /*
      * 
      * Overridden Member Functions
