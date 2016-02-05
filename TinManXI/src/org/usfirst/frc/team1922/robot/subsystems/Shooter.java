@@ -35,12 +35,12 @@ public class Shooter extends Subsystem implements CfgInterface {
 	 * Cfg Member Variables
 	 * 
 	 */
-	protected float mAngleP = 0.0f;
+	/*protected float mAngleP = 0.0f;
 	protected float mAngleI = 0.0f;
 	protected float mAngleD = 0.0f;
 	protected float mAnglePotMultRatio = 1.0f;
 	protected float mAnglePotOffset = 0.0f;
-	protected int mAngleMotorId = 5;
+	protected int mAngleMotorId = 5;*/
 	
 	protected int mFeedSol = 0;
 	
@@ -76,6 +76,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	{
 		//load the shooter angle
 		mShooterFeeder.Reconstruct(mFeedSol);
+		//mShooterAngle.Reconstruct(mAngleMotorId, mAngleP, mAngleI, mAngleD, mAnglePotMultRatio, mAnglePotOffset);
 		mShooterAngle.Reconstruct(mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, 
