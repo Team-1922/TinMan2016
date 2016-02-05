@@ -2,7 +2,7 @@ package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
-import org.usfirst.frc.team1922.robot.commands.UpdateLateralPIDSwitch;
+import org.usfirst.frc.team1922.robot.commands.shooter.UpdateLateralPIDSwitch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

@@ -37,6 +37,13 @@ public class ShooterWheels extends Subsystem {
 	public void SetSpeed(double speed)
 	{
 		mWheels.setSetpoint(speed);
+		mWheels.disable();
+	}
+	
+	public void SpinDown()
+	{
+		mWheels.setSetpoint(0.0);
+		mWheels.disable();
 	}
 	
 	public boolean IsSpunUp()

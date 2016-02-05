@@ -12,7 +12,7 @@ public class ShooterAngle {
 	Solenoid mAngleSolFront;
 	Solenoid mAngleSolRear;
 	
-	enum Position
+	public enum Position
 	{
 		kIntake,
 		kLow,
