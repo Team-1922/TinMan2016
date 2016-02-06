@@ -1,11 +1,12 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *
  */
-public class ShooterAngle {
+public class ShooterAngle extends Subsystem {
 
 	Solenoid mAngleSolFront;
 	Solenoid mAngleSolRear;
