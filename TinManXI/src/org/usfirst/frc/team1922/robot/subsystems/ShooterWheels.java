@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -29,6 +30,7 @@ public class ShooterWheels extends Subsystem {
 	public void Reconstruct(int talonID, float p, float i, float d, int encUnitsPerRot)
 	{
 		mWheels = new CANTalon(talonID);
+		mWheels.changeControlMode(TalonControlMode.Speed);
 		mWheels.configEncoderCodesPerRev(encUnitsPerRot);
 		mWheels.setPID(p, i, d);
 	}
