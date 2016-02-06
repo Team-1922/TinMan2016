@@ -26,6 +26,14 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor.setPID(p, i, d);
 		mAngleMotor.configPotentiometerTurns(10);
 		mAngleMotor.changeControlMode(TalonControlMode.Speed);
+		
+		//TODO: is this the correct way to do this?  How do limit switches work
+		//	with the talon SRX?
+		mAngleMotor.enableForwardSoftLimit(true);
+		mAngleMotor.enableReverseSoftLimit(true);
+		mAngleMotor.setForwardSoftLimit(1);
+		mAngleMotor.setReverseSoftLimit(1);
+		
 		mNumTurns = numTurns;
 		mAngleOffset = horizAngle;
 	}

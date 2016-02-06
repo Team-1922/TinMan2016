@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
+import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
 import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static DriveTrain mDriveTrain = new DriveTrain();
+	public static BallRetriever mBallRetriever = new BallRetriever();
 	public static Shooter mShooter = new Shooter();
 	public static ShooterLateralUtilities mGlobShooterLatUtils = new ShooterLateralUtilities();
 	public static OI oi;
@@ -50,6 +52,7 @@ public class Robot extends IterativeRobot {
 		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(oi);
 		mCfgLoader.RegisterCfgClass(mShooter);
+		mCfgLoader.RegisterCfgClass(mBallRetriever);
 		
 		//load the xml file here
 		mCfgLoader.LoadFile(mCfgFileName);

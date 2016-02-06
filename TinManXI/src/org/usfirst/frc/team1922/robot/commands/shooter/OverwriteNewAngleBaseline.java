@@ -15,13 +15,13 @@ public class OverwriteNewAngleBaseline extends Command {
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
-
+		Robot.mShooter.GetShooterAngle().SetAngleBaseline();
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class OverwriteNewAngleBaseline extends Command {
 	@Override
 	protected void interrupted() {
 		// TODO Auto-generated method stub
-
+		end();
 	}
 
 }
