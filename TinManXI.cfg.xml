@@ -3,10 +3,7 @@
 	<DriveTrain LeftMotor1="1" LeftMotor2="2" RightMotor1="3" RightMotor2="4" XSensitivity="1.0" YSensitivity="1.0" P="0.0" I="0.0" D="0.0" Tolerance="0.0"/>
 	<OI>
 		<Joystick Name="OpStick" Id="0" />
-		
-		
 		<Command Joystick="OpStick" Button="9" Name="SpinUpWheels" />
-
 	</OI>
 	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="320" />
 	<Shooter>

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SpinUpShooterWheels extends Command {
 
 	private final double mRPM;
+	
     public SpinUpShooterWheels(double rpm) {
     	mRPM = rpm;
         // Use requires() here to declare subsystem dependencies
@@ -19,6 +20,7 @@ public class SpinUpShooterWheels extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("Shooter Wheels Spinning Up...");
     	Robot.mShooter.SetWheelsSpeed(mRPM);
     }
 

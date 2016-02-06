@@ -9,14 +9,14 @@ public class CommandRetrieval {
 	public static final String Prefix = "org.usfirst.frc.team1922.robot.commands.";
 	public static Command GetCommandFromName(String name)
 	{
+		String compName = Prefix + name;
 		Class<?> clazz;
 		Object instance = null;
 		try {
-			clazz = Class.forName(Prefix + name);
+			clazz = Class.forName(compName);
 			Constructor<?> constructor = clazz.getConstructor();
 			instance = constructor.newInstance();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

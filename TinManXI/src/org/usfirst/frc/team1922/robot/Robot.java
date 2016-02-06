@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
 		//mCfgLoader.RegisterCfgClass(mBallRetriever);
 		
 		//load the xml file here
-		mCfgLoader.LoadFile(XMLData.mXMLString, false);
+		mCfgLoader.LoadFile(XMLData.GetString(), false);
 		
 		//System.out.println("TEST");
 		

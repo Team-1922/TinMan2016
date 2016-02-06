@@ -120,6 +120,7 @@ public class OI implements CfgInterface{
 		for(int i = 0; i < commands.getLength(); ++i)
 		{
 			Element thisElement = (Element)commands.item(i);
+			System.out.println(thisElement.getAttribute("Name"));
 			//Command thisCommand = CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name"));
 			mCommandMap.put(
 					new Tuple<String,Integer>(
@@ -165,9 +166,9 @@ public class OI implements CfgInterface{
 	}
 	@Override
 	public void MakeCfgClassesNull() {
-		mCommandMap = null;
-		mJoysticks = null;
-		mButtonCommands = null;		
+		mCommandMap.clear();;
+		mJoysticks.clear();
+		mButtonCommands.clear();		
 	}
 
 

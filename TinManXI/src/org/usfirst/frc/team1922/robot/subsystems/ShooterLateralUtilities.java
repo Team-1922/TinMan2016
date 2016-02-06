@@ -106,6 +106,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mPIDWindageAdj = Float.parseFloat(mCfgClass.GetAttribute("Windage"));
 		
 		SetTableName(mTableName);
+		InvalidateBestWindow();
 		return true;
 	}
 

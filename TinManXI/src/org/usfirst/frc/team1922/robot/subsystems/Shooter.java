@@ -53,6 +53,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mWheelsD = 0.0f;
 	protected float mWheelsF = 0.0f;
 	protected int mWheelsEncToRot = 1;
+	protected float mWheelsSetRpm = 0;
 	
 	protected float mLateralP = 0.0f;
 	protected float mLateralI = 0.0f;
@@ -149,6 +150,12 @@ public class Shooter extends Subsystem implements CfgInterface {
     	return mShooterLateral;
     }
     
+    
+    public float GetShooterDefaultSpeed()
+    {
+    	return mWheelsSetRpm;
+    }
+    
     /*
      * 
      * Overridden Member Functions
@@ -179,6 +186,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mWheelsP = Float.parseFloat(shooterWheelsElement.getAttribute("P"));
 		mWheelsI = Float.parseFloat(shooterWheelsElement.getAttribute("I"));
 		mWheelsD = Float.parseFloat(shooterWheelsElement.getAttribute("D"));
+		
+		mWheelsSetRpm = Float.parseFloat(shooterWheelsElement.getAttribute("ShootRPM"));
 		
 		mWheelsEncToRot = Integer.parseInt(shooterWheelsElement.getAttribute("EncSamplesPerRotation"));
 				
@@ -231,6 +240,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		shooterWheelsElement.setAttribute("P", Float.toString(mWheelsP));
 		shooterWheelsElement.setAttribute("I", Float.toString(mWheelsI));
 		shooterWheelsElement.setAttribute("D", Float.toString(mWheelsD));
+		
+		shooterWheelsElement.setAttribute("ShootRPM", Float.toString(mWheelsSetRpm));
 		
 		shooterWheelsElement.setAttribute("EncSamplesPerRotation", Integer.toString(mWheelsEncToRot));
 		
