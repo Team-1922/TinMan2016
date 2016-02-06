@@ -16,7 +16,7 @@ public class ReloadXMLCfg extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mCfgLoader.LoadFile(Robot.mCfgFileName);
+    	Robot.mCfgLoader.LoadFile(Robot.mCfgFileName, true);
     }
 
     // Called repeatedly when this Command is scheduled to run

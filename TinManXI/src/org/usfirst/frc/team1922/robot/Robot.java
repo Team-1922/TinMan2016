@@ -48,14 +48,14 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		
 		//register XML loading classes here
-		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
-		mCfgLoader.RegisterCfgClass(mDriveTrain);
+		//mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
+		//mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(oi);
 		mCfgLoader.RegisterCfgClass(mShooter);
-		mCfgLoader.RegisterCfgClass(mBallRetriever);
+		//mCfgLoader.RegisterCfgClass(mBallRetriever);
 		
 		//load the xml file here
-		mCfgLoader.LoadFile(mCfgFileName);
+		mCfgLoader.LoadFile(XMLData.mXMLString, false);
 		
 		//System.out.println("TEST");
 		

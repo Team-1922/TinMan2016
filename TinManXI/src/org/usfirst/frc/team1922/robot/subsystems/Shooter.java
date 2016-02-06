@@ -167,8 +167,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		 mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
 		 mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
 		 mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
-		 mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleMultRatio"));
-		 mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("AngleOffset")); 
+		 mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
+		 mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset")); 
 		
 		
 		Element shooterWheelsElement = (Element) mCfgClass.GetNthChild("Wheels", 0);
@@ -188,6 +188,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mLateralP = Float.parseFloat(shooterLateralElement.getAttribute("P"));
 		mLateralI = Float.parseFloat(shooterLateralElement.getAttribute("I"));
 		mLateralD = Float.parseFloat(shooterLateralElement.getAttribute("D"));
+		
+		mLateralTolerance = Float.parseFloat(shooterLateralElement.getAttribute("Tolerance"));
 		
 		Element shooterFeederElement = (Element) mCfgClass.GetNthChild("Feeder", 0);
 		
@@ -213,8 +215,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		shooterAngleElement.setAttribute("MotorId", Integer.toString(mAngleMotorId));
 
-		shooterAngleElement.setAttribute("AngleMultRatio", Float.toString(mAnglePotMultRatio));
-		shooterAngleElement.setAttribute("AngleOffset", Float.toString(mAnglePotOffset));
+		shooterAngleElement.setAttribute("AngleTo5v", Float.toString(mAnglePotMultRatio));
+		shooterAngleElement.setAttribute("PotOffset", Float.toString(mAnglePotOffset));
 		
 		
 		mCfgClass.AddChild(shooterAngleElement);
@@ -240,6 +242,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		shooterLateralElement.setAttribute("P", Float.toString(mLateralP));
 		shooterLateralElement.setAttribute("I", Float.toString(mLateralI));
 		shooterLateralElement.setAttribute("D", Float.toString(mLateralD));
+		shooterLateralElement.setAttribute("Tolerance", Float.toString(mLateralTolerance));
 		
 		mCfgClass.AddChild(shooterLateralElement);
 		

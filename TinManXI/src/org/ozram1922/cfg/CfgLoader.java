@@ -9,6 +9,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import java.io.FileInputStream;
+import java.io.StringReader;
 import java.io.File;
 import org.xml.sax.InputSource;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class CfgLoader
   }
 
   //returns false ONLY if an exception is thown.  If the config file does not have complete data, it will not throw
-  public boolean LoadFile(String filePath)
+  public boolean LoadFile(String data, boolean isFile)
   {
 	//delete all of the 'things' before we load (to avoid GC not running in time)
 	for(CfgInterface i : mCfgClasses)
@@ -59,11 +60,18 @@ public class CfgLoader
     {
        // use the factory to create a documentbuilder
        DocumentBuilder builder = factory.newDocumentBuilder();
-
-       // create a new document from input source
-       FileInputStream fis = new FileInputStream(filePath);
-       InputSource is = new InputSource(fis);
-       Document doc = builder.parse(is);
+       Document doc = null;
+       if(isFile)
+       {
+	       // create a new document from input source
+	       FileInputStream fis = new FileInputStream(data);
+	       InputSource is = new InputSource(fis);
+	       doc = builder.parse(is);
+       }
+       else
+       {
+    	   doc = builder.parse( new InputSource( new StringReader( data ) ) );  
+       }
 
        // get the first element
        Element rootElement = doc.getDocumentElement();
