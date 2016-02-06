@@ -25,7 +25,8 @@ public class ShooterFeeder extends Subsystem {
 	
 	public void MakeCfgClassesNull()
 	{
-		mFeedSolenoid.free();
+		if(mFeedSolenoid != null)
+			mFeedSolenoid.free();
 		mFeedSolenoid = null;
 	}
 	

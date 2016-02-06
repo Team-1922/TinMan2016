@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
+import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
@@ -30,7 +31,7 @@ public class Robot extends IterativeRobot {
 	public static BallRetriever mBallRetriever = new BallRetriever();
 	public static Shooter mShooter = new Shooter();
 	public static ShooterLateralUtilities mGlobShooterLatUtils = new ShooterLateralUtilities();
-	public static OI oi;
+	public static OI oi = new OI();
 	public static CfgLoader mCfgLoader = new CfgLoader();
 	public static String mCfgFileName = "TinManXI.cfg.xml";
 
@@ -39,16 +40,16 @@ public class Robot extends IterativeRobot {
     
     Command mSaveFile;
     Command mLoadFile;
+    Command mJoyCtrlAngle;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-		oi = new OI();
 		
 		//register XML loading classes here
-		//mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
+		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
 		//mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(oi);
 		mCfgLoader.RegisterCfgClass(mShooter);
@@ -119,6 +120,13 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        
+        /*
+         * FOR TESTING ONLY
+         * 
+         */
+        mJoyCtrlAngle = new JoyCtrlAngle();
+        mJoyCtrlAngle.start();
         
         //mSaveFile.start();
     }

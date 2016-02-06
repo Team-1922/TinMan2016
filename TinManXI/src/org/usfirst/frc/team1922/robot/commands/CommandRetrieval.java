@@ -1,12 +1,27 @@
 package org.usfirst.frc.team1922.robot.commands;
 
+import java.lang.reflect.Constructor;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class CommandRetrieval {
 	
+	public static final String Prefix = "org.usfirst.frc.team1922.robot.commands.";
 	public static Command GetCommandFromName(String name)
 	{
-		switch(name)
+		Class<?> clazz;
+		Object instance = null;
+		try {
+			clazz = Class.forName(Prefix + name);
+			Constructor<?> constructor = clazz.getConstructor();
+			instance = constructor.newInstance();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return (Command)instance;
+		/*switch(name)
 		{
 		case "OverwriteXMLCfg":
 			return new OverwriteXMLCfg();
@@ -16,7 +31,7 @@ public class CommandRetrieval {
 			return new DriveForward();
 		default:
 			return null;
-		}
+		}*/
 	}
 
 }

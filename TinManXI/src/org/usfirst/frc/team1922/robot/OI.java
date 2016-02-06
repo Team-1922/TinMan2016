@@ -74,7 +74,7 @@ public class OI implements CfgInterface{
 		
 	}
 	
-	public float GetLeftPower()
+	/*public float GetLeftPower()
 	{
 		Joystick LeftStick = mJoysticks.get("LeftJoystick").y;
 		return LeftStick.getAxisChannel(AxisType.kY);
@@ -84,6 +84,11 @@ public class OI implements CfgInterface{
 	{
 		Joystick RightStick = mJoysticks.get("RightJoystick").y;
 		return RightStick.getAxisChannel(AxisType.kY);
+	}*/
+	
+	public Joystick GetJoystick(String name)
+	{
+		return this.mJoysticks.get(name).y;
 	}
 
 	/*

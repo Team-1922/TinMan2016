@@ -45,6 +45,7 @@ public class ShooterWheels extends Subsystem {
 	public void SpinDown()
 	{
 		mWheels.setSetpoint(0.0);
+		mWheels.setEncPosition(0);//zero this out so the value doesn't get too large
 		mWheels.disable();
 	}
 	
@@ -59,7 +60,8 @@ public class ShooterWheels extends Subsystem {
 
 
 	public void MakeCfgClassesNull() {
-		mWheels.delete();
+		if(mWheels != null)
+			mWheels.delete();
 		mWheels = null;
 	}
 }

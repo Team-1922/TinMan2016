@@ -67,6 +67,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	
 	public Shooter()
 	{
+		mShooterFeeder = new ShooterFeeder();
 		mShooterAngle = new ShooterAngleAnalog();
 		mShooterWheels = new ShooterWheels();
 		mShooterLateral = new ShooterLateral();
