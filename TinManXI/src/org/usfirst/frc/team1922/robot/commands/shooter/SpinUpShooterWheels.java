@@ -12,6 +12,7 @@ public class SpinUpShooterWheels extends Command {
 	private final double mRPM;
 	
     public SpinUpShooterWheels(double rpm) {
+    	System.out.println("Shooter Wheels Init: " + rpm);
     	mRPM = rpm;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

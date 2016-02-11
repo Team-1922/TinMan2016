@@ -29,10 +29,7 @@ public class ShooterAngleAnalog extends Subsystem {
 		
 		//TODO: is this the correct way to do this?  How do limit switches work
 		//	with the talon SRX?
-		/*mAngleMotor.enableForwardSoftLimit(true);
-		mAngleMotor.enableReverseSoftLimit(true);
-		mAngleMotor.setForwardSoftLimit(1);
-		mAngleMotor.setReverseSoftLimit(1);*/
+		mAngleMotor.enableLimitSwitch(true, true);
 		
 		mNumTurns = numTurns;
 		mAngleOffset = horizAngle;
@@ -55,7 +52,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	//TODO: does this do what it should?  
 	public boolean IsStopped()
 	{
-		return mAngleMotor.getForwardSoftLimit() == 1;
+		return mAngleMotor.isFwdLimitSwitchClosed() || mAngleMotor.isRevLimitSwitchClosed();
 	}
 	
 	public void SetAngleBaseline()

@@ -83,7 +83,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 				mAnglePotMultRatio, mAnglePotOffset);
 		//mShooterAngle.Reconstruct(mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
-				mWheelsP, mWheelsI, mWheelsD, 
+				mWheelsP, mWheelsI, mWheelsD, mWheelsF,
 				mWheelsEncToRot);
 		mShooterLateral.Reconstruct(
 				mLateralP, mLateralI, mLateralD, mLateralTolerance);
@@ -186,6 +186,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mWheelsP = Float.parseFloat(shooterWheelsElement.getAttribute("P"));
 		mWheelsI = Float.parseFloat(shooterWheelsElement.getAttribute("I"));
 		mWheelsD = Float.parseFloat(shooterWheelsElement.getAttribute("D"));
+		mWheelsF = Float.parseFloat(shooterWheelsElement.getAttribute("F"));
 		
 		mWheelsSetRpm = Float.parseFloat(shooterWheelsElement.getAttribute("ShootRPM"));
 		
@@ -240,6 +241,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		shooterWheelsElement.setAttribute("P", Float.toString(mWheelsP));
 		shooterWheelsElement.setAttribute("I", Float.toString(mWheelsI));
 		shooterWheelsElement.setAttribute("D", Float.toString(mWheelsD));
+		shooterWheelsElement.setAttribute("F", Float.toString(mWheelsF));
 		
 		shooterWheelsElement.setAttribute("ShootRPM", Float.toString(mWheelsSetRpm));
 		

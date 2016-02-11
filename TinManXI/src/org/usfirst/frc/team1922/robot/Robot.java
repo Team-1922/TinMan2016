@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import java.io.IOException;
+
 import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
@@ -50,10 +52,10 @@ public class Robot extends IterativeRobot {
 		
 		//register XML loading classes here
 		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
-		//mCfgLoader.RegisterCfgClass(mDriveTrain);
-		mCfgLoader.RegisterCfgClass(oi);
+		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(mShooter);
 		//mCfgLoader.RegisterCfgClass(mBallRetriever);
+		mCfgLoader.RegisterCfgClass(oi);
 		
 		//load the xml file here
 		mCfgLoader.LoadFile(XMLData.GetString(), false);
@@ -62,6 +64,19 @@ public class Robot extends IterativeRobot {
 		
 		mSaveFile = new OverwriteXMLCfg();
 		mLoadFile = new ReloadXMLCfg();
+		
+		//startGRIP();
+    }
+
+	//TODO: Make this Good
+    protected void startGRIP()
+    {
+        /* Run GRIP in a new process */
+        try {
+            new ProcessBuilder("/home/lvuser/grip").inheritIO().start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 	
 	/**
@@ -128,6 +143,12 @@ public class Robot extends IterativeRobot {
         mJoyCtrlAngle = new JoyCtrlAngle();
         mJoyCtrlAngle.start();
         
+        SmartDashboard.putNumber("Wheels P", Robot.mShooter.GetShooterWheels().GetP());
+        SmartDashboard.putNumber("Wheels I", Robot.mShooter.GetShooterWheels().GetI());
+        SmartDashboard.putNumber("Wheels D", Robot.mShooter.GetShooterWheels().GetD());
+        SmartDashboard.putNumber("Wheels F", Robot.mShooter.GetShooterWheels().GetF());
+        SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
+        
         //mSaveFile.start();
     }
 
@@ -139,6 +160,21 @@ public class Robot extends IterativeRobot {
     	mGlobShooterLatUtils.UpdateCycle();
     	
         Scheduler.getInstance().run();
+        
+        Robot.mShooter.GetShooterWheels().SetPID(
+        		SmartDashboard.getNumber("Wheels P"),
+        		SmartDashboard.getNumber("Wheels I"), 
+        		SmartDashboard.getNumber("Wheels D"),
+        		SmartDashboard.getNumber("Wheels F"));
+        
+        //Robot.mShooter.GetShooterWheels().GetController().set(2000);
+        //Robot.mShooter.GetShooterWheels().SetSpeed(SmartDashboard.getNumber("Wheels Setpoint"));
+
+        SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
+        
+        SmartDashboard.putNumber("Encoder Position", Robot.mShooter.GetShooterWheels().GetController().getPosition());
+
+        SmartDashboard.putNumber("Encoder Speed", Robot.mShooter.GetShooterWheels().GetController().getSpeed());
     }
     
     /**

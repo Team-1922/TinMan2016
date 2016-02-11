@@ -148,10 +148,14 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
     }
 	@Override
 	public void MakeCfgClassesNull() {
-		mLeftMotor1.delete();
-		mLeftMotor2.delete();
-		mRightMotor1.delete();
-		mRightMotor2.delete();
+		if(mLeftMotor1 != null)
+			mLeftMotor1.delete();
+		if(mLeftMotor2 != null)
+			mLeftMotor2.delete();
+		if(mRightMotor1 != null)
+			mRightMotor1.delete();
+		if(mRightMotor2 != null)
+			mRightMotor2.delete();
 		
 		mLeftMotor1 = null;
 		mLeftMotor2 = null;
