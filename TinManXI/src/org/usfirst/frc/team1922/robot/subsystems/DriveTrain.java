@@ -164,7 +164,7 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	}
 	@Override
 	protected double returnPIDInput() {
-		return Robot.mGlobShooterLatUtils.GetBestWindow().mCenterY;
+		return Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX;
 	}
 	
 	//positive = cw; set to spin about a central axis
@@ -172,11 +172,12 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	protected void usePIDOutput(double output) {
 		
 		//output is the 'spin'
-		mLeftMotor1.set(output);
+		/*mLeftMotor1.set(output);
 		mLeftMotor2.set(output);
 
 		mRightMotor1.set(-output);
-		mRightMotor2.set(-output);
+		mRightMotor2.set(-output);*/
+		SetPower(output, -output);
 	}
 
 }

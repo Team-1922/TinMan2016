@@ -24,10 +24,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected ConfigurableClass mCfgClass = new ConfigurableClass("Shooter", this);
 	protected ShooterAngleAnalog mShooterAngle;
 	protected ShooterWheels mShooterWheels;
-	protected ShooterLateral mShooterLateral;
 	protected ShooterFeeder mShooterFeeder;
 	
-	protected UpdateLateralPIDSwitch mPIDUpdateCmd = new UpdateLateralPIDSwitch();
+	//protected UpdateLateralPIDSwitch mPIDUpdateCmd = new UpdateLateralPIDSwitch();
     
 	
 	/*
@@ -73,7 +72,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterFeeder = new ShooterFeeder();
 		mShooterAngle = new ShooterAngleAnalog();
 		mShooterWheels = new ShooterWheels();
-		mShooterLateral = new ShooterLateral();
+		//mShooterLateral = new ShooterLateral();
 	}
 	
 	public void Reconstruct()
@@ -88,8 +87,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, mWheelsF,
 				mWheelsEncToRot);
-		mShooterLateral.Reconstruct(
-				mLateralP, mLateralI, mLateralD, mLateralTolerance);
+		//mShooterLateral.Reconstruct(
+		//		mLateralP, mLateralI, mLateralD, mLateralTolerance);
 	}
 
     public void initDefaultCommand() 
@@ -105,7 +104,7 @@ public class Shooter extends Subsystem implements CfgInterface {
     		mShooterAngle.setPosition(setpoint);
     }*/
     
-    public void EnableLateralPID()
+    /*public void EnableLateralPID()
     {
     	mPIDUpdateCmd.start();
     }
@@ -113,13 +112,13 @@ public class Shooter extends Subsystem implements CfgInterface {
     public void DisableLateralPID()
     {
     	mPIDUpdateCmd.stop();
-    }
+    }*/
     
     //sets the state of lateralPID control
-    public PIDSubsystem GetLateralPID()
+    /*public PIDSubsystem GetLateralPID()
     {
     	return mShooterLateral;
-    }
+    }*/
     
     //set the wheels speed in rpm
     public void SetWheelsSpeed(double speed)
@@ -148,10 +147,10 @@ public class Shooter extends Subsystem implements CfgInterface {
     	return mShooterWheels;
     }
     
-    public ShooterLateral GetShooterLateral()
+    /*public ShooterLateral GetShooterLateral()
     {
     	return mShooterLateral;
-    }
+    }*/
     
     
     public float GetShooterDefaultSpeed()
@@ -288,7 +287,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterFeeder.MakeCfgClassesNull();
 		mShooterAngle.MakeCfgClassesNull();
 		mShooterWheels.MakeCfgClassesNull();
-		mShooterLateral.MakeCfgClassesNull();
+		//mShooterLateral.MakeCfgClassesNull();
 	}
 }
 

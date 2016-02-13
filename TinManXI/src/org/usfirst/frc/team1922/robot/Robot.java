@@ -150,14 +150,13 @@ public class Robot extends IterativeRobot {
         mSetAngle.start();*/
         
         /*mJoyCtrlAngle = new JoyCtrlAngle();
-        mJoyCtrlAngle.start();
+        mJoyCtrlAngle.start();*/
         
-        SmartDashboard.putNumber("Wheels P", Robot.mShooter.GetShooterWheels().GetP());
-        SmartDashboard.putNumber("Wheels I", Robot.mShooter.GetShooterWheels().GetI());
-        SmartDashboard.putNumber("Wheels D", Robot.mShooter.GetShooterWheels().GetD());
-        SmartDashboard.putNumber("Wheels F", Robot.mShooter.GetShooterWheels().GetF());
-        SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
-        */
+        SmartDashboard.putNumber("Drive P", Robot.mDriveTrain.getPIDController().getP());
+        SmartDashboard.putNumber("Drive I", Robot.mDriveTrain.getPIDController().getI());
+        SmartDashboard.putNumber("Drive D", Robot.mDriveTrain.getPIDController().getD());
+        SmartDashboard.putNumber("Drive F", Robot.mDriveTrain.getPIDController().getF());
+       
         //mSaveFile.start();
     }
 
@@ -170,16 +169,18 @@ public class Robot extends IterativeRobot {
     	
         Scheduler.getInstance().run();
         
-        /*Robot.mShooter.GetShooterWheels().SetPID(
-        		SmartDashboard.getNumber("Wheels P"),
-        		SmartDashboard.getNumber("Wheels I"), 
-        		SmartDashboard.getNumber("Wheels D"),
-        		SmartDashboard.getNumber("Wheels F"));
+        Robot.mDriveTrain.getPIDController().setPID(
+        		SmartDashboard.getNumber("Drive P"),
+        		SmartDashboard.getNumber("Drive I"), 
+        		SmartDashboard.getNumber("Drive D"));
+        
+        SmartDashboard.putNumber("Drive Setpoint", Robot.mDriveTrain.getPIDController().getSetpoint());
+        
         
         //Robot.mShooter.GetShooterWheels().GetController().set(2000);
         //Robot.mShooter.GetShooterWheels().SetSpeed(SmartDashboard.getNumber("Wheels Setpoint"));
 
-        SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
+        /*SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
         
         SmartDashboard.putNumber("Encoder Position", Robot.mShooter.GetShooterWheels().GetController().getPosition());
 

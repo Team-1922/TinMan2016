@@ -48,24 +48,38 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		double[] centerYs   = table.getNumberArray("centerY", defaultValue);
 		double[] solidities = table.getNumberArray("solidity", defaultValue);
     	
-		
-		if(Array.getLength(areas) == 0)
+		/*
+		 * 
+		 * 
+		 * 
+		 * TODO: IMPORTANT: check that the width is greater than the height
+		 * 			to prevent unwanted objects being detected (to start with)
+		 * 
+		 * 
+		 * 
+		 */
+
+		InvalidateBestWindow();
+		/*if(Array.getLength(areas) == 0)
 		{
-			InvalidateBestWindow();
 		}
-		else
+		else*/
 		{
 			//are any of the areas significantly BETTER than the current best
 			for(int i = 0; i < Array.getLength(areas); ++i)
 			{
-				if(areas[i] > mBestWindow.mArea + 100)
+				if(widths[i] > heights[i])
 				{
-					mBestWindow = new StrongholdWindow(
-							areas[i], widths[i], heights[i],
-							centerXs[i], centerYs[i], solidities[i]);
+					if(areas[i] > mBestWindow.mArea + 100)
+					{
+						mBestWindow = new StrongholdWindow(
+								areas[i], widths[i], heights[i],
+								centerXs[i], centerYs[i], solidities[i]);
+					}
 				}
 			}
 		}
+		mBestWindow.Print();
     	/*
     	 * Flow:
     	 * 
@@ -82,13 +96,14 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	public StrongholdWindow GetBestWindow()
 	{
+		mBestWindow.Print();
 		return mBestWindow;
 	}
 	
 	public void InvalidateBestWindow()
 	{
 		//do this manually
-		mBestWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
+		mBestWindow = new StrongholdWindow(0, 0, 0, 650, 650, 0);
 	}
 	
 

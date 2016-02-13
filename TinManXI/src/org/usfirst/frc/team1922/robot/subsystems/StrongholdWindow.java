@@ -22,6 +22,11 @@ public class StrongholdWindow
 		mSolidity = solidity;
 	}
 	
+	public void Print()
+	{
+		System.out.println("Window: \n Area: " + mArea + " \n Width: " + mWidth + "\n Height: " + mHeight + "\n CenterX: " + mCenterX + "\n CenterY: " + mCenterY + "\n Solidity: " + mSolidity + "\n");
+	}
+	
 	/*public static ArrayList<StrongholdWindow> MakeWindows(
 			double[] areas, double[] widths, double[] heights,
 			double[] centerXs, double[] centerYs, double[] solidities)
