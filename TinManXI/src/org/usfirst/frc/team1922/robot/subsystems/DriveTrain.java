@@ -22,8 +22,8 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	
 	private ConfigurableClass mCfgInstance = new ConfigurableClass("DriveTrain", this);
 	
-	protected float mXSensitivity = 1.0f;
-	protected float mYSensitivity = 1.0f;
+	protected float mLeftSensitivity = 1.0f;
+	protected float mRightSensitivity = 1.0f;
 	
 	//if these values are negative, that motor is inverted
 	protected int mLeftMotorId1 = 1;
@@ -84,10 +84,10 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	
 	public void SetPower(double left, double right)
 	{
-		mLeftMotor1.set(left);
-		mLeftMotor2.set(left);
-		mRightMotor1.set(right);
-		mRightMotor2.set(right);
+		mLeftMotor1.set(mLeftSensitivity * left);
+		mLeftMotor2.set(mLeftSensitivity * left);
+		mRightMotor1.set(mRightSensitivity * right);
+		mRightMotor2.set(mRightSensitivity * right);
 	}
 	
 	/*
@@ -99,8 +99,8 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	@Override
 	public boolean DeserializeInternal() {
 
-		mXSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("XSensitivity"));
-		mYSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("YSensitivity"));
+		mLeftSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("LeftSensitivity"));
+		mRightSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("RightSensitivity"));
 		
 		mLeftMotorId1 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor1"));
 		mLeftMotorId2 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor2"));
@@ -121,8 +121,8 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	public void SerializeInternal(Document doc) {
 
 
-		mCfgInstance.SetAttribute("XSensitivity", Float.toString(mXSensitivity));
-		mCfgInstance.SetAttribute("YSensitivity", Float.toString(mYSensitivity));
+		mCfgInstance.SetAttribute("LeftSensitivity", Float.toString(mLeftSensitivity));
+		mCfgInstance.SetAttribute("RightSensitivity", Float.toString(mRightSensitivity));
 		
 		mCfgInstance.SetAttribute("LeftMotor1", Integer.toString(mLeftMotorId1));
 		mCfgInstance.SetAttribute("LeftMotor2", Integer.toString(mLeftMotorId2));

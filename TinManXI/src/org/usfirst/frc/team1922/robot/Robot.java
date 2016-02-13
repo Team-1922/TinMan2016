@@ -36,7 +36,9 @@ public class Robot extends IterativeRobot {
 	public static ShooterLateralUtilities mGlobShooterLatUtils = new ShooterLateralUtilities();
 	public static OI oi = new OI();
 	public static CfgLoader mCfgLoader = new CfgLoader();
+	public static RangeAngleTable mRangeAngleTable;
 	public static String mCfgFileName = "TinManXI.cfg.xml";
+	public static String mCsvRangeAngleName = "RangeAngleTable.csv";
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -51,6 +53,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+
+		mRangeAngleTable = new RangeAngleTable(mCsvRangeAngleName);
 		
 		//register XML loading classes here
 		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first

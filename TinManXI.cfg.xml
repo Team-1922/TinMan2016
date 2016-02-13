@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<DriveTrain LeftMotor1="-7" LeftMotor2="-2" RightMotor1="3" RightMotor2="4" XSensitivity="1.0" YSensitivity="1.0" P="0.0" I="0.0" D="0.0" Tolerance="0.0"/>
+	<DriveTrain LeftMotor1="-7" LeftMotor2="-2" RightMotor1="3" RightMotor2="4" LeftSensitivity="1.0" RightSensitivity="0.8" P="0.0" I="0.0" D="0.0" Tolerance="0.0"/>
 	<OI>
 		<Joystick Name="OpStick" Id="0" />
 		<Joystick Name="LeftStick" Id="1" />

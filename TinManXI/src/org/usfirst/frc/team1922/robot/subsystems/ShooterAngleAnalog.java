@@ -29,6 +29,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ping, int echo)
 	{
 		mDistanceFinder = new Ultrasonic(ping, echo, Unit.kInches);
+		mDistanceFinder.setAutomaticMode(true);
 		
 		mAngleMotor = new CANTalon(canId);
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
@@ -40,8 +41,6 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor.setProfile(0);
 		mAngleMotor.setPID(p, i, d);
 		
-		//TODO: is this the correct way to do this?  How do limit switches work
-		//	with the talon SRX?
 		mAngleMotor.enableLimitSwitch(true, true);
 		
 		mAngleRatio	 = multRatio;
@@ -77,6 +76,12 @@ public class ShooterAngleAnalog extends Subsystem {
 		//return true;
 		return OzMath.SigmaTest(mAngleMotor.getPosition(), mAngleMotor.getSetpoint(), .01);
 		//the "sigma" here should be in voltage or degrees?
+	}
+	
+	//returns in feet
+	public double GetUltraDistance()
+	{
+		return mDistanceFinder.getRangeInches() / 12.0;
 	}
 	
 	public void SetAngleBaseline()
