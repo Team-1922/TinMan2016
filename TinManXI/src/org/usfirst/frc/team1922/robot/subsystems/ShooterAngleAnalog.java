@@ -5,6 +5,8 @@ import org.ozram1922.OzMath;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.Ultrasonic.Unit;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class ShooterAngleAnalog extends Subsystem {
     
 	protected CANTalon mAngleMotor;
+	protected Ultrasonic mDistanceFinder;
 	protected float mAngleRatio;
 	protected float mAngleOffset;
 	protected float mAngleBaseline = 0.0f;
@@ -23,8 +26,10 @@ public class ShooterAngleAnalog extends Subsystem {
 	
 	//mult ratio is in potValue per degree
 	//horizAngle is in potValue's
-	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle)
+	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ping, int echo)
 	{
+		mDistanceFinder = new Ultrasonic(ping, echo, Unit.kInches);
+		
 		mAngleMotor = new CANTalon(canId);
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 		mAngleMotor.changeControlMode(TalonControlMode.Position);

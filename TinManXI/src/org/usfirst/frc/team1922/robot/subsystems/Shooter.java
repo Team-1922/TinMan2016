@@ -41,6 +41,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mAnglePotMultRatio = 1.0f;
 	protected float mAnglePotOffset = 0.0f;
 	protected int mAngleMotorId = 5;
+	protected int mAngleEcho = 0;
+	protected int mAnglePing = 0;
 	
 	protected int mFeedSol = 0;
 	
@@ -80,7 +82,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterFeeder.Reconstruct(mFeedSol);
 		mShooterAngle.Reconstruct(mAngleMotorId, 
 				mAngleP, mAngleI, mAngleD, 
-				mAnglePotMultRatio, mAnglePotOffset);
+				mAnglePotMultRatio, mAnglePotOffset,
+				mAnglePing, mAngleEcho);
 		//mShooterAngle.Reconstruct(mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, mWheelsF,
@@ -170,6 +173,8 @@ public class Shooter extends Subsystem implements CfgInterface {
 		//mAngleSolFront = Integer.parseInt(shooterAngleElement.getAttribute("FrontSol"));
 		//mAngleSolRear = Integer.parseInt(shooterAngleElement.getAttribute("RearSol"));
 
+		mAngleEcho = Integer.parseInt(shooterAngleElement.getAttribute("Echo"));
+		mAnglePing = Integer.parseInt(shooterAngleElement.getAttribute("Ping"));
 		
 		 mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
 		 mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
@@ -218,7 +223,9 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		//shooterAngleElement.setAttribute("FrontSol", Float.toString(mAngleSolFront));
 		//shooterAngleElement.setAttribute("RearSol", Float.toString(mAngleSolRear));
-		
+
+		shooterAngleElement.setAttribute("Ping", Float.toString(mAnglePing));
+		shooterAngleElement.setAttribute("Echo", Float.toString(mAngleEcho));
 		
 		shooterAngleElement.setAttribute("P", Float.toString(mAngleP));
 		shooterAngleElement.setAttribute("I", Float.toString(mAngleI));
