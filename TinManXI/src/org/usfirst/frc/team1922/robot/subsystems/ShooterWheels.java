@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.OzMath;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
@@ -100,7 +102,7 @@ public class ShooterWheels extends Subsystem {
 	
 	public boolean IsSpunUp()
 	{
-		return mWheels.getEncVelocity() == mWheels.getSetpoint();
+		return OzMath.SigmaTest(mWheels.getSpeed(), mWheels.getSetpoint(), 25);
 	}
 
     public void initDefaultCommand() 

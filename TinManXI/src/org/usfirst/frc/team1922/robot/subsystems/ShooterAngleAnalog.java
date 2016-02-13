@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.OzMath;
+
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -10,37 +13,45 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class ShooterAngleAnalog extends Subsystem {
     
 	protected CANTalon mAngleMotor;
-	protected float mNumTurns;
+	protected float mAngleRatio;
 	protected float mAngleOffset;
-	protected float mAngleBaseline;
+	protected float mAngleBaseline = 0.0f;
 	
 	public ShooterAngleAnalog()
 	{
 	}
 	
-	//numTurns is the number of turns of the shooter angle per 10 potentiometer turns
-	//horizAngle is in degrees
-	public void Reconstruct(int canId, float p, float i, float d, float numTurns, float horizAngle)
+	//mult ratio is in potValue per degree
+	//horizAngle is in potValue's
+	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle)
 	{
 		mAngleMotor = new CANTalon(canId);
-		mAngleMotor.setPID(p, i, d);
+		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
+		mAngleMotor.changeControlMode(TalonControlMode.Position);
 		mAngleMotor.configPotentiometerTurns(10);
-		mAngleMotor.changeControlMode(TalonControlMode.Speed);
+		
+		mAngleMotor.reverseOutput(true);
+		
+		mAngleMotor.setProfile(0);
+		mAngleMotor.setPID(p, i, d);
 		
 		//TODO: is this the correct way to do this?  How do limit switches work
 		//	with the talon SRX?
 		mAngleMotor.enableLimitSwitch(true, true);
 		
-		mNumTurns = numTurns;
+		mAngleRatio	 = multRatio;
 		mAngleOffset = horizAngle;
+		
+
 	}
 	
 	//angle is relative to horizontal (negative to get to feeding position)
 	public void SetAngle(float angle)
 	{
-		mAngleMotor.enable();
-		mAngleMotor.changeControlMode(TalonControlMode.Speed);
-		mAngleMotor.setSetpoint(mNumTurns * ((angle + mAngleOffset) / 360.0f) + mAngleBaseline);
+		float set = mAngleRatio * angle + mAngleBaseline + mAngleOffset;
+		System.out.println("Setting Angle To:" + set);
+		mAngleMotor.changeControlMode(TalonControlMode.Position);
+		mAngleMotor.set(set);
 	}
 	
 	public void SetSpeed(double d)
@@ -53,6 +64,14 @@ public class ShooterAngleAnalog extends Subsystem {
 	public boolean IsStopped()
 	{
 		return mAngleMotor.isFwdLimitSwitchClosed() || mAngleMotor.isRevLimitSwitchClosed();
+	}
+	
+	public boolean OnTarget()
+	{
+		//System.out.println(mAngleMotor.getSetpoint());
+		//return true;
+		return OzMath.SigmaTest(mAngleMotor.getPosition(), mAngleMotor.getSetpoint(), .01);
+		//the "sigma" here should be in voltage or degrees?
 	}
 	
 	public void SetAngleBaseline()

@@ -12,6 +12,7 @@ import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
+import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngle;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
     Command mSaveFile;
     Command mLoadFile;
     Command mJoyCtrlAngle;
+    Command mSetAngle;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -140,7 +142,10 @@ public class Robot extends IterativeRobot {
          * FOR TESTING ONLY
          * 
          */
-        mJoyCtrlAngle = new JoyCtrlAngle();
+        /*mSetAngle = new SetShooterAngle(15);
+        mSetAngle.start();*/
+        
+        /*mJoyCtrlAngle = new JoyCtrlAngle();
         mJoyCtrlAngle.start();
         
         SmartDashboard.putNumber("Wheels P", Robot.mShooter.GetShooterWheels().GetP());
@@ -148,7 +153,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Wheels D", Robot.mShooter.GetShooterWheels().GetD());
         SmartDashboard.putNumber("Wheels F", Robot.mShooter.GetShooterWheels().GetF());
         SmartDashboard.putNumber("Wheels Setpoint", Robot.mShooter.GetShooterWheels().GetController().get());
-        
+        */
         //mSaveFile.start();
     }
 
@@ -161,7 +166,7 @@ public class Robot extends IterativeRobot {
     	
         Scheduler.getInstance().run();
         
-        Robot.mShooter.GetShooterWheels().SetPID(
+        /*Robot.mShooter.GetShooterWheels().SetPID(
         		SmartDashboard.getNumber("Wheels P"),
         		SmartDashboard.getNumber("Wheels I"), 
         		SmartDashboard.getNumber("Wheels D"),
@@ -175,6 +180,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Encoder Position", Robot.mShooter.GetShooterWheels().GetController().getPosition());
 
         SmartDashboard.putNumber("Encoder Speed", Robot.mShooter.GetShooterWheels().GetController().getSpeed());
+    */
     }
     
     /**

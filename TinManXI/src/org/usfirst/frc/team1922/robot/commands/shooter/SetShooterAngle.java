@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 
-/*
+
 public class SetShooterAngle extends Command {
 
 		
@@ -24,6 +24,7 @@ public class SetShooterAngle extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("SetShooterAngle");
     	Robot.mShooter.GetShooterAngle().SetAngle(mAngle);
     }
 
@@ -33,11 +34,14 @@ public class SetShooterAngle extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.mShooter.GetShooterAngle().onTarget();
+        return Robot.mShooter.GetShooterAngle().OnTarget();
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println("End SetShooterAngle");
+    	//do this to keep the motor from "growling"
+    	Robot.mShooter.GetShooterAngle().SetSpeed(0);
     }
 
     // Called when another command which requires one or more of the same
@@ -45,4 +49,4 @@ public class SetShooterAngle extends Command {
     protected void interrupted() {
     	end();
     }
-}*/
+}
