@@ -18,6 +18,9 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	double[] defaultValue = new double[0];
 	StrongholdWindow mBestWindow;
 	
+	long mTimeSincePreviousUniqueUpdate = 0;
+	long mPreviousUniqueUpdateTime = 0;
+	
 	protected ConfigurableClass mCfgClass = new ConfigurableClass("ShooterLateralGlobal", this);
 	
 	//zero is NOT centered, the center of the image is (i think 640 wide)
@@ -58,28 +61,46 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		 * 
 		 * 
 		 */
+		
 
-		InvalidateBestWindow();
+		//InvalidateBestWindow();
 		/*if(Array.getLength(areas) == 0)
 		{
 		}
 		else*/
+		//are any of the areas significantly BETTER than the current best
+		StrongholdWindow potNew = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
+		for(int i = 0; i < Array.getLength(areas); ++i)
 		{
-			//are any of the areas significantly BETTER than the current best
-			for(int i = 0; i < Array.getLength(areas); ++i)
+			if(widths[i] > heights[i])
 			{
-				if(widths[i] > heights[i])
+				if(areas[i] > potNew.mArea/* + 100*/)
 				{
-					if(areas[i] > mBestWindow.mArea + 100)
-					{
-						mBestWindow = new StrongholdWindow(
-								areas[i], widths[i], heights[i],
-								centerXs[i], centerYs[i], solidities[i]);
-					}
+					potNew = new StrongholdWindow(
+							areas[i], widths[i], heights[i],
+							centerXs[i], centerYs[i], solidities[i]);
 				}
 			}
 		}
-		mBestWindow.Print();
+		
+		//is this "best" window the same as the old best window? (This is for timing purposes)  Even if the camera position stays the same
+		//	There will still be small variances in some aspect of the window (EXACTLY THE SAME = STALE WINDOW)
+		if(potNew != mBestWindow)
+		{
+			//if not, reset the timer
+			mBestWindow = potNew;
+			
+			System.out.println("New Window Found, Took: " + mTimeSincePreviousUniqueUpdate + "ms");
+			
+			mTimeSincePreviousUniqueUpdate = 0;
+			mPreviousUniqueUpdateTime = System.currentTimeMillis();
+		}
+		else
+		{
+			//if true, update the time
+			mTimeSincePreviousUniqueUpdate = System.currentTimeMillis() - mPreviousUniqueUpdateTime;
+			
+		}
     	/*
     	 * Flow:
     	 * 
@@ -91,13 +112,24 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
     	 * 	is the area significantly bigger? (~100px bigger?)
     	 * 		if yes, replace, if no don't replace (not worth the PID readjusts time)
     	 * 
+    	 * THIS IS OLD, MAY NOT BE RELEVENT
     	 */
 	}
 	
 	public StrongholdWindow GetBestWindow()
 	{
 		mBestWindow.Print();
+		if(IsBestWindowStale())
+		{
+			System.out.println("Warning: Window is Stale!");
+		}
 		return mBestWindow;
+	}
+	
+	//returns true if the best window is more than 200ms old
+	public boolean IsBestWindowStale()
+	{
+		return mTimeSincePreviousUniqueUpdate > 200;
 	}
 	
 	public void InvalidateBestWindow()
