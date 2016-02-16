@@ -71,6 +71,13 @@ public class Robot extends IterativeRobot {
 		mSaveFile = new OverwriteXMLCfg();
 		mLoadFile = new ReloadXMLCfg();
 		
+
+        SmartDashboard.putNumber("Drive P", Robot.mDriveTrain.getPIDController().getP());
+        SmartDashboard.putNumber("Drive I", Robot.mDriveTrain.getPIDController().getI());
+        SmartDashboard.putNumber("Drive D", Robot.mDriveTrain.getPIDController().getD());
+        SmartDashboard.putNumber("Drive F", Robot.mDriveTrain.getPIDController().getF());
+       
+		
 		//startGRIP();
     }
 
@@ -152,11 +159,6 @@ public class Robot extends IterativeRobot {
         /*mJoyCtrlAngle = new JoyCtrlAngle();
         mJoyCtrlAngle.start();*/
         
-        SmartDashboard.putNumber("Drive P", Robot.mDriveTrain.getPIDController().getP());
-        SmartDashboard.putNumber("Drive I", Robot.mDriveTrain.getPIDController().getI());
-        SmartDashboard.putNumber("Drive D", Robot.mDriveTrain.getPIDController().getD());
-        SmartDashboard.putNumber("Drive F", Robot.mDriveTrain.getPIDController().getF());
-       
         //mSaveFile.start();
     }
 

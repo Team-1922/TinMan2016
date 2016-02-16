@@ -78,6 +78,8 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 		
 		getPIDController().setPID(mP, mI, mD);
 		getPIDController().setAbsoluteTolerance(mTolerance);
+		getPIDController().setInputRange(-1, 320);
+		getPIDController().setOutputRange(-1, 1);
 		
 		setSetpoint(Robot.mGlobShooterLatUtils.GetWindage());
 	}
@@ -88,6 +90,11 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 		mLeftMotor2.set(mLeftSensitivity * left);
 		mRightMotor1.set(mRightSensitivity * right);
 		mRightMotor2.set(mRightSensitivity * right);
+	}
+	
+	public double GetTolerance()
+	{
+		return mTolerance;
 	}
 	
 	/*

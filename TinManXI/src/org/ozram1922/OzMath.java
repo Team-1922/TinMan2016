@@ -19,5 +19,19 @@ public class OzMath {
 	{
 		return x + (y - x) * val;
 	}
+	
+	//see http://stackoverflow.com/questions/5503091/is-there-clean-syntax-for-checking-if-multiple-variables-all-have-the-same-value
+	//	for credit
+	public static boolean AreAllEqual(int checkValue, int... otherValues)
+	{
+	    for (int value : otherValues)
+	    {
+	        if (value != checkValue)
+	        {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
 
 }

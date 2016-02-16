@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class CenterWindowInView extends Command {
 
-	private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
+	//private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
 	private boolean mWillRun = true;
     public CenterWindowInView() {
         // Use requires() here to declare subsystem dependencies
@@ -23,7 +23,7 @@ public class CenterWindowInView extends Command {
     protected void initialize() {
     	//don't do anything if the window is not in view
     	System.out.println("Start Centering Window");
-    	mWillRun = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX != 650;
+    	mWillRun = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX != -1;
     	
     	if(mWillRun)
     	{
@@ -34,21 +34,29 @@ public class CenterWindowInView extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//make sure we wait for the update to come before continuing
-    	if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
+    	/*if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
     	{
     		Robot.mDriveTrain.disable();
     	}
     	else
     	{
     		Robot.mDriveTrain.enable();
-    	}
+    	}*/
     	System.out.println(Robot.mDriveTrain.getPIDController().getError());
+    	
+    	//reset the "i" value if we are close to the setpoint to avoid huge oscilation
+    	/*if(Math.abs(Robot.mDriveTrain.getPIDController().getError()) > Robot.mDriveTrain.GetTolerance() * 5.0)
+    	{
+    		Robot.mDriveTrain.getPIDController().reset();
+    		Robot.mDriveTrain.getPIDController().enable();
+    	}*/
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        //return Robot.mDriveTrain.onTarget() || !mWillRun;
-    	return false;
+    	//what is the best way to do this, because "onTarget()" doesn't seem to work
+        return Math.abs(Robot.mDriveTrain.getPIDController().getError()) < Robot.mDriveTrain.GetTolerance() || !mWillRun;
+    	//return false;
     }
 
     // Called once after isFinished returns true

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1922.robot.subsystems;
 
 import java.lang.reflect.Array;
 
+import org.ozram1922.OzMath;
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
 import org.w3c.dom.Document;
@@ -50,6 +51,13 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		double[] centerXs   = table.getNumberArray("centerX", defaultValue);
 		double[] centerYs   = table.getNumberArray("centerY", defaultValue);
 		double[] solidities = table.getNumberArray("solidity", defaultValue);
+		
+		//in that somewhat likely case which there is a LOWER number of some value
+		//	due to asynchronous access, make sure we DON"T update this frame
+		if(!OzMath.AreAllEqual(Array.getLength(areas), Array.getLength(widths), Array.getLength(heights), Array.getLength(centerXs), Array.getLength(centerYs), Array.getLength(solidities)))
+		{
+			return;
+		}
     	
 		/*
 		 * 
@@ -90,7 +98,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 			//if not, reset the timer
 			mBestWindow = potNew;
 			
-			System.out.println("New Window Found, Took: " + mTimeSincePreviousUniqueUpdate + "ms");
+			//System.out.println("New Window Found, Took: " + mTimeSincePreviousUniqueUpdate + "ms");
 			
 			mTimeSincePreviousUniqueUpdate = 0;
 			mPreviousUniqueUpdateTime = System.currentTimeMillis();
@@ -118,7 +126,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	public StrongholdWindow GetBestWindow()
 	{
-		mBestWindow.Print();
+		//mBestWindow.Print();
 		if(IsBestWindowStale())
 		{
 			System.out.println("Warning: Window is Stale!");
@@ -135,7 +143,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public void InvalidateBestWindow()
 	{
 		//do this manually
-		mBestWindow = new StrongholdWindow(0, 0, 0, 650, 650, 0);
+		mBestWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
 	}
 	
 

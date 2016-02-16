@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class PutWindowInView extends Command {
 
-	private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
+	//private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
 	private boolean mWillRun = true;
     public PutWindowInView() {
         // Use requires() here to declare subsystem dependencies
@@ -28,22 +28,26 @@ public class PutWindowInView extends Command {
     	mWillRun = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX == -1;
     	
     	if(mWillRun)
+    	{
     		Robot.mDriveTrain.enable();
+    	}
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//make sure we wait for the update to come before continuing
-    	if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
+    	/*if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
     	{
     		Robot.mDriveTrain.disable();
     	}
     	else
     	{
     		Robot.mDriveTrain.enable();
-    	}
-    	System.out.println(Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX);
+    	}*/
+    	System.out.println(Robot.mDriveTrain.getPIDController().getError());
+    	
+    	//do something to avoid excessive "I" buildup (Not necessary MAYBE)
     }
 
     // Make this return true when this Command no longer needs to run execute()
