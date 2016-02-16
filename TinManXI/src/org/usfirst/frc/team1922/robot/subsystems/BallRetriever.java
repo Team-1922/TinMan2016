@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *	
  */
 public class BallRetriever extends Subsystem implements CfgInterface {
+
+	protected ConfigurableClass mCfgClass = new ConfigurableClass("BallRetriever", this);
 	
 	protected CANTalon mRetrievalMotor;
 	
 	protected int mMotorId;
-	public float kMotorSpeed;
-	
-	protected ConfigurableClass mCfgClass;
+	public float mMotorSpeed;
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -35,17 +35,17 @@ public class BallRetriever extends Subsystem implements CfgInterface {
     
     public void StartMotor()
     {
-    	mRetrievalMotor.set(kMotorSpeed);
+    	mRetrievalMotor.set(mMotorSpeed);
     }
     
     public void StopMotor()
     {
-    	mRetrievalMotor.set(kMotorSpeed);
+    	mRetrievalMotor.set(0);
     }
 
 	@Override
 	public boolean DeserializeInternal() {
-		kMotorSpeed = Float.parseFloat(mCfgClass.GetAttribute("MotorSpeed"));
+		mMotorSpeed = Float.parseFloat(mCfgClass.GetAttribute("MotorSpeed"));
 		mMotorId = Integer.parseInt(mCfgClass.GetAttribute("MotorId"));
 		
 		return true;
@@ -53,7 +53,7 @@ public class BallRetriever extends Subsystem implements CfgInterface {
 
 	@Override
 	public void SerializeInternal(Document doc) {
-		mCfgClass.SetAttribute("MotorSpeed", Float.toString(kMotorSpeed));
+		mCfgClass.SetAttribute("MotorSpeed", Float.toString(mMotorSpeed));
 		mCfgClass.SetAttribute("MotorId", Integer.toString(mMotorId));
 		
 	}

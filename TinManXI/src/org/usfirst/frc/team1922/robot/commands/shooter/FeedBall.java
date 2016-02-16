@@ -14,7 +14,7 @@ public class FeedBall extends Command {
         // eg. requires(chassis);
     	requires(Robot.mShooter.GetShooterFeeder());
     	
-    	this.setTimeout(2);
+    	setTimeout(2);
     }
 
     // Called just before this Command runs the first time
@@ -28,7 +28,7 @@ public class FeedBall extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

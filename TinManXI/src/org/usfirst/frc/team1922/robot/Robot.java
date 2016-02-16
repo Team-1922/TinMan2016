@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
 		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(mShooter);
-		//mCfgLoader.RegisterCfgClass(mBallRetriever);
+		mCfgLoader.RegisterCfgClass(mBallRetriever);
 		mCfgLoader.RegisterCfgClass(oi);
 		
 		//load the xml file here
