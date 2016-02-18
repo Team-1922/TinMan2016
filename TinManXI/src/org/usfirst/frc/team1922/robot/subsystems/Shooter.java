@@ -2,11 +2,9 @@ package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
-import org.usfirst.frc.team1922.robot.commands.shooter.UpdateLateralPIDSwitch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -40,8 +38,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mAnglePotMultRatio = 1.0f;
 	protected float mAnglePotOffset = 0.0f;
 	protected int mAngleMotorId = 5;
-	protected int mAngleEcho = 0;
-	protected int mAnglePing = 0;
+	protected int mAngleUltraId = 0;
 	
 	protected int mFeedSol = 0;
 	
@@ -82,7 +79,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterAngle.Reconstruct(mAngleMotorId, 
 				mAngleP, mAngleI, mAngleD, 
 				mAnglePotMultRatio, mAnglePotOffset,
-				mAnglePing, mAngleEcho);
+				mAngleUltraId);
 		//mShooterAngle.Reconstruct(mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, mWheelsF,
@@ -172,15 +169,14 @@ public class Shooter extends Subsystem implements CfgInterface {
 		//mAngleSolFront = Integer.parseInt(shooterAngleElement.getAttribute("FrontSol"));
 		//mAngleSolRear = Integer.parseInt(shooterAngleElement.getAttribute("RearSol"));
 
-		mAngleEcho = Integer.parseInt(shooterAngleElement.getAttribute("Echo"));
-		mAnglePing = Integer.parseInt(shooterAngleElement.getAttribute("Ping"));
+		mAngleUltraId = Integer.parseInt(shooterAngleElement.getAttribute("UltraId"));
 		
-		 mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
-		 mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
-		 mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
-		 mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
-		 mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
-		 mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset")); 
+		mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
+		mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
+		mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
+		mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
+		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
+		mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset")); 
 		
 		
 		Element shooterWheelsElement = (Element) mCfgClass.GetNthChild("Wheels", 0);
@@ -223,8 +219,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		//shooterAngleElement.setAttribute("FrontSol", Float.toString(mAngleSolFront));
 		//shooterAngleElement.setAttribute("RearSol", Float.toString(mAngleSolRear));
 
-		shooterAngleElement.setAttribute("Ping", Float.toString(mAnglePing));
-		shooterAngleElement.setAttribute("Echo", Float.toString(mAngleEcho));
+		shooterAngleElement.setAttribute("UltraId", Float.toString(mAngleUltraId));
 		
 		shooterAngleElement.setAttribute("P", Float.toString(mAngleP));
 		shooterAngleElement.setAttribute("I", Float.toString(mAngleI));
