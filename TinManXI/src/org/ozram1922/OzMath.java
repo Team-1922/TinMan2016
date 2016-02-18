@@ -21,9 +21,12 @@ public class OzMath {
 	}
 	
 	//get the number of pixels a certain length is at a specified distance
+	//  len: in inches
+	//	distance: in inches
 	public static double GetPixelCountFromDistanceAndLength(double len, double distance)
 	{
-		return -64.19502441 * Math.log(distance) + 222.42240554;
+		//see http://1drv.ms/1mK12zk  for how I got this function
+		return (-5.40945617*Math.log(distance) + 18.59408912) * len;
 	}
 	
 	//see http://stackoverflow.com/questions/5503091/is-there-clean-syntax-for-checking-if-multiple-variables-all-have-the-same-value
