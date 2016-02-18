@@ -36,8 +36,10 @@ public class BallRetrieverPneumatics extends Subsystem {
     
     public void MakeCfgClassesNull()
     {
-    	mShortStrokeSol.free();
-    	mLongStrokeSol.free();
+    	if(mShortStrokeSol != null)
+    		mShortStrokeSol.free();
+    	if(mLongStrokeSol != null)
+    		mLongStrokeSol.free();
     	
     	mShortStrokeSol = null;
     	mLongStrokeSol = null;

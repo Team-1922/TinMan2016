@@ -34,7 +34,10 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	protected float mP;
 	protected float mI;
 	protected float mD;
+	
+	//this is in INCHES
 	protected float mTolerance;
+	protected float mPixlesPerInch;
 	
 	
 	/*
@@ -94,7 +97,15 @@ public class DriveTrain extends PIDSubsystem implements CfgInterface {
 	
 	public double GetTolerance()
 	{
+		//this is the acceptable tolerance in INCHES
 		return mTolerance;
+	}
+	
+	@Override
+	public boolean onTarget()
+	{
+		//get the acceptible tolerance
+		return getPIDController().getAvgError() < GetTolerance();
 	}
 	
 	/*

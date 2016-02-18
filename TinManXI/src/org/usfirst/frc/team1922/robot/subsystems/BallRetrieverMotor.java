@@ -29,7 +29,8 @@ public class BallRetrieverMotor extends Subsystem {
     
     public void MakeCfgClassesNull()
     {
-    	mRetrievalMotor.delete();
+    	if(mRetrievalMotor != null)
+    		mRetrievalMotor.delete();
     	mRetrievalMotor = null;
     }
 }

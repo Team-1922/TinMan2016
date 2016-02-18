@@ -20,6 +20,12 @@ public class OzMath {
 		return x + (y - x) * val;
 	}
 	
+	//get the number of pixels a certain length is at a specified distance
+	public static double GetPixelCountFromDistanceAndLength(double len, double distance)
+	{
+		return -64.19502441 * Math.log(distance) + 222.42240554;
+	}
+	
 	//see http://stackoverflow.com/questions/5503091/is-there-clean-syntax-for-checking-if-multiple-variables-all-have-the-same-value
 	//	for credit
 	public static boolean AreAllEqual(int checkValue, int... otherValues)

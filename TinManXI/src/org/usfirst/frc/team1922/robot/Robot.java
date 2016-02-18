@@ -171,13 +171,13 @@ public class Robot extends IterativeRobot {
     	
         Scheduler.getInstance().run();
         
-        Robot.mDriveTrain.getPIDController().setPID(
+        /*Robot.mDriveTrain.getPIDController().setPID(
         		SmartDashboard.getNumber("Drive P"),
         		SmartDashboard.getNumber("Drive I"), 
         		SmartDashboard.getNumber("Drive D"));
         
         SmartDashboard.putNumber("Drive Setpoint", Robot.mDriveTrain.getPIDController().getSetpoint());
-        
+        */
         
         //Robot.mShooter.GetShooterWheels().GetController().set(2000);
         //Robot.mShooter.GetShooterWheels().SetSpeed(SmartDashboard.getNumber("Wheels Setpoint"));
@@ -188,6 +188,14 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Encoder Speed", Robot.mShooter.GetShooterWheels().GetController().getSpeed());
     */
+        
+        UpdateSmartDashboardItems();
+    }
+    
+    public void UpdateSmartDashboardItems()
+    {
+    	SmartDashboard.putNumber("Window Alignment Error (Pixels)", mGlobShooterLatUtils.GetWindage() - mGlobShooterLatUtils.GetBestWindow().mCenterX);
+    	SmartDashboard.putBoolean("Window Aligned?", mDriveTrain.onTarget());
     }
     
     /**
