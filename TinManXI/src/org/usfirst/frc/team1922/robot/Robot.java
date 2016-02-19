@@ -14,6 +14,7 @@ import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
 import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngle;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
+import org.usfirst.frc.team1922.robot.subsystems.Climber;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
 import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
@@ -39,6 +40,7 @@ public class Robot extends IterativeRobot {
 	public static RangeAngleTable mRangeAngleTable;
 	public static String mCfgFileName = "TinManXI.cfg.xml";
 	public static String mCsvRangeAngleName = "RangeAngleTable.csv";
+	public static Climber mClimber = new Climber();
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -58,6 +60,7 @@ public class Robot extends IterativeRobot {
 		
 		//register XML loading classes here
 		mCfgLoader.RegisterCfgClass(mGlobShooterLatUtils); //this has to be first
+		mCfgLoader.RegisterCfgClass(mClimber);
 		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(mShooter);
 		mCfgLoader.RegisterCfgClass(mBallRetriever);
