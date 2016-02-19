@@ -78,6 +78,8 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	protected CANTalon mRightMotor1;
 	protected CANTalon mRightMotor2;
 	
+	protected double mClutchRatio = 1.0;
+	
 	/*
 	 * 
 	 * Member Functions
@@ -121,12 +123,29 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	
 	public void SetPower(double left, double right)
 	{
+		mLeftMotor1.set(mClutchRatio * mLeftSensitivity * left);
+		mLeftMotor2.set(mClutchRatio * mLeftSensitivity * left);
+		mRightMotor1.set(mClutchRatio * mRightSensitivity * right);
+		mRightMotor2.set(mClutchRatio * mRightSensitivity * right);
+	}
+	
+	public void SetSensitivityClutch(double val)
+	{
+		mClutchRatio = val;
+	}
+	
+	public boolean IsSensitivityClutchEnabled()
+	{
+		return mClutchRatio < 1.0;
+	}
+	
+	public void PIDSetPower(double left, double right)
+	{
 		mLeftMotor1.set(mLeftSensitivity * left);
 		mLeftMotor2.set(mLeftSensitivity * left);
 		mRightMotor1.set(mRightSensitivity * right);
 		mRightMotor2.set(mRightSensitivity * right);
 	}
-	
 
 	public double GetTolerance()
 	{
@@ -292,7 +311,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 
 		@Override
 		public void pidWrite(double output) {
-			Robot.mDriveTrain.SetPower(output, -output);
+			Robot.mDriveTrain.PIDSetPower(output, -output);
 		}
 		
 	};
@@ -301,7 +320,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 
 		@Override
 		public void pidWrite(double output) {
-			Robot.mDriveTrain.SetPower(output, output);
+			Robot.mDriveTrain.PIDSetPower(output, output);
 		}
 		
 	};
