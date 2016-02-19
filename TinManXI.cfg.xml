@@ -11,6 +11,8 @@
 		<Command Joystick="OpStick" Button="5" Name="shooter.SetShooterAngle25" />
 		<Command Joystick="OpStick" Button="2" Name="shooter.SetShooterAngleHorizontal" />
 		<Command Joystick="OpStick" Button="4" Name="shooter.SpinDownShooterWheels" />
+		<Command Joysitck="LeftStick" Button="5" Name="Tilt" />
+		<Command Joysitck="LeftStick" Button="6" Name="Lift" />
 	</OI>
 	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="160" />
 	<Shooter>
@@ -21,4 +23,5 @@
 	</Shooter>
 	<BallRetriever MotorId="1" MotorSpeed=".75" ShortStrokeId="1" LongStrokeId="2" />
 	<Scaler LiftId="3" TiltId="4" />
+	<Climber liftSolenoid="0" tiltSolenoid="1" />
 </root>
