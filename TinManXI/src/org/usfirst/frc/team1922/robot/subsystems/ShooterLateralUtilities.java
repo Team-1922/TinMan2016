@@ -25,7 +25,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	protected ConfigurableClass mCfgClass = new ConfigurableClass("ShooterLateralGlobal", this);
 	
 	//zero is NOT centered, the center of the image is (i think 640 wide)
-	protected float mPIDWindageAdj;
+	protected int mPIDWindageAdj;
 	protected String mTableName;
 	
 	public ShooterLateralUtilities()
@@ -40,6 +40,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public float GetWindage()
 	{
 		return mPIDWindageAdj;
+	}
+	
+	public int GetError()
+	{
+		return Math.abs(mPIDWindageAdj - mBestWindow.mCenterX);
 	}
 	
 	//call this BEFORE the command updater, 
@@ -158,7 +163,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public boolean DeserializeInternal() {
 
 		mTableName = mCfgClass.GetAttribute("NetTableName");
-		mPIDWindageAdj = Float.parseFloat(mCfgClass.GetAttribute("Windage"));
+		mPIDWindageAdj = Integer.parseInt(mCfgClass.GetAttribute("Windage"));
 		
 		SetTableName(mTableName);
 		InvalidateBestWindow();
@@ -169,7 +174,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public void SerializeInternal(Document doc) {
 
 		mCfgClass.SetAttribute("NetTableName", mTableName);
-		mCfgClass.SetAttribute("Windage", Float.toString(mPIDWindageAdj));
+		mCfgClass.SetAttribute("Windage", Integer.toString(mPIDWindageAdj));
 	}
 
 	@Override

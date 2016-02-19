@@ -72,11 +72,11 @@ public class Robot extends IterativeRobot {
 		mLoadFile = new ReloadXMLCfg();
 		
 
-        SmartDashboard.putNumber("Drive P", Robot.mDriveTrain.getPIDController().getP());
+        /*SmartDashboard.putNumber("Drive P", Robot.mDriveTrain.getPIDController().getP());
         SmartDashboard.putNumber("Drive I", Robot.mDriveTrain.getPIDController().getI());
         SmartDashboard.putNumber("Drive D", Robot.mDriveTrain.getPIDController().getD());
         SmartDashboard.putNumber("Drive F", Robot.mDriveTrain.getPIDController().getF());
-       
+       */
 		
 		//startGRIP();
     }

@@ -22,11 +22,17 @@ public class OzMath {
 	
 	//get the number of pixels a certain length is at a specified distance
 	//  len: in inches
-	//	distance: in inches
+	//	distance: in inches (From window to robot, NOT robot to wall!!!)
 	public static double GetPixelCountFromDistanceAndLength(double len, double distance)
 	{
 		//see http://1drv.ms/1mK12zk  for how I got this function
 		return (-5.40945617*Math.log(distance) + 18.59408912) * len;
+	}
+	
+	//use this instead if you are lazy
+	public static double GetPixelCountFromLength(double len, double wallDistance)
+	{
+		return GetPixelCountFromDistanceAndLength(len, Math.sqrt(wallDistance * wallDistance + 7056));
 	}
 	
 	//see http://stackoverflow.com/questions/5503091/is-there-clean-syntax-for-checking-if-multiple-variables-all-have-the-same-value
@@ -41,6 +47,11 @@ public class OzMath {
 	        }
 	    }
 	    return true;
+	}
+
+	public static int PixelsToEncoderUnits(int pixels) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -3,16 +3,16 @@ package org.usfirst.frc.team1922.robot.subsystems;
 //we don't trust the consumer to be responsible, so FINAL
 public class StrongholdWindow 
 {
-	public final double mArea;
-	public final double mWidth;
-	public final double mHeight;
-	public final double mCenterX;
-	public final double mCenterY;
-	public final double mSolidity; //i don't know what this is, but why not
+	public final int mArea;
+	public final int mWidth;
+	public final int mHeight;
+	public final int mCenterX;
+	public final int mCenterY;
+	public final int mSolidity; //i don't know what this is, but why not
 	
 	public StrongholdWindow(
-			double area, double width, double height, 
-			double centerX, double centerY, double solidity)
+			int area, int width, int height, 
+			int centerX, int centerY, int solidity)
 	{
 		mArea = area;
 		mWidth = width;
@@ -20,6 +20,18 @@ public class StrongholdWindow
 		mCenterX = centerX;
 		mCenterY = centerY;
 		mSolidity = solidity;
+	}
+	
+	public StrongholdWindow(
+			double area, double width, double height, 
+			double centerX, double centerY, double solidity)
+	{
+		mArea = (int) area;
+		mWidth = (int) width;
+		mHeight = (int) height;
+		mCenterX = (int) centerX;
+		mCenterY = (int) centerY;
+		mSolidity = (int) solidity;
 	}
 	
 	public void Print()

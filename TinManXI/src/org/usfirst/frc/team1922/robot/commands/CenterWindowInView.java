@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
-import org.usfirst.frc.team1922.robot.subsystems.StrongholdWindow;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -12,6 +10,8 @@ public class CenterWindowInView extends Command {
 
 	//private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
 	private boolean mWillRun = true;
+	private long mStartWaitTime = 0;
+	
     public CenterWindowInView() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -27,41 +27,38 @@ public class CenterWindowInView extends Command {
     	
     	if(mWillRun)
     	{
+    		Robot.mDriveTrain.SetActiveController("Rotational");
+    		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		Robot.mDriveTrain.enable();
     	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//make sure we wait for the update to come before continuing
-    	/*if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
+    	if(System.currentTimeMillis() - mStartWaitTime > 1000)
     	{
-    		Robot.mDriveTrain.disable();
+    		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
+    		mStartWaitTime = 0;
     	}
-    	else
+    		
+    	//if the encoder PID is on target, start wait timer
+    	if(Robot.mDriveTrain.onTarget())
     	{
-    		Robot.mDriveTrain.enable();
-    	}*/
-    	System.out.println(Robot.mDriveTrain.getPIDController().getError());
-    	
-    	//reset the "i" value if we are close to the setpoint to avoid huge oscilation
-    	/*if(Math.abs(Robot.mDriveTrain.getPIDController().getError()) > Robot.mDriveTrain.GetTolerance() * 5.0)
-    	{
-    		Robot.mDriveTrain.getPIDController().reset();
-    		Robot.mDriveTrain.getPIDController().enable();
-    	}*/
+    		if(System.currentTimeMillis() - mStartWaitTime < 1)
+    			mStartWaitTime = System.currentTimeMillis();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	//what is the best way to do this, because "onTarget()" doesn't seem to work
-        return Math.abs(Robot.mDriveTrain.getPIDController().getError()) < Robot.mDriveTrain.GetTolerance() || !mWillRun;
+        return Robot.mDriveTrain.RotationalOnTarget();
     	//return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.println("Done Centering WIndow");
+    	System.out.println("Done Centering Window");
     	Robot.mDriveTrain.disable();
     }
 

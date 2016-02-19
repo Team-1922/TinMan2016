@@ -12,6 +12,8 @@ public class PutWindowInView extends Command {
 
 	//private StrongholdWindow mLastWindow = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
 	private boolean mWillRun = true;
+	private long mStartWaitTime = 0;
+	
     public PutWindowInView() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -29,6 +31,8 @@ public class PutWindowInView extends Command {
     	
     	if(mWillRun)
     	{
+    		Robot.mDriveTrain.SetActiveController("Rotational");
+    		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		Robot.mDriveTrain.enable();
     	}
     	
@@ -36,18 +40,18 @@ public class PutWindowInView extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//make sure we wait for the update to come before continuing
-    	/*if(mLastWindow == Robot.mGlobShooterLatUtils.GetBestWindow())
+    	if(System.currentTimeMillis() - mStartWaitTime > 1000)
     	{
-    		Robot.mDriveTrain.disable();
+    		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
+    		mStartWaitTime = 0;
     	}
-    	else
+    		
+    	//if the encoder PID is on target, start wait timer
+    	if(Robot.mDriveTrain.onTarget())
     	{
-    		Robot.mDriveTrain.enable();
-    	}*/
-    	System.out.println(Robot.mDriveTrain.getPIDController().getError());
-    	
-    	//do something to avoid excessive "I" buildup (Not necessary MAYBE)
+    		if(System.currentTimeMillis() - mStartWaitTime < 1)//make sure if it is already set, don't overwrite it
+    			mStartWaitTime = System.currentTimeMillis();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
