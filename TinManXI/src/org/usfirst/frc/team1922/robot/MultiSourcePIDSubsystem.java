@@ -27,8 +27,19 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	  }
 
 	  
-	  public void AddPIDController(String name, double p, double i, double d, double f, PIDOutput output, PIDSource source) {
-	    mControllers.put(name, new MultiSourcePIDSubsystemModule(p, i, d, f, output, source));
+	  public void AddPIDController(String name, double p, double i, double d, double f, HashMap<String,PIDOutput> outputs, HashMap<String,PIDSource> sources, String defaultOutput, String defaultSource) {
+	    mControllers.put(name, new MultiSourcePIDSubsystemModule(p, i, d, f));
+	    if(outputs == null || sources == null)
+	    	throw new IllegalArgumentException();
+	    
+	    mControllers.get(name).AddOutputs(outputs);
+	    mControllers.get(name).AddSources(sources);
+	    
+	    if(!outputs.containsKey(defaultOutput) || !sources.containsKey(sources))
+	    	throw new IllegalArgumentException();
+	    	
+	    mControllers.get(name).SetOutput(defaultOutput);
+	    mControllers.get(name).SetSource(defaultSource);
 	  }
 	  
 	  
@@ -105,7 +116,7 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @return the current position
 	   */
 	  public double getPosition() {
-	    return GetActiveControllerModule().mInput.pidGet();
+	    return GetActiveControllerModule().GetActiveSource().pidGet();
 	  }
 
 	  /**

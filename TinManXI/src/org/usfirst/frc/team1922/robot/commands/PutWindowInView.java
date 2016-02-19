@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
-import org.usfirst.frc.team1922.robot.subsystems.StrongholdWindow;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**

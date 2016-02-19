@@ -29,10 +29,9 @@ public class OzMath {
 		return (-5.40945617*Math.log(distance) + 18.59408912) * len;
 	}
 	
-	//use this instead if you are lazy
-	public static double GetPixelCountFromLength(double len, double wallDistance)
+	public static double GetHyp(double leg1, double leg2)
 	{
-		return GetPixelCountFromDistanceAndLength(len, Math.sqrt(wallDistance * wallDistance + 7056));
+		return Math.sqrt(leg1 * leg1 + leg2 * leg2);
 	}
 	
 	//see http://stackoverflow.com/questions/5503091/is-there-clean-syntax-for-checking-if-multiple-variables-all-have-the-same-value

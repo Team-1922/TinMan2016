@@ -27,6 +27,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	//zero is NOT centered, the center of the image is (i think 640 wide)
 	protected int mPIDWindageAdj;
 	protected String mTableName;
+	protected double mCameraToBaseWindowHeight; //the base of the TAPE
 	
 	public ShooterLateralUtilities()
 	{
@@ -129,6 +130,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
     	 */
 	}
 	
+	public double GetCameraToWindowBaseHeight()
+	{
+		return mCameraToBaseWindowHeight;
+	}
+	
 	public StrongholdWindow GetBestWindow()
 	{
 		//mBestWindow.Print();
@@ -164,6 +170,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 		mTableName = mCfgClass.GetAttribute("NetTableName");
 		mPIDWindageAdj = Integer.parseInt(mCfgClass.GetAttribute("Windage"));
+		mCameraToBaseWindowHeight = Double.parseDouble(mCfgClass.GetAttribute("CameraToWindowBase"));
 		
 		SetTableName(mTableName);
 		InvalidateBestWindow();
@@ -175,6 +182,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 		mCfgClass.SetAttribute("NetTableName", mTableName);
 		mCfgClass.SetAttribute("Windage", Integer.toString(mPIDWindageAdj));
+		mCfgClass.SetAttribute("CameraToWindowBase", Double.toString(mCameraToBaseWindowHeight));
 	}
 
 	@Override

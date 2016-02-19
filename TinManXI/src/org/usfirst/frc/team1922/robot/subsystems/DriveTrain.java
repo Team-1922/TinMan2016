@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+import java.util.HashMap;
+
 import org.ozram1922.OzMath;
 import org.ozram1922.cfg.CfgInterface;
 import org.ozram1922.cfg.ConfigurableClass;
@@ -63,7 +65,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	protected float mRP;
 	protected float mRI;
 	protected float mRD;
-	protected float mDegreesToEncoderUnits;
+	protected float mRadiansToEncoderUnits;
 	
 	
 	/*
@@ -85,11 +87,19 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	{
 		super("Drive Train");
 		
-		AddPIDController("Linear", mLP, mLI, mLD, 0.0f, new LinearSetter(), new SpeedGetter());
-		GetPIDController("Linear").setAbsoluteTolerance(mLTolerance * mInchesToEncoderUnits);
+		HashMap<String, PIDOutput> outputs = new HashMap<String, PIDOutput>();
+		HashMap<String, PIDSource> sources = new HashMap<String, PIDSource>();
 		
-		AddPIDController("Rotational", mRP, mRI, mRD, 0.0f, new RotationSetter(), new SpeedGetter());
-		GetPIDController("Rotational").setAbsoluteTolerance(mRTolerance * mDegreesToEncoderUnits);
+		outputs.put("Linear", linearSetter);
+		outputs.put("Rotational", rotationalSetter);
+		
+		sources.put("Default", getter);
+		
+		AddPIDController("Movement", mLP, mLI, mLD, 0.0f, outputs, sources, "Linear", "Default");
+		GetPIDController("Movement").setAbsoluteTolerance(mLTolerance * mInchesToEncoderUnits);
+		
+		//AddPIDController("Aiming", mRP, mRI, mRD, 0.0f, new RotationSetter(), new SpeedGetter());
+		//GetPIDController("Aiming").setAbsoluteTolerance(mRTolerance * mDegreesToEncoderUnits);
 		//Reconstruct();
 	}
 	public void Reconstruct()
@@ -132,10 +142,10 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		switch (GetActiveControllerName())
 		{
 		default:
-		case "Linear":
+		case "Standard":
 			return mLTolerance;
 		case "Rotation":
-			return OzMath.GetPixelCountFromLength(mRTolerance, Robot.mShooter.mShooterAngle.GetUltraDistance());
+			return OzMath.GetPixelCountFromDistanceAndLength(mRTolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()));
 		}
 	}
 	
@@ -167,17 +177,17 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotorId1 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor1"));
 		mRightMotorId2 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor2"));
 		
-		mLP = Float.parseFloat(mCfgInstance.GetAttribute("LinearP"));
-		mLI = Float.parseFloat(mCfgInstance.GetAttribute("LinearI"));
-		mLD = Float.parseFloat(mCfgInstance.GetAttribute("LinearD"));
-		mLTolerance = Float.parseFloat(mCfgInstance.GetAttribute("LinearTolerance"));
+		mLP = Float.parseFloat(mCfgInstance.GetAttribute("MovementP"));
+		mLI = Float.parseFloat(mCfgInstance.GetAttribute("MovementI"));
+		mLD = Float.parseFloat(mCfgInstance.GetAttribute("MovementD"));
+		mLTolerance = Float.parseFloat(mCfgInstance.GetAttribute("MovementTolerance"));
 		mInchesToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("InchesToEncoderUnits"));
 		
-		mRP = Float.parseFloat(mCfgInstance.GetAttribute("RotationalP"));
-		mRI = Float.parseFloat(mCfgInstance.GetAttribute("RotationalI"));
-		mRD = Float.parseFloat(mCfgInstance.GetAttribute("RotationalD"));
-		mRTolerance = Float.parseFloat(mCfgInstance.GetAttribute("RotationalTolerance"));
-		mDegreesToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("DegreesToEncoderUnits"));
+		mRP = Float.parseFloat(mCfgInstance.GetAttribute("AimingP"));
+		mRI = Float.parseFloat(mCfgInstance.GetAttribute("AimingI"));
+		mRD = Float.parseFloat(mCfgInstance.GetAttribute("AimingD"));
+		mRTolerance = Float.parseFloat(mCfgInstance.GetAttribute("AimingTolerance"));
+		mRadiansToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("RadiansToEncoderUnits"));
 		
 		Reconstruct();
 		
@@ -196,17 +206,17 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mCfgInstance.SetAttribute("RightMotor1", Integer.toString(mRightMotorId1));
 		mCfgInstance.SetAttribute("RightMotor2", Integer.toString(mRightMotorId2));
 		
-		mCfgInstance.SetAttribute("LinearP", Float.toString(mLP));
-		mCfgInstance.SetAttribute("LinearI", Float.toString(mLI));
-		mCfgInstance.SetAttribute("LinearD", Float.toString(mLD));
-		mCfgInstance.SetAttribute("LinearTolerance", Float.toString(mLTolerance));
+		mCfgInstance.SetAttribute("MovementP", Float.toString(mLP));
+		mCfgInstance.SetAttribute("MovementI", Float.toString(mLI));
+		mCfgInstance.SetAttribute("MovementD", Float.toString(mLD));
+		mCfgInstance.SetAttribute("MovementTolerance", Float.toString(mLTolerance));
 		mCfgInstance.SetAttribute("InchesToEncoderUnits", Float.toString(mInchesToEncoderUnits));
 		
-		mCfgInstance.SetAttribute("RotationalP", Float.toString(mRP));
-		mCfgInstance.SetAttribute("RotationalI", Float.toString(mRI));
-		mCfgInstance.SetAttribute("RotationalD", Float.toString(mRD));
-		mCfgInstance.SetAttribute("RotationalTolerance", Float.toString(mRTolerance));
-		mCfgInstance.SetAttribute("DegreesToEncoderUnits", Float.toString(mDegreesToEncoderUnits));
+		mCfgInstance.SetAttribute("AimingP", Float.toString(mRP));
+		mCfgInstance.SetAttribute("AimingI", Float.toString(mRI));
+		mCfgInstance.SetAttribute("AimingD", Float.toString(mRD));
+		mCfgInstance.SetAttribute("AimingTolerance", Float.toString(mRTolerance));
+		mCfgInstance.SetAttribute("RadiansToEncoderUnits", Float.toString(mRadiansToEncoderUnits));
 	}
 
 	@Override
@@ -235,26 +245,32 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor2 = null;
 	}
 	
-	//type == 0: Forward/reverse
-	//type == 1: Rotational
+	//type == 0: Linear (i.e. forward/back)
+	//type == 1: Rotational (coarse)
+	//type == 1: Aiming (TODO:)
 	public void PIDSwap(int type)
 	{
 		switch(type)
 		{
 		default:
 		case 0:
-			SetActiveController("Linear");
+			SetActiveController("Movement");
+			GetActiveControllerModule().SetOutput("Linear");
 			break;
 		case 1:
-			SetActiveController("Rotational");
+			SetActiveController("Movement");
+			GetActiveControllerModule().SetOutput("Linear");
 			break;
+		//case 2:
+			//SetActiveController("Aiming");
+			//break;
 		}
 	}
 	
 	/*
 	 * There only needs to be one source
 	 */
-	class SpeedGetter implements PIDSource
+	protected PIDSource getter = new PIDSource()
 	{
 
 		@Override
@@ -270,9 +286,8 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		@Override
 		public void setPIDSourceType(PIDSourceType pidSource) {
 		}
-	}
-	
-	class RotationSetter implements PIDOutput
+	};
+	protected PIDOutput rotationalSetter = new PIDOutput()
 	{
 
 		@Override
@@ -280,8 +295,8 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 			Robot.mDriveTrain.SetPower(output, -output);
 		}
 		
-	}
-	class LinearSetter implements PIDOutput
+	};
+	protected PIDOutput linearSetter = new PIDOutput()
 	{
 
 		@Override
@@ -289,7 +304,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 			Robot.mDriveTrain.SetPower(output, output);
 		}
 		
-	}
+	};
 	
 	public void UpdateRotationEncodersWithPixels() 
 	{
