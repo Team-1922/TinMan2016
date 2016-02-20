@@ -2,6 +2,7 @@ package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.OzMath;
 import org.usfirst.frc.team1922.robot.AnalogUltrasonic;
+import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
@@ -90,6 +91,7 @@ public class ShooterAngleAnalog extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
+    	setDefaultCommand(new JoyCtrlAngle());
     }
 	
 	public void MakeCfgClassesNull()

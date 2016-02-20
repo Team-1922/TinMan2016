@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
+@Deprecated
 public class ShooterAngle extends Subsystem {
 
 	Solenoid mAngleSolFront;
