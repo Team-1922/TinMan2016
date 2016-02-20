@@ -38,8 +38,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi = new OI();
 	public static CfgLoader mCfgLoader = new CfgLoader();
 	public static RangeAngleTable mRangeAngleTable;
-	public static String mCfgFileName = "TinManXI.cfg.xml";
-	public static String mCsvRangeAngleName = "RangeAngleTable.csv";
+	public static String mCfgFileName = "/home/lvuser/TinManXI.cfg.xml";
+	public static String mCsvRangeAngleName = "/home/lvuser/RangeAngleTable.csv";
 	public static Climber mClimber = new Climber();
 
     Command autonomousCommand;
@@ -191,6 +191,8 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Encoder Speed", Robot.mShooter.GetShooterWheels().GetController().getSpeed());
     */
+        
+        SmartDashboard.putNumber("Ultrasonic", Robot.mShooter.GetShooterAngle().GetUltraDistance());
         
         UpdateSmartDashboardItems();
     }
