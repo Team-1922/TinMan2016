@@ -43,8 +43,8 @@ public class Climber extends Subsystem implements CfgInterface{
 	@Override
 	public void SerializeInternal(Document doc) {
 		// TODO Auto-generated method stub
-		mCfgClass.SetAttribute("liftSolenoid1", Integer.toString(liftSolenoidid));
-		mCfgClass.SetAttribute("tiltSolenoid1", Integer.toString(tiltSolenoidid));
+		mCfgClass.SetAttribute("liftSolenoid", Integer.toString(liftSolenoidid));
+		mCfgClass.SetAttribute("tiltSolenoid", Integer.toString(tiltSolenoidid));
 	}
 
 	@Override
