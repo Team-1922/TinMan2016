@@ -161,9 +161,21 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		switch (GetActiveControllerName())
 		{
 		default:
-		case "Standard":
+		case "Movement":
 			return mMTolerance;
-		case "Rotation":
+		case "Aiming":
+			return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
+		}
+	}
+	
+	public double GetTolerance(String name)
+	{
+		switch(name)
+		{
+		default:
+		case "Movement":
+			return mMTolerance;
+		case "Aiming":
 			return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
 		}
 	}
@@ -290,7 +302,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 			break;
 		case 1:
 			SetActiveController("Movement");
-			GetActiveControllerModule().SetOutput("Linear");
+			GetActiveControllerModule().SetOutput("Rotational");
 			break;
 		//case 2:
 			//SetActiveController("Aiming");
