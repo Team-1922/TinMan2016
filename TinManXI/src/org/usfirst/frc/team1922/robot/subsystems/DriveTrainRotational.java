@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 /**
  *
  */
+@Deprecated
 public class DriveTrainRotational extends PIDSubsystem {
 	
 	//this is in inches

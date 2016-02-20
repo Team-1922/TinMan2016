@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 /**
  *This class is connected to ONLY the micro adjustment
  */
+@Deprecated
 public class ShooterLateral extends PIDSubsystem {
 	
 
