@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 		mCfgLoader.RegisterCfgClass(oi);
 		
 		//load the xml file here
-		mCfgLoader.LoadFile(XMLData.GetString(), false);
+		mCfgLoader.LoadFile(mCfgFileName, true);
 		
 		//System.out.println("TEST");
 		

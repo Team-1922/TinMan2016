@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1922.robot;
 
+@Deprecated
 public class XMLData 
 {
 	public static String GetString()

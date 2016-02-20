@@ -10,21 +10,25 @@
   libraries.
   -->
 
-  <!-- By default the system version of WPI is used -->
-  <!-- <property name="version" value=""/> -->
+    <!-- By default the system version of WPI is used -->
+    <!-- <property name="version" value=""/> -->
 
-  <!-- By default the system team number is used -->
-  <!-- <property name="team-number" value=""/> -->
+    <!-- By default the system team number is used -->
+    <!-- <property name="team-number" value=""/> -->
 
-  <!-- By default the target is set to 10.TE.AM.2 -->
-  <!-- <property name="target" value=""/> -->
+    <!-- By default the target is set to 10.TE.AM.2 -->
+    <!-- <property name="target" value=""/> -->
 
-  <!-- Any other property in build.properties can also be overridden. -->
+    <!-- Any other property in build.properties can also be overridden. -->
   
-  <property file="${user.home}/wpilib/wpilib.properties"/>
-  <property file="build.properties"/>
-  <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
-  
-  <import file="${wpilib.ant.dir}/build.xml"/>
+    <property file="${user.home}/wpilib/wpilib.properties"/>
+    <property file="build.properties"/>
+    <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
+	
+	<!-- This might not be quite correct -->
+  	<property name="cfg.xml" value="../TinManXI.cfg.xml" />
+	
+    <import file="newWPIBuild.xml" />
+	
 
 </project> 
