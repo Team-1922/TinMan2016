@@ -64,9 +64,7 @@ public class CfgLoader
        if(isFile)
        {
 	       // create a new document from input source
-	       FileInputStream fis = new FileInputStream(data);
-	       InputSource is = new InputSource(fis);
-	       doc = builder.parse(is);
+	       doc = builder.parse(new InputSource(new FileInputStream(data)));
        }
        else
        {

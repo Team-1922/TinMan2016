@@ -37,7 +37,7 @@ public class Climber extends Subsystem implements CfgInterface{
 		liftSolenoid = new Solenoid(Math.abs(liftSolenoidid));
 		tiltSolenoid = new Solenoid(Math.abs(tiltSolenoidid));
 		
-		return false;
+		return true;
 	}
 
 	@Override

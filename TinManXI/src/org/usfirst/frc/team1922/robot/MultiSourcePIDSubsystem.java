@@ -35,7 +35,7 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	    mControllers.get(name).AddOutputs(outputs);
 	    mControllers.get(name).AddSources(sources);
 	    
-	    if(!outputs.containsKey(defaultOutput) || !sources.containsKey(sources))
+	    if(!outputs.containsKey(defaultOutput) || !sources.containsKey(defaultSource))
 	    	throw new IllegalArgumentException();
 	    	
 	    mControllers.get(name).SetOutput(defaultOutput);
@@ -44,6 +44,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	  
 	  
 	  public PIDController GetPIDController(String name) {
+		if(!mControllers.containsKey(name))
+			return null;
 	    return mControllers.get(name).mController;
 	  }
 
@@ -87,6 +89,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param deltaSetpoint the change in the setpoint
 	   */
 	  public void setSetpointRelative(double deltaSetpoint) {
+		if(GetActiveController() == null)
+			return;
 	    setSetpoint(getPosition() + deltaSetpoint);
 	  }
 
@@ -98,6 +102,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param setpoint the new setpoint
 	   */
 	  public void setSetpoint(double setpoint) {
+		if(GetActiveController() == null)
+			return;
 	    GetActiveController().setSetpoint(setpoint);
 	  }
 
@@ -107,6 +113,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @return the setpoint
 	   */
 	  public double getSetpoint() {
+		if(GetActiveController() == null)
+			return Double.NaN;
 	    return GetActiveController().getSetpoint();
 	  }
 
@@ -116,6 +124,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @return the current position
 	   */
 	  public double getPosition() {
+		if(GetActiveController() == null)
+			return Double.NaN;
 	    return GetActiveControllerModule().GetActiveSource().pidGet();
 	  }
 
@@ -126,6 +136,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param maximumInput the maximum value expected from the output
 	   */
 	  public void setInputRange(double minimumInput, double maximumInput) {
+		  if(GetActiveController() == null)
+			return;
 		  GetActiveController().setInputRange(minimumInput, maximumInput);
 	  }
 
@@ -136,6 +148,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param maximumOutput the maximum value to write to the output
 	   */
 	  public void setOutputRange(double minimumOutput, double maximumOutput) {
+		  if(GetActiveController() == null)
+			return;
 		  GetActiveController().setOutputRange(minimumOutput, maximumOutput);
 	  }
 
@@ -146,6 +160,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param t the absolute tolerance
 	   */
 	  public void setAbsoluteTolerance(double t) {
+		  if(GetActiveController() == null)
+			return;
 		  GetActiveController().setAbsoluteTolerance(t);
 	  }
 
@@ -156,6 +172,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @param p the percent tolerance
 	   */
 	  public void setPercentTolerance(double p) {
+		  if(GetActiveController() == null)
+			return;
 		  GetActiveController().setPercentTolerance(p);
 	  }
 
@@ -167,6 +185,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @return true if the error is less than the tolerance
 	   */
 	  public boolean onTarget() {
+		if(GetActiveController() == null)
+			return false;
 	    return GetActiveController().onTarget();
 	  }
 
@@ -174,6 +194,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * Enables the internal {@link PIDController}
 	   */
 	  public void enable() {
+		if(GetActiveController() == null)
+			return;
 	    GetActiveController().enable();
 	  }
 
@@ -181,6 +203,8 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * Disables the internal {@link PIDController}
 	   */
 	  public void disable() {
+		if(GetActiveController() == null)
+			return;
 		GetActiveController().disable();
 	  }
 
