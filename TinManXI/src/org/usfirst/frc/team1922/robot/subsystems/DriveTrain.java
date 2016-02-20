@@ -164,7 +164,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		case "Standard":
 			return mLTolerance;
 		case "Rotation":
-			return OzMath.GetPixelCountFromDistanceAndLength(mRTolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()));
+			return OzMath.GetPixelCountFromDistanceAndLength(mRTolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
 		}
 	}
 	

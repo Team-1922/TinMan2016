@@ -24,10 +24,14 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	protected ConfigurableClass mCfgClass = new ConfigurableClass("ShooterLateralGlobal", this);
 	
-	//zero is NOT centered, the center of the image is (i think 640 wide)
+	//zero is NOT centered, the center of the image is 320 (i think 640 wide)
 	protected int mPIDWindageAdj;
 	protected String mTableName;
 	protected double mCameraToBaseWindowHeight; //the base of the TAPE
+	
+	protected int mCameraViewWidth;
+	
+	protected float mThrottleZeroPosition = 0.0f;
 	
 	public ShooterLateralUtilities()
 	{
@@ -46,6 +50,12 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public int GetError()
 	{
 		return Math.abs(mPIDWindageAdj - mBestWindow.mCenterX);
+	}
+	
+	//this will between -1 and 1
+	public void SetThrottleZeroWidth(float loc)
+	{
+		mThrottleZeroPosition = loc;
 	}
 	
 	//call this BEFORE the command updater, 
@@ -135,6 +145,21 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		return mCameraToBaseWindowHeight;
 	}
 	
+	public float GetZeroWindowPos()
+	{
+		return mThrottleZeroPosition;
+	}
+	
+	public int GetCameraViewWidth()
+	{
+		return mCameraViewWidth;
+	}
+	
+	public void SetWindage(int windage)
+	{
+		mPIDWindageAdj = windage;
+	}
+	
 	public StrongholdWindow GetBestWindow()
 	{
 		//mBestWindow.Print();
@@ -171,6 +196,9 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mTableName = mCfgClass.GetAttribute("NetTableName");
 		mPIDWindageAdj = Integer.parseInt(mCfgClass.GetAttribute("Windage"));
 		mCameraToBaseWindowHeight = Double.parseDouble(mCfgClass.GetAttribute("CameraToWindowBase"));
+		mCameraViewWidth = Integer.parseInt(mCfgClass.GetAttribute("ViewWidth"));
+		
+		mThrottleZeroPosition = mCameraViewWidth / 2;
 		
 		SetTableName(mTableName);
 		InvalidateBestWindow();
@@ -183,6 +211,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mCfgClass.SetAttribute("NetTableName", mTableName);
 		mCfgClass.SetAttribute("Windage", Integer.toString(mPIDWindageAdj));
 		mCfgClass.SetAttribute("CameraToWindowBase", Double.toString(mCameraToBaseWindowHeight));
+		mCfgClass.SetAttribute("ViewWidth", Integer.toString(mCameraViewWidth));
 	}
 
 	@Override

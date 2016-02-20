@@ -23,10 +23,13 @@ public class OzMath {
 	//get the number of pixels a certain length is at a specified distance
 	//  len: in inches
 	//	distance: in inches (From window to robot, NOT robot to wall!!!)
-	public static double GetPixelCountFromDistanceAndLength(double len, double distance)
+	public static double GetPixelCountFromDistanceAndLength(double len, double distance, int viewWidth)
 	{
+		//a ratio is used just in case the camera size changes
+		float ratio = (float)viewWidth / 320.0f;
+		
 		//see http://1drv.ms/1mK12zk  for how I got this function
-		return (-5.40945617*Math.log(distance) + 18.59408912) * len;
+		return ratio * ((-5.40945617*Math.log(distance) + 18.59408912) * len);
 	}
 	
 	public static double GetHyp(double leg1, double leg2)
