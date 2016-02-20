@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<DriveTrain LeftMotor1="-7" LeftMotor2="-2" RightMotor1="3" RightMotor2="4" LeftSensitivity="1.0" RightSensitivity="0.8" MovementP="0.0" MovementI="0.0" MovementD="0.0" MovementTolerance="1.0" AimingP="0.00083" AimingI="0.0" AimingD="0.0" AimingTolerance="3.5" InchesToEncoderUnits="1.0" RadiansToEncoderUnits="1.0" TurningRadius="12.125"/>
+	<DriveTrain LeftMotor1="-7" LeftMotor2="-2" RightMotor1="3" RightMotor2="4" LeftSensitivity="1.0" RightSensitivity="0.8" MovementP="0.0" MovementI="0.0" MovementD="0.0" MovementTolerance="1.0" AimingP="0.00083" AimingI="0.0" AimingD="0.0" AimingTolerance="3.5" InchesToEncoderUnits="1.0" RadiansToEncoderUnits="1.0" TurningRadius="12.125" />
 	<OI>
 		<Joystick Name="OpStick" Id="0" />
 		<Joystick Name="LeftStick" Id="1" />
@@ -16,10 +16,10 @@
 		<Command Joystick="LeftStick" Button="5" Name="Tilt" />
 		<Command Joystick="LeftStick" Button="6" Name="Lift" />
 	</OI>
-	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="160" CameraToWindowBase="TODO" ViewWidth="320"/>
+	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="160" CameraToWindowBase="84" ViewWidth="320" />
 	<Shooter>
-		<Angle P="375.0" I="0.015" D="0.0" AngleTo5v="TODO" PotOffset="TODO" MotorId="5" UltraId="0" />
-		<Wheels MotorId="6" P="2.2" I="0.0" D="50.0" F=".0465" EncSamplesPerRotation="4096" ShootRPM="2000"/>
+		<Angle P="375.0" I="0.015" D="0.0" AngleTo5v="1" PotOffset="0" MotorId="5" UltraId="0" />
+		<Wheels MotorId="6" P="2.2" I="0.0" D="50.0" F=".0465" EncSamplesPerRotation="4096" ShootRPM="2000" />
 		<Lateral P="0.0" I="0.0" D="0.0" Tolerance="0.0" />
 		<Feeder Sol="0" />
 	</Shooter>
