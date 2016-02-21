@@ -343,11 +343,47 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		
 	};
 	
+	//if isHorizontal == false, it is vertical
+	public int PixelsToEncoderUnits(int pixels, boolean isHorizontal)
+	{
+		//see Kevin for this equation
+		double mu = 0;
+		double hpx = 0;
+		double t = 0;
+		double b = 0;
+		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
+		if(isHorizontal)
+		{
+			mu = Robot.mGlobShooterLatUtils.GetHorizontalFOV();
+			hpx = Robot.mGlobShooterLatUtils.GetCameraViewWidth();
+			
+			//assume the "top" is the center x plus half the width/height
+			t = bestWindow.mCenterX + bestWindow.mWidth/2.0;
+			b = hpx - t - bestWindow.mWidth;
+		}
+		else
+		{
+			mu = Robot.mGlobShooterLatUtils.GetVerticalFOV();
+			hpx = Robot.mGlobShooterLatUtils.GetCameraViewHeight();
+			
+			//assume the "top" is the center x plus half the width/height
+			t = bestWindow.mCenterY + bestWindow.mHeight/2.0;
+			b = hpx - t - bestWindow.mHeight;
+		}
+		
+		double tanMuOver2 = Math.tan(mu/2);
+		double hpxOverSinMu = hpx/Math.sin(mu);
+		double tACotTerm = Math.atan(1/(hpxOverSinMu/t - tanMuOver2));
+		double bACotTerm = Math.atan(1/(hpxOverSinMu/b - tanMuOver2));
+		
+		return (int) ((mu - tACotTerm - bACotTerm) * mRadiansToEncoderUnits);
+	}
+	
 	public void UpdateRotationEncodersWithPixels() 
 	{
 		SetRotationalTolerance();
 		
-		mLeftMotor1.setEncPosition(OzMath.PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError()));
+		mLeftMotor1.setEncPosition(PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), true));
 	}
 
 }

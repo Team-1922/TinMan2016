@@ -51,9 +51,4 @@ public class OzMath {
 	    return true;
 	}
 
-	public static int PixelsToEncoderUnits(int pixels) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

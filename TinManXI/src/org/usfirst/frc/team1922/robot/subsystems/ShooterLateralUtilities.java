@@ -30,8 +30,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	protected double mCameraToBaseWindowHeight; //the base of the TAPE
 	
 	protected int mCameraViewWidth;
+	protected int mCameraViewHeight;
 	
 	protected float mThrottleZeroPosition = 0.0f;
+	protected float mVerticalFOV;
+	protected float mHorizontalFOV;
 	
 	public ShooterLateralUtilities()
 	{
@@ -155,9 +158,24 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		return mCameraViewWidth;
 	}
 	
+	public int GetCameraViewHeight()
+	{
+		return mCameraViewHeight;
+	}
+	
 	public void SetWindage(int windage)
 	{
 		mPIDWindageAdj = windage;
+	}
+	
+	public double GetHorizontalFOV()
+	{
+		return mHorizontalFOV;
+	}
+	
+	public double GetVerticalFOV()
+	{
+		return mVerticalFOV;
 	}
 	
 	public StrongholdWindow GetBestWindow()
@@ -197,6 +215,10 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mPIDWindageAdj = Integer.parseInt(mCfgClass.GetAttribute("Windage"));
 		mCameraToBaseWindowHeight = Double.parseDouble(mCfgClass.GetAttribute("CameraToWindowBase"));
 		mCameraViewWidth = Integer.parseInt(mCfgClass.GetAttribute("ViewWidth"));
+		mCameraViewHeight = Integer.parseInt(mCfgClass.GetAttribute("ViewHeight"));
+		
+		mVerticalFOV = Float.parseFloat(mCfgClass.GetAttribute("VertFOV"));
+		mHorizontalFOV = Float.parseFloat(mCfgClass.GetAttribute("HorizFOV"));
 		
 		mThrottleZeroPosition = mCameraViewWidth / 2;
 		
@@ -212,6 +234,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mCfgClass.SetAttribute("Windage", Integer.toString(mPIDWindageAdj));
 		mCfgClass.SetAttribute("CameraToWindowBase", Double.toString(mCameraToBaseWindowHeight));
 		mCfgClass.SetAttribute("ViewWidth", Integer.toString(mCameraViewWidth));
+		mCfgClass.SetAttribute("VertFOV", Float.toString(mVerticalFOV));
+		mCfgClass.SetAttribute("HorizFOV", Float.toString(mHorizontalFOV));
 	}
 
 	@Override
