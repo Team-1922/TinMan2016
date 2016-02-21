@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.ozram1922.Tuple;
@@ -24,6 +25,41 @@ import org.w3c.dom.NodeList;
  */
 public class OI implements CfgInterface{
 
+	public enum TriggerAction
+	{
+		kWhileHeld,
+		kWhenPressed,
+		kWhenReleased
+	}
+	
+	public static TriggerAction StringToTriggerAction(String action)
+	{
+		switch(action)
+		{
+		default:
+		case "WhenPressed":
+			return TriggerAction.kWhenPressed;
+		case "WhenReleased":
+			return TriggerAction.kWhenReleased;
+		case "WhileHeld":
+			return TriggerAction.kWhileHeld;
+		}
+	}
+	
+	public static String TriggerActionToString(TriggerAction action)
+	{
+		switch(action)
+		{
+		default:
+		case kWhenPressed:
+			return "WhenPressed";
+		case kWhenReleased:
+			return "WhenReleased";
+		case kWhileHeld:
+			return "WhileHeld";
+		
+		}
+	}
 	/*
 	 * 
 	 * Config Variables
@@ -31,7 +67,7 @@ public class OI implements CfgInterface{
 	 */
 	private ConfigurableClass mCfgInstance = new ConfigurableClass("OI", this);
 	
-	protected HashMap<Tuple<String,Integer>, Command> mCommandMap = new HashMap<Tuple<String,Integer>, Command>();
+	protected HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>> mCommandMap = new HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>>();
 	
 	/*
 	 * 
@@ -57,13 +93,22 @@ public class OI implements CfgInterface{
 	public void Reconstruct()
 	{
 		//setup all of the command bindings with the loaded XML data
-	    Iterator<Entry<Tuple<String,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
-		while(it0.hasNext())
+	    for(Map.Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>> pair : mCommandMap.entrySet())
 		{
-			Entry<Tuple<String,Integer>, Command> pair = (Entry<Tuple<String,Integer>, Command>)it0.next();
-			
 			JoystickButton j = new JoystickButton(mJoysticks.get(pair.getKey().x).y, pair.getKey().y) ;
-			j.whenPressed(pair.getValue());
+			switch(pair.getValue().y)
+			{
+			default:
+			case kWhenPressed:
+				j.whenPressed(pair.getValue().x);
+				break;
+			case kWhenReleased:
+				j.whenReleased(pair.getValue().x);
+				break;
+			case kWhileHeld:
+				j.whileHeld(pair.getValue().x);
+				break;
+			}
 			System.out.println(pair.getValue().toString());
 			mButtonCommands.add(j);
 		}
@@ -126,7 +171,7 @@ public class OI implements CfgInterface{
 					new Tuple<String,Integer>(
 							thisElement.getAttribute("Joystick"), 
 							Integer.parseInt(thisElement.getAttribute("Button"))), 
-					CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name")));
+					new Tuple<Command, TriggerAction>(CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name")), StringToTriggerAction(thisElement.getAttribute("TriggerType"))));
 		}
 		
 		Reconstruct();
@@ -147,12 +192,13 @@ public class OI implements CfgInterface{
 			mCfgInstance.AddChild(ej);
 		}
 
-	    Iterator<Entry<Tuple<String,Integer>, Command>> it0 = mCommandMap.entrySet().iterator();
+	    Iterator<Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>>> it0 = mCommandMap.entrySet().iterator();
 		while(it0.hasNext())
 		{
-			Entry<Tuple<String,Integer>, Command> pair = (Entry<Tuple<String,Integer>, Command>)it0.next();
+			Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>> pair = (Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>>)it0.next();
 			Element ec = doc.createElement("Command");
-			ec.setAttribute("Name", pair.getValue().getName());
+			ec.setAttribute("Name", pair.getValue().x.getName());
+			ec.setAttribute("TriggerType", TriggerActionToString(pair.getValue().y));
 			ec.setAttribute("JoystickId", pair.getKey().x);
 			ec.setAttribute("ButtonId", Integer.toString(pair.getKey().y));
 			mCfgInstance.AddChild(ec);
