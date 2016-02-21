@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveForwardDistance extends Command {
 
-	protected final float mDistanceInches;
+	protected final double mDistanceInches;
 	
-    public DriveForwardDistance(float distanceInches) {
+    public DriveForwardDistance(double distanceInches) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	mDistanceInches = distanceInches;
