@@ -106,5 +106,13 @@ public class BallRetriever extends Subsystem implements CfgInterface {
 		mIntakeWheels.MakeCfgClassesNull();
 		mIntakePneumatics.MakeCfgClassesNull();
 	}
+
+	public void ToggleMotor() {
+		if(this.mIntakeWheels.GetMotorSpeed() > 0)
+			StopMotor();
+		else
+			StartMotor();
+		
+	}
 }
 

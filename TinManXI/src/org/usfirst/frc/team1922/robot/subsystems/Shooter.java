@@ -52,6 +52,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mWheelsF = 0.0f;
 	protected int mWheelsEncToRot = 1;
 	protected float mWheelsSetRpm = 0;
+	protected float mWheelsIntakeRpm = 1;
 	
 	protected float mLateralP = 0.0f;
 	protected float mLateralI = 0.0f;
@@ -154,6 +155,14 @@ public class Shooter extends Subsystem implements CfgInterface {
     {
     	return mWheelsSetRpm;
     }
+
+	public void ToggleIntakeSpin() 
+	{
+		if(mShooterWheels.GetSetpoint() > 0.0)
+			mShooterWheels.SetSpeed(mWheelsIntakeRpm);
+		else
+			mShooterWheels.SetSpeed(0);
+	}
     
     /*
      * 
@@ -189,6 +198,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mWheelsF = Float.parseFloat(shooterWheelsElement.getAttribute("F"));
 		
 		mWheelsSetRpm = Float.parseFloat(shooterWheelsElement.getAttribute("ShootRPM"));
+		mWheelsIntakeRpm = Float.parseFloat(shooterWheelsElement.getAttribute("IntakeRPM"));
 		
 		mWheelsEncToRot = Integer.parseInt(shooterWheelsElement.getAttribute("EncSamplesPerRotation"));
 				
@@ -245,6 +255,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		shooterWheelsElement.setAttribute("F", Float.toString(mWheelsF));
 		
 		shooterWheelsElement.setAttribute("ShootRPM", Float.toString(mWheelsSetRpm));
+		shooterWheelsElement.setAttribute("IntakeRPM", Float.toString(mWheelsIntakeRpm));
 		
 		shooterWheelsElement.setAttribute("EncSamplesPerRotation", Integer.toString(mWheelsEncToRot));
 		
