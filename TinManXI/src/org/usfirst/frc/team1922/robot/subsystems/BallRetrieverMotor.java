@@ -27,6 +27,11 @@ public class BallRetrieverMotor extends Subsystem {
     	mRetrievalMotor.set(speed);
     }
     
+    public double GetMotorSpeed()
+    {
+    	return mRetrievalMotor.get();
+    }
+    
     public void MakeCfgClassesNull()
     {
     	if(mRetrievalMotor != null)
