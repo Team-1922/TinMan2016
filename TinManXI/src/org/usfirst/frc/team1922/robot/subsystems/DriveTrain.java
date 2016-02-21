@@ -59,7 +59,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	 * Rotational PID
 	 * 
 	 */
-	//this is in INCHES
+	//this is in PERCENT OF THE WINDOW WIDTH
 	protected float mATolerance;
 	
 	protected float mAP;
@@ -158,14 +158,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		 * If "Rotational": returns tolerance in DEGREES
 		 * 
 		 */
-		switch (GetActiveControllerName())
-		{
-		default:
-		case "Movement":
-			return mMTolerance;
-		case "Aiming":
-			return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
-		}
+		return GetTolerance(GetActiveControllerName());
 	}
 	
 	public double GetTolerance(String name)
@@ -176,7 +169,8 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		case "Movement":
 			return mMTolerance;
 		case "Aiming":
-			return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
+			return mATolerance * Robot.mGlobShooterLatUtils.GetBestWindow().mWidth;
+			//return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
 		}
 	}
 	
