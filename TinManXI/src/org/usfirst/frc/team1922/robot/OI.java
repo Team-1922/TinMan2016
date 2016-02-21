@@ -171,7 +171,8 @@ public class OI implements CfgInterface{
 					new Tuple<String,Integer>(
 							thisElement.getAttribute("Joystick"), 
 							Integer.parseInt(thisElement.getAttribute("Button"))), 
-					new Tuple<Command, TriggerAction>(CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name")), StringToTriggerAction(thisElement.getAttribute("TriggerType"))));
+					new Tuple<Command, TriggerAction>(CommandRetrieval.GetCommandFromName(thisElement.getAttribute("Name")), 
+							StringToTriggerAction(thisElement.getAttribute("TriggerType"))));
 		}
 		
 		Reconstruct();

@@ -295,5 +295,14 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterWheels.MakeCfgClassesNull();
 		//mShooterLateral.MakeCfgClassesNull();
 	}
+
+	public void StartIntake() {
+		mShooterWheels.SetSpeed(mWheelsIntakeRpm);
+	}
+	
+	public void StopIntake()
+	{
+		mShooterWheels.SetSpeed(0);
+	}
 }
 

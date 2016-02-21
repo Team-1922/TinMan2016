@@ -6,7 +6,7 @@
 		<Joystick Name="LeftStick" Id="1" />
 		<Joystick Name="RightStick" Id="2" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="1" Name="shooter.FeedBall" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="2" Name="ToggleIntakeWheels" />
+		<Command TriggerType="WhileHeld" Joystick="OpStick" Button="2" Name="UseIntakeWheels" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="3" Name="shooter.SpinUpShooterWheelsCfg" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="4" Name="shooter.SpinDownShooterWheels" />		
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="5" Name="SetIntakePositionLow" />
