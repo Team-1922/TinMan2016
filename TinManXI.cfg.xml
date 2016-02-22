@@ -17,7 +17,7 @@
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="5" Name="Tilt" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="6" Name="Lift" />
 	</OI>
-	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="160" CameraToWindowBase="84" ViewWidth="320" ViewHeight="240" VertFOV="0.628319" HorizFOV="0.837758" />
+	<ShooterLateralGlobal NetTableName="GRIP/myContoursReport" Windage="160" CameraToWindowBase="60" ViewWidth="320" ViewHeight="240" VertFOV="0.628319" HorizFOV="0.837758" />
 	<Shooter>
 		<Angle P="375.0" I="0.015" D="0.0" AngleTo5v="1" PotOffset="0" MotorId="5" UltraId="0" />
 		<Wheels MotorId="6" P="2.2" I="0.0" D="50.0" F=".0465" EncSamplesPerRotation="4096" ShootRPM="3000" IntakeRPM="1500" />
