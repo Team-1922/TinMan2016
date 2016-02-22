@@ -218,7 +218,10 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mAI = Float.parseFloat(mCfgInstance.GetAttribute("AimingI"));
 		mAD = Float.parseFloat(mCfgInstance.GetAttribute("AimingD"));
 		mATolerance = Float.parseFloat(mCfgInstance.GetAttribute("AimingTolerance"));
-		mRadiansToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("RadiansToEncoderUnits"));
+		
+		//This may be OK to do.  because enc per angle = (enc/in) * radius
+		mRadiansToEncoderUnits = mInchesToEncoderUnits * mTurningRadius;
+		//mRadiansToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("RadiansToEncoderUnits"));
 		
 		Reconstruct();
 		
@@ -248,7 +251,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mCfgInstance.SetAttribute("AimingI", Float.toString(mAI));
 		mCfgInstance.SetAttribute("AimingD", Float.toString(mAD));
 		mCfgInstance.SetAttribute("AimingTolerance", Float.toString(mATolerance));
-		mCfgInstance.SetAttribute("RadiansToEncoderUnits", Float.toString(mRadiansToEncoderUnits));
+		//mCfgInstance.SetAttribute("RadiansToEncoderUnits", Float.toString(mRadiansToEncoderUnits));
 	}
 
 	@Override
