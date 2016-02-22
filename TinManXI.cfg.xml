@@ -5,14 +5,15 @@
 		<Joystick Name="OpStick" Id="0" />
 		<Joystick Name="LeftStick" Id="1" />
 		<Joystick Name="RightStick" Id="2" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="1" Name="shooter.FeedBall" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="1" Name="shooter.ShootBall" />
 		<Command TriggerType="WhileHeld" Joystick="OpStick" Button="2" Name="UseIntakeWheels" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="3" Name="shooter.SpinUpShooterWheelsCfg" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="4" Name="shooter.SpinDownShooterWheels" />		
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="5" Name="SetIntakePositionLow" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="6" Name="SetIntakePositionHigh" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="3" Name="shooter.SpinUpShooterWheelsCfg" />		
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="5" Name="SetIntakePositionMedLow" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="6" Name="SetIntakePositionMedHigh" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="11" Name="SetIntakePositionLow" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="12" Name="SetIntakePositionHigh" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="7" Name="PutWindowInView" />
-		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="11" Name="FindAndCenterWindow" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="8" Name="FindAndCenterWindow" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="5" Name="Tilt" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="6" Name="Lift" />
 	</OI>
