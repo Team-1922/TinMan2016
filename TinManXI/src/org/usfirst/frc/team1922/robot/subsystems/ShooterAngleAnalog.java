@@ -25,7 +25,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	}
 	
 	//mult ratio is in potValue per degree
-	//horizAngle is in potValue's
+	//horizAngle is in radians
 	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId)
 	{
 		mDistanceFinder = new AnalogUltrasonic(ultraId);
@@ -51,7 +51,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	//angle is relative to horizontal (negative to get to feeding position)
 	public void SetAngle(float angle)
 	{
-		float set = mAngleRatio * angle + mAngleBaseline + mAngleOffset;
+		float set = mAngleRatio * (angle + mAngleOffset) + mAngleBaseline;
 		System.out.println("Setting Angle To:" + set);
 		mAngleMotor.changeControlMode(TalonControlMode.Position);
 		mAngleMotor.set(set);
@@ -81,6 +81,11 @@ public class ShooterAngleAnalog extends Subsystem {
 	public double GetUltraDistance()
 	{
 		return mDistanceFinder.GetDistanceInches() / 12.0;
+	}
+	
+	public double GetUltraDistanceRaw()
+	{
+		return mDistanceFinder.getAverageVoltage();
 	}
 	
 	public void SetAngleBaseline()
