@@ -14,6 +14,8 @@
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="12" Name="SetIntakePositionHigh" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="7" Name="PutWindowInView" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="8" Name="FindAndCenterWindow" />
+		<Command TriggerType="WhileHeld" Joystick="LeftStick" Button="1" Name="RotateCameraServoPos" />
+		<Command TriggerType="WhileHeld" Joystick="RightStick" Button="1" Name="RotateCameraServoNeg" />
 		<!--<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="5" Name="Tilt" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="6" Name="Lift" /> -->
 	</OI>
@@ -26,4 +28,5 @@
 	</Shooter>	
 	<BallRetriever MotorId="1" MotorSpeed=".75" ShortStrokeId="2" LongStrokeId="3" />
 	<Climber liftSolenoid="4" tiltSolenoid="5" />
+	<DriverCamera ServoId="9" FullPos="1" FullNeg="0" />
 </root>

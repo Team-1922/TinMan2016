@@ -35,8 +35,8 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor.changeControlMode(TalonControlMode.Position);
 		mAngleMotor.configPotentiometerTurns(10);
 		
-		mAngleMotor.reverseOutput(true);
-		mAngleMotor.setInverted(true);
+		//mAngleMotor.reverseOutput(true);
+		//mAngleMotor.setInverted(true);
 		
 		mAngleMotor.setProfile(0);
 		mAngleMotor.setPID(p, i, d);
@@ -52,15 +52,17 @@ public class ShooterAngleAnalog extends Subsystem {
 	//angle is relative to horizontal (negative to get to feeding position)
 	public void SetAngle(float angle)
 	{
-		float set = mAngleRatio * (angle + mAngleOffset) + mAngleBaseline;
-		System.out.println("Setting Angle To:" + set);
-		mAngleMotor.changeControlMode(TalonControlMode.Position);
-		mAngleMotor.set(set);
+		//float set = mAngleRatio * (angle + mAngleOffset) + mAngleBaseline;
+		//System.out.println("Setting Angle To:" + set);
+		//mAngleMotor.changeControlMode(TalonControlMode.Position);
+		//mAngleMotor.set(set);
+		mAngleMotor.set(angle);
 	}
 	
 	public double GetAngle()
 	{
-		return mAngleMotor.getPosition();
+		//return mAngleMotor.getPosition();
+		return mAngleMotor.getAnalogInPosition();
 	}
 	
 	public void SetSpeed(double d)

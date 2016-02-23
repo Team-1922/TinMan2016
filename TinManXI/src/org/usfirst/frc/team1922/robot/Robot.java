@@ -16,6 +16,7 @@ import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngle;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.Climber;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team1922.robot.subsystems.DriverCamera;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
 import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
 
@@ -41,6 +42,7 @@ public class Robot extends IterativeRobot {
 	public static String mCfgFileName = "/home/lvuser/TinManXI.cfg.xml";
 	public static String mCsvRangeAngleName = "/home/lvuser/RangeAngleTable.csv";
 	public static Climber mClimber = new Climber();
+	public static DriverCamera mDriverCamera = new DriverCamera();
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -64,6 +66,7 @@ public class Robot extends IterativeRobot {
 		mCfgLoader.RegisterCfgClass(mDriveTrain);
 		mCfgLoader.RegisterCfgClass(mShooter);
 		mCfgLoader.RegisterCfgClass(mBallRetriever);
+		mCfgLoader.RegisterCfgClass(mDriverCamera);
 		mCfgLoader.RegisterCfgClass(oi);
 		
 		//load the xml file here
@@ -197,7 +200,7 @@ public class Robot extends IterativeRobot {
 
         if(SmartDashboard.getNumber("Angle Setpoint") != 0)
         {
-        	//Robot.mShooter.GetShooterAngle().SetAngle((float)SmartDashboard.getNumber("Angle Setpoint"));
+        	Robot.mShooter.GetShooterAngle().SetAngle((float)SmartDashboard.getNumber("Angle Setpoint"));
         }
         SmartDashboard.putNumber("Angle", Robot.mShooter.GetShooterAngle().GetAngle());
         
