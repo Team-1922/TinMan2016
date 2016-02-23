@@ -33,10 +33,11 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor = new CANTalon(canId);
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 		mAngleMotor.changeControlMode(TalonControlMode.Position);
-		mAngleMotor.configPotentiometerTurns(10);
+		mAngleMotor.configPotentiometerTurns(1);
 		
+		mAngleMotor.reverseSensor(true);
 		//mAngleMotor.reverseOutput(true);
-		//mAngleMotor.setInverted(true);
+		mAngleMotor.setInverted(true);
 		
 		mAngleMotor.setProfile(0);
 		mAngleMotor.setPID(p, i, d);

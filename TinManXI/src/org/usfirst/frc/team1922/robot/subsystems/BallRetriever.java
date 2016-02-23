@@ -45,9 +45,9 @@ public class BallRetriever extends Subsystem implements CfgInterface {
     	mIntakePneumatics.Reconstruct(mShortStrokeId, mLongStrokeId);
     }
     
-    public void StartMotor()
+    public void StartMotor(boolean pos)
     {
-    	mIntakeWheels.SetMotorSpeed(mMotorSpeed);
+    	mIntakeWheels.SetMotorSpeed((pos ? 1 : -1) * mMotorSpeed);
     }
     
     public void StopMotor()
@@ -113,7 +113,7 @@ public class BallRetriever extends Subsystem implements CfgInterface {
 		if(this.mIntakeWheels.GetMotorSpeed() > 0)
 			StopMotor();
 		else
-			StartMotor();
+			StartMotor(true);
 		
 	}
 }

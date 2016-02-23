@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class UseIntakeWheels extends Command {
+public class UseIntakeWheelsReverse extends Command {
 
-    public UseIntakeWheels() {
+    public UseIntakeWheelsReverse() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.mBallRetriever.GetMotorSubsystem());
@@ -18,7 +18,7 @@ public class UseIntakeWheels extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mBallRetriever.StartMotor(true);
+    	Robot.mBallRetriever.StartMotor(false);
     	Robot.mShooter.StartIntake(true);
     }
 

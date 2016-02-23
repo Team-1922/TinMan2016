@@ -217,6 +217,15 @@ public class OI implements CfgInterface{
 		mJoysticks.clear();
 		mButtonCommands.clear();		
 	}
+	
+	//this outputs all of the button mapped commands onto the smart dashboard
+	public void WriteSmartDashboardItems() {
+
+		/*for(Map.Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>> entry : mCommandMap.entrySet())
+		{
+			
+		}*/
+	}
 
 
     //// CREATING BUTTONS

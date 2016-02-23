@@ -105,7 +105,7 @@ public class ShooterWheels extends Subsystem {
 	
 	public boolean IsSpunUp()
 	{
-		return OzMath.SigmaTest(mWheels.getSpeed(), mWheels.getSetpoint(), 25);
+		return OzMath.SigmaTest(mWheels.getSpeed(), mWheels.getSetpoint(), 50);
 	}
 
     public void initDefaultCommand() 

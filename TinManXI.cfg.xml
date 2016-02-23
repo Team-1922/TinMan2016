@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<DriveTrain LeftMotor1="7" LeftMotor2="2" RightMotor1="-3" RightMotor2="-4" LeftSensitivity="1.0" RightSensitivity="0.8" MovementP="0.0" MovementI="0.0" MovementD="0.0" MovementTolerance="1.0" AimingP="0.00083" AimingI="0.0" AimingD="0.0" AimingTolerance="0.15" InchesToEncoderUnits="1.0" TurningRadius="12.125" />
+	<DriveTrain LeftMotor1="7" LeftMotor2="2" RightMotor1="-3" RightMotor2="-4" LeftSensitivity=".5" RightSensitivity=".5" MovementP="0.0" MovementI="0.0" MovementD="0.0" MovementTolerance="1.0" AimingP="0.00083" AimingI="0.0" AimingD="0.0" AimingTolerance="0.15" InchesToEncoderUnits="1.0" TurningRadius="12.125" />
 	<OI>
 		<Joystick Name="OpStick" Id="0" />
 		<Joystick Name="LeftStick" Id="1" />
 		<Joystick Name="RightStick" Id="2" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="1" Name="shooter.ShootBall" />
 		<Command TriggerType="WhileHeld" Joystick="OpStick" Button="2" Name="UseIntakeWheels" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="4" Name="shooter.SpinDownShooterWheels" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="3" Name="shooter.SpinUpShooterWheelsCfg" />		
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="5" Name="SetIntakePositionMedLow" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="6" Name="SetIntakePositionMedHigh" />
