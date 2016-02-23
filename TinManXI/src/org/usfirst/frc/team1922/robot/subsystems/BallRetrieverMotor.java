@@ -20,6 +20,7 @@ public class BallRetrieverMotor extends Subsystem {
     public void Reconstruct(int id)
     {
     	mRetrievalMotor = new CANTalon(id);
+    	mRetrievalMotor.setInverted(true);
     }
     
     public void SetMotorSpeed(double speed)

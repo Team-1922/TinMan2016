@@ -35,12 +35,15 @@ public class ShooterWheels extends Subsystem {
 		System.out.println("Reconstruct Shooter Wheels: " + talonID + "," + p + "," + i + "," + d + "," + f + "," + encUnitsPerRot);
 		mWheels = new CANTalon(talonID);
 		mWheels.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		mWheels.reverseSensor(true);
+		//mWheels.reverseSensor(true);
 		mWheels.configEncoderCodesPerRev(encUnitsPerRot);
 		
+		mWheels.reverseOutput(true);
+		
+		mWheels.setEncPosition(0);//zero this out so the value doesn't get too large
 
-		mWheels.configNominalOutputVoltage(+0.0f, -0.0f);
-		mWheels.configPeakOutputVoltage(+12.0f, 0.0f);
+		//mWheels.configNominalOutputVoltage(+0.0f, -0.0f);
+		//mWheels.configPeakOutputVoltage(+12.0f, 0.0f);
 		
 		mWheels.setProfile(0);
 		mWheels.setPID(p, i, d);
@@ -50,7 +53,7 @@ public class ShooterWheels extends Subsystem {
 	//Set the speed of the motor in rpm (handled by PID control on the talon
 	public void SetSpeed(double speed)
 	{
-		System.out.println("Speed: " + speed);
+		//System.out.println("Speed: " + speed);
 		mWheels.changeControlMode(TalonControlMode.Speed);
 		//mWheels.enable();
 		mWheels.set(speed);
@@ -114,6 +117,15 @@ public class ShooterWheels extends Subsystem {
 		if(mWheels != null)
 			mWheels.delete();
 		mWheels = null;
+	}
+
+	public double GetSpeed() {
+		return this.mWheels.getSpeed();
+	}
+	
+	public double GetEncPos()
+	{
+		return this.mWheels.getPosition();
 	}
 }
 

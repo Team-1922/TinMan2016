@@ -99,7 +99,7 @@
 	    </jar>
 	  </target>
 	
-	  <target name="upload-cfg">
+	  <target name="upload-cfg" depends="get-target-ip" >
 	    <scp file="${cfg.xml}" todir="${username}@${target}:${deploy.dir}" password="${password}" trust="true"/>
 	  </target>
 		

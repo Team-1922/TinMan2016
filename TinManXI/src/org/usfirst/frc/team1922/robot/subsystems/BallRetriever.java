@@ -82,6 +82,8 @@ public class BallRetriever extends Subsystem implements CfgInterface {
 		mShortStrokeId = Integer.parseInt(mCfgClass.GetAttribute("ShortStrokeId"));
 		mLongStrokeId = Integer.parseInt(mCfgClass.GetAttribute("LongStrokeId"));
 		
+		Reconstruct();
+		
 		return true;
 	}
 

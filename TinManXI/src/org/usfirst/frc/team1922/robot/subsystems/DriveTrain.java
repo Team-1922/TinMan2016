@@ -117,6 +117,18 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor1 = new CANTalon(Math.abs(mRightMotorId1));
 		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));
 		
+		mLeftMotor1.setInverted(mLeftMotorId1 < 0);
+		mLeftMotor1.reverseOutput(mLeftMotorId1 < 0);
+		
+		mLeftMotor2.setInverted(mLeftMotorId2 < 0);
+		mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
+		
+		mRightMotor1.setInverted(mRightMotorId1 < 0);
+		mRightMotor1.reverseOutput(mRightMotorId1 < 0);
+		
+		mRightMotor2.setInverted(mRightMotorId2 < 0);
+		mRightMotor2.reverseOutput(mRightMotorId2 < 0);
+		
 		//default to the linear back-forth motion
 		PIDSwap(0);
 	}

@@ -14,7 +14,7 @@ public class FeedBall extends Command {
         // eg. requires(chassis);
     	requires(Robot.mShooter.GetShooterFeeder());
     	
-    	setTimeout(2);
+    	setTimeout(1);
     }
 
     // Called just before this Command runs the first time

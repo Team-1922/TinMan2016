@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 //this is only to be used with MB1013
 public class AnalogUltrasonic extends AnalogInput
 {
-	protected double mScalingFactor = 0.009766;
+	protected double mScalingFactor = 1;
 	
 	public AnalogUltrasonic(int id)
 	{
@@ -21,12 +21,17 @@ public class AnalogUltrasonic extends AnalogInput
 	
 	public double GetDistanceInches()
 	{
-		return ScaleInput(getVoltage());
+		return ScaleInput(getAverageVoltage());
 	}
 	
 	protected double ScaleInput(double voltage)
 	{
 		return voltage / mScalingFactor;
+	}
+	
+	protected double GetRawInput()
+	{
+		return getAverageVoltage();
 	}
 		
 
