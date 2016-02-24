@@ -12,8 +12,6 @@ import java.io.IOException;
 import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.OverwriteXMLCfg;
 import org.usfirst.frc.team1922.robot.commands.ReloadXMLCfg;
-import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
-import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngle;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.Climber;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;

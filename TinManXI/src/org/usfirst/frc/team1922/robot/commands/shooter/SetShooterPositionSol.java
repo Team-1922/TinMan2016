@@ -1,10 +1,5 @@
 package org.usfirst.frc.team1922.robot.commands.shooter;
 
-import org.usfirst.frc.team1922.robot.Robot;
-import org.usfirst.frc.team1922.robot.subsystems.ShooterAngle;
-
-import edu.wpi.first.wpilibj.command.Command;
-
 /**
  *
  */

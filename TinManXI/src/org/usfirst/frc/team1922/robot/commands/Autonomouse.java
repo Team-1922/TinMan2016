@@ -2,7 +2,6 @@ package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngleAuto;
 import org.usfirst.frc.team1922.robot.commands.shooter.ShootBall;
-import org.usfirst.frc.team1922.robot.commands.shooter.SpinUpShooterWheels;
 import org.usfirst.frc.team1922.robot.commands.shooter.SpinUpShooterWheelsCfg;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
