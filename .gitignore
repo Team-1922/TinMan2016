@@ -42,3 +42,6 @@ local.properties
 
 # STS (Spring Tool Suite)
 .springBeans
+
+*.class
+*.jar
