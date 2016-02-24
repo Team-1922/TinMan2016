@@ -63,7 +63,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	
 	public double GetAngle()
 	{
-		return mAngleMotor.getPosition();
+		return (mAngleBaseline + mAngleOffset - mAngleMotor.getPosition())/mAngleRatio;
 	}
 	
 	public void SetSpeed(double d)
