@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1922.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
 	public static String mCsvRangeAngleName = "/home/lvuser/RangeAngleTable.csv";
 	public static Climber mClimber = new Climber();
 	public static DriverCamera mDriverCamera = new DriverCamera();
+    CameraServer server;
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -78,6 +80,10 @@ public class Robot extends IterativeRobot {
 		mLoadFile = new ReloadXMLCfg();
 		
 
+        server = CameraServer.getInstance();
+        server.setQuality(50);
+        //the camera name (ex "cam0") can be found through the roborio web interface
+        server.startAutomaticCapture("cam1");
 		
 		//startGRIP();
     }
@@ -200,7 +206,7 @@ public class Robot extends IterativeRobot {
 
         if(SmartDashboard.getNumber("Angle Setpoint") != 0)
         {
-        	Robot.mShooter.GetShooterAngle().SetAngle((float)SmartDashboard.getNumber("Angle Setpoint"));
+        	//Robot.mShooter.GetShooterAngle().SetAngle((float)SmartDashboard.getNumber("Angle Setpoint"));
         }
         SmartDashboard.putNumber("Angle", Robot.mShooter.GetShooterAngle().GetAngle());
         

@@ -25,7 +25,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	}
 	
 	//mult ratio is in potValue per degree
-	//horizAngle is in radians
+	//horizAngle is in normalized encoder units
 	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId)
 	{
 		mDistanceFinder = new AnalogUltrasonic(ultraId);
@@ -34,12 +34,13 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 		mAngleMotor.changeControlMode(TalonControlMode.Position);
 		mAngleMotor.configPotentiometerTurns(1);
+
+		mAngleMotor.setProfile(0);
 		
-		mAngleMotor.reverseSensor(true);
-		//mAngleMotor.reverseOutput(true);
+		//mAngleMotor.reverseSensor(true);
+		mAngleMotor.reverseOutput(false);
 		mAngleMotor.setInverted(true);
 		
-		mAngleMotor.setProfile(0);
 		mAngleMotor.setPID(p, i, d);
 		
 		mAngleMotor.enableLimitSwitch(true, true);
@@ -53,17 +54,16 @@ public class ShooterAngleAnalog extends Subsystem {
 	//angle is relative to horizontal (negative to get to feeding position)
 	public void SetAngle(float angle)
 	{
-		//float set = mAngleRatio * (angle + mAngleOffset) + mAngleBaseline;
-		//System.out.println("Setting Angle To:" + set);
-		//mAngleMotor.changeControlMode(TalonControlMode.Position);
-		//mAngleMotor.set(set);
-		mAngleMotor.set(angle);
+		float set = mAngleBaseline + mAngleOffset - (mAngleRatio * angle);
+		System.out.println("Setting Angle To:" + set);
+		mAngleMotor.changeControlMode(TalonControlMode.Position);
+		mAngleMotor.set(set);
+		//mAngleMotor.set(angle);
 	}
 	
 	public double GetAngle()
 	{
-		//return mAngleMotor.getPosition();
-		return mAngleMotor.getAnalogInPosition();
+		return mAngleMotor.getPosition();
 	}
 	
 	public void SetSpeed(double d)

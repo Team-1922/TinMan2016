@@ -184,7 +184,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
 		mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
 		mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
-		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleTo5v"));
+		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleToNorm"));
 		mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset")); 
 		
 		
@@ -237,7 +237,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		
 		shooterAngleElement.setAttribute("MotorId", Integer.toString(mAngleMotorId));
 
-		shooterAngleElement.setAttribute("AngleTo5v", Float.toString(mAnglePotMultRatio));
+		shooterAngleElement.setAttribute("AngleToNorm", Float.toString(mAnglePotMultRatio));
 		shooterAngleElement.setAttribute("PotOffset", Float.toString(mAnglePotOffset));
 		
 		
