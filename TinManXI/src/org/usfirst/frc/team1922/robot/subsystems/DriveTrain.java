@@ -358,32 +358,23 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		
 	};
 	
-	//if isHorizontal == false, it is vertical
-	public int PixelsToEncoderUnits(int pixels, boolean isHorizontal)
+	//if isHorizontal == false, it is vertical; bottom=distance from bottom extrema to the BOTTOM of "pixels"
+	public int PixelsToEncoderUnits(int pixels, int bottom, boolean isHorizontal)
 	{
 		//see Kevin for this equation
 		double mu = 0;
 		double hpx = 0;
-		double t = 0;
-		double b = 0;
-		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
+		double t = bottom + pixels;
+		double b = bottom;
 		if(isHorizontal)
 		{
 			mu = Robot.mGlobShooterLatUtils.GetHorizontalFOV();
 			hpx = Robot.mGlobShooterLatUtils.GetCameraViewWidth();
-			
-			//assume the "top" is the center x plus half the width/height
-			t = bestWindow.mCenterX + bestWindow.mWidth/2.0;
-			b = hpx - t - bestWindow.mWidth;
 		}
 		else
 		{
 			mu = Robot.mGlobShooterLatUtils.GetVerticalFOV();
 			hpx = Robot.mGlobShooterLatUtils.GetCameraViewHeight();
-			
-			//assume the "top" is the center x plus half the width/height
-			t = bestWindow.mCenterY + bestWindow.mHeight/2.0;
-			b = hpx - t - bestWindow.mHeight;
 		}
 		
 		double tanMuOver2 = Math.tan(mu/2);
@@ -398,7 +389,9 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	{
 		SetRotationalTolerance();
 		
-		mLeftMotor1.setEncPosition(PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), true));
+		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
+		
+		mLeftMotor1.setEncPosition(PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true));
 	}
 
 }
