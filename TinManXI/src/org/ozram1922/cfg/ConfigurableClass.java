@@ -28,7 +28,9 @@ public class ConfigurableClass
       return false;
 
     tmpElement = thisElement;
-    return mThisClass.DeserializeInternal();
+    boolean ret = mThisClass.DeserializeInternal();
+    tmpElement = null;
+    return ret;
   }
   public Element Serialize(Document doc)
   {
@@ -52,18 +54,26 @@ public class ConfigurableClass
 
   public void SetAttribute(String name, String value)
   {
+	  if(tmpElement == null)
+		  return;
     tmpElement.setAttribute(name, value);
   }
   public String GetAttribute(String name)
   {
+	  if(tmpElement == null)
+		  return "";
     return tmpElement.getAttribute(name);
   }
   public void AddChild(Element childElement)
   {
+	  if(tmpElement == null)
+		  return;
     tmpElement.appendChild(childElement);
   }
   public Node GetNthChild(String name, int num)
   {
+	  if(tmpElement == null)
+		  return null;
     NodeList children = tmpElement.getElementsByTagName(name);
     if(num < 0 || children.getLength() < num - 1)
       return null;
@@ -72,6 +82,8 @@ public class ConfigurableClass
   }
   public NodeList GetChildren(String name)
   {
-    return tmpElement.getElementsByTagName(name);
+	  if(tmpElement == null)
+		  return null;
+	  return tmpElement.getElementsByTagName(name);
   }
 }

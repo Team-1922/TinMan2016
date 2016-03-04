@@ -47,10 +47,11 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser chooser;
     
-    Command mSaveFile;
-    Command mLoadFile;
-    Command mJoyCtrlAngle;
-    Command mSetAngle;
+    //Command mJoyCtrlAngle;
+    //Command mSetAngle;
+    
+    //store variable to make sure robot state is good
+    boolean mSuccessfulInit = false;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -70,12 +71,13 @@ public class Robot extends IterativeRobot {
 		mCfgLoader.RegisterCfgClass(oi);
 		
 		//load the xml file here
-		mCfgLoader.LoadFile(mCfgFileName, true);
+		mSuccessfulInit = mCfgLoader.LoadFile(mCfgFileName, true);
+		if(!mSuccessfulInit)
+		{
+			System.out.println("Something went REALLY wrong loading the .xml config file");
+		}
 		
 		//System.out.println("TEST");
-		
-		mSaveFile = new OverwriteXMLCfg();
-		mLoadFile = new ReloadXMLCfg();
 		
 
         server = CameraServer.getInstance();
@@ -141,6 +143,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	if(!mSuccessfulInit)
+    		return;
+    	
     	//in order to make sure the network tables update first, it is not a command
     	mGlobShooterLatUtils.UpdateCycle();
     	
@@ -165,7 +170,7 @@ public class Robot extends IterativeRobot {
         mJoyCtrlAngle.start();*/
         
         //mSaveFile.start();
-        SmartDashboard.putNumber("Wheels P", Robot.mShooter.GetShooterWheels().GetP());
+        /*SmartDashboard.putNumber("Wheels P", Robot.mShooter.GetShooterWheels().GetP());
         SmartDashboard.putNumber("Wheels I", Robot.mShooter.GetShooterWheels().GetI());
         SmartDashboard.putNumber("Wheels D", Robot.mShooter.GetShooterWheels().GetD());
         SmartDashboard.putNumber("Wheels F", Robot.mShooter.GetShooterWheels().GetF());
@@ -175,19 +180,21 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Angle D", Robot.mShooter.GetShooterAngle().GetD());
        
         SmartDashboard.putNumber("Wheels Setpoint", 0);
-        SmartDashboard.putNumber("Angle Setpoint", 0);
+        SmartDashboard.putNumber("Angle Setpoint", 0);*/
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	if(!mSuccessfulInit)
+    		return;
     	//in order to make sure the network tables update first, it is not a command
     	mGlobShooterLatUtils.UpdateCycle();
     	
         Scheduler.getInstance().run();
         
-        Robot.mShooter.GetShooterWheels().SetPID(
+        /*Robot.mShooter.GetShooterWheels().SetPID(
         		SmartDashboard.getNumber("Wheels P"),
         		SmartDashboard.getNumber("Wheels I"), 
         		SmartDashboard.getNumber("Wheels D"),
@@ -206,7 +213,7 @@ public class Robot extends IterativeRobot {
         {
         	//Robot.mShooter.GetShooterAngle().SetAngle((float)SmartDashboard.getNumber("Angle Setpoint"));
         }
-        SmartDashboard.putNumber("Angle", Robot.mShooter.GetShooterAngle().GetAngle());
+        SmartDashboard.putNumber("Angle", Robot.mShooter.GetShooterAngle().GetAngle());*/
         
         //SmartDashboard.putNumber("WHeels Raw", mShooter.GetShooterWheels().GetSpeed());
         
@@ -227,8 +234,6 @@ public class Robot extends IterativeRobot {
     
     public void UpdateSmartDashboardItems()
     {
-    	oi.WriteSmartDashboardItems();
-    	
     	SmartDashboard.putBoolean("Shooter Wheels Spun Up", mShooter.GetShooterWheels().IsSpunUp());
     	SmartDashboard.putNumber("Window Alignment Error (Pixels)", mGlobShooterLatUtils.GetError());
     	SmartDashboard.putNumber("Aiming Tolerance", mDriveTrain.GetTolerance("Aiming"));

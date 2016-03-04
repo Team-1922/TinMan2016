@@ -66,6 +66,7 @@ public class OI implements CfgInterface{
 	 */
 	private ConfigurableClass mCfgInstance = new ConfigurableClass("OI", this);
 	
+	//HashMap<Tuple<Joystick Name, Button Number>, Tuple<Command instance, trigger action type>>
 	protected HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>> mCommandMap = new HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>>();
 	
 	/*
@@ -73,6 +74,7 @@ public class OI implements CfgInterface{
 	 * Member Variables
 	 * 
 	 */
+	//HashMap<Joystick name, Tuple<Joystick ID, Joystick instance>>
 	HashMap<String, Tuple<Integer,Joystick>> mJoysticks = new HashMap<String, Tuple<Integer,Joystick>>();
 	
 	ArrayList<JoystickButton> mButtonCommands = new ArrayList<JoystickButton>();
@@ -91,6 +93,8 @@ public class OI implements CfgInterface{
 	}
 	public void Reconstruct()
 	{
+		mButtonCommands.clear();
+		
 		//setup all of the command bindings with the loaded XML data
 	    for(Map.Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>> pair : mCommandMap.entrySet())
 		{
@@ -146,6 +150,7 @@ public class OI implements CfgInterface{
 		//System.out.println("TEST AGAIN");
 		
 		//get children
+		mJoysticks.clear();
 		NodeList joysticks = mCfgInstance.GetChildren("Joystick");
 		for(int i = 0; i < joysticks.getLength(); ++i)
 		{
@@ -160,6 +165,7 @@ public class OI implements CfgInterface{
 		//make list of joysticks
 		
 		//make map of buttons and commands
+		mCommandMap.clear();
 		NodeList commands = mCfgInstance.GetChildren("Command");
 		for(int i = 0; i < commands.getLength(); ++i)
 		{
@@ -212,7 +218,7 @@ public class OI implements CfgInterface{
 	}
 	@Override
 	public void MakeCfgClassesNull() {
-		mCommandMap.clear();;
+		mCommandMap.clear();
 		mJoysticks.clear();
 		mButtonCommands.clear();		
 	}

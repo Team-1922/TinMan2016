@@ -68,12 +68,12 @@ public class Climber extends Subsystem implements CfgInterface{
 	}
 
 	public void setliftSolenoid(boolean b) {
-		// TODO Auto-generated method stub
+		liftSolenoid.set(b);
 
 	}
 	
 	public void settiltSolenoid(boolean b) {
-		// TODO Auto-generated method stub
+		tiltSolenoid.set(b);
 
 	}
 	

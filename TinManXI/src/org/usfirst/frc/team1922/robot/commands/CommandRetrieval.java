@@ -18,6 +18,7 @@ public class CommandRetrieval {
 			instance = constructor.newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
+			instance = null;
 		}
 		
 		return (Command)instance;
