@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
-import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class DriverCamera extends Subsystem implements CfgInterface {
-    
-	protected ConfigurableClass mCfgClass = new ConfigurableClass("DriverCamera", this);
 	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -49,26 +47,28 @@ public class DriverCamera extends Subsystem implements CfgInterface {
     }
 
 	@Override
-	public boolean DeserializeInternal() {
-		mServoId = Integer.parseInt(mCfgClass.GetAttribute("ServoId"));
-		mFullPos = Float.parseFloat(mCfgClass.GetAttribute("FullPos"));
-		mFullNeg = Float.parseFloat(mCfgClass.GetAttribute("FullNeg"));
+	public boolean Deserialize(CfgElement element) {
+		mServoId = element.GetAttributeI("ServoId");
+		mFullPos = element.GetAttributeF("FullPos");
+		mFullNeg = element.GetAttributeF("FullNeg");
 		
 		mRotServo = new Servo(mServoId);
 		return true;
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
-		mCfgClass.SetAttribute("ServoId", Integer.toString(mServoId));
-		mCfgClass.SetAttribute("FullPos", Float.toString(mFullPos));
-		mCfgClass.SetAttribute("FullNeg", Float.toString(mFullNeg));
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
+		element.SetAttribute("ServoId", mServoId);
+		element.SetAttribute("FullPos", mFullPos);
+		element.SetAttribute("FullNeg", mFullNeg);
 		
+		return element;
 	}
-
+	
 	@Override
-	public ConfigurableClass GetCfgClass() {
-		return mCfgClass;
+	public String GetElementTitle()
+	{
+		return "DriverCamera";
 	}
 
 	@Override

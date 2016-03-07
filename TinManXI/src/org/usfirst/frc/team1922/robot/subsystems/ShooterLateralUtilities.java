@@ -3,9 +3,9 @@ package org.usfirst.frc.team1922.robot.subsystems;
 import java.lang.reflect.Array;
 
 import org.ozram1922.OzMath;
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
-import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -21,8 +21,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	long mTimeSincePreviousUniqueUpdate = 0;
 	long mPreviousUniqueUpdateTime = 0;
-	
-	protected ConfigurableClass mCfgClass = new ConfigurableClass("ShooterLateralGlobal", this);
 	
 	//zero is NOT centered, the center of the image is 320 (i think 640 wide)
 	protected int mPIDWindageAdj;
@@ -209,16 +207,16 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
     
     
 	@Override
-	public boolean DeserializeInternal() {
+	public boolean Deserialize(CfgElement element) {
 
-		mTableName = mCfgClass.GetAttribute("NetTableName");
-		mPIDWindageAdj = Integer.parseInt(mCfgClass.GetAttribute("Windage"));
-		mCameraToBaseWindowHeight = Double.parseDouble(mCfgClass.GetAttribute("CameraToWindowBase"));
-		mCameraViewWidth = Integer.parseInt(mCfgClass.GetAttribute("ViewWidth"));
-		mCameraViewHeight = Integer.parseInt(mCfgClass.GetAttribute("ViewHeight"));
+		mTableName = element.GetAttribute("NetTableName");
+		mPIDWindageAdj = element.GetAttributeI("Windage");
+		mCameraToBaseWindowHeight = element.GetAttributeF("CameraToWindowBase");
+		mCameraViewWidth = element.GetAttributeI("ViewWidth");
+		mCameraViewHeight = element.GetAttributeI("ViewHeight");
 		
-		mVerticalFOV = Float.parseFloat(mCfgClass.GetAttribute("VertFOV"));
-		mHorizontalFOV = Float.parseFloat(mCfgClass.GetAttribute("HorizFOV"));
+		mVerticalFOV = element.GetAttributeF("VertFOV");
+		mHorizontalFOV = element.GetAttributeF("HorizFOV");
 		
 		mThrottleZeroPosition = mCameraViewWidth / 2;
 		
@@ -228,19 +226,22 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
 
-		mCfgClass.SetAttribute("NetTableName", mTableName);
-		mCfgClass.SetAttribute("Windage", Integer.toString(mPIDWindageAdj));
-		mCfgClass.SetAttribute("CameraToWindowBase", Double.toString(mCameraToBaseWindowHeight));
-		mCfgClass.SetAttribute("ViewWidth", Integer.toString(mCameraViewWidth));
-		mCfgClass.SetAttribute("VertFOV", Float.toString(mVerticalFOV));
-		mCfgClass.SetAttribute("HorizFOV", Float.toString(mHorizontalFOV));
+		element.SetAttribute("NetTableName", mTableName);
+		element.SetAttribute("Windage", mPIDWindageAdj);
+		element.SetAttribute("CameraToWindowBase", mCameraToBaseWindowHeight);
+		element.SetAttribute("ViewWidth", mCameraViewWidth);
+		element.SetAttribute("VertFOV", mVerticalFOV);
+		element.SetAttribute("HorizFOV", mHorizontalFOV);
+		
+		return element;
 	}
 
 	@Override
-	public ConfigurableClass GetCfgClass() {
-		return mCfgClass;
+	public String GetElementTitle()
+	{
+		return "ShooterLateralGlobal";
 	}
 
 	@Override

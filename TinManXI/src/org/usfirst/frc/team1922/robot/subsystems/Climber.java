@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
-import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -14,7 +14,6 @@ public class Climber extends Subsystem implements CfgInterface{
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-	protected ConfigurableClass mCfgClass = new ConfigurableClass("Climber", this);
 	
 	protected Solenoid liftSolenoid;
 	protected Solenoid tiltSolenoid;
@@ -29,10 +28,9 @@ public class Climber extends Subsystem implements CfgInterface{
     }
 
 	@Override
-	public boolean DeserializeInternal() {
-		// TODO Auto-generated method stub
-		liftSolenoidid = Integer.parseInt(mCfgClass.GetAttribute("liftSolenoid"));
-		tiltSolenoidid = Integer.parseInt(mCfgClass.GetAttribute("tiltSolenoid"));
+	public boolean Deserialize(CfgElement element) {
+		liftSolenoidid = element.GetAttributeI("liftSolenoid");
+		tiltSolenoidid = element.GetAttributeI("tiltSolenoid");
 		
 		liftSolenoid = new Solenoid(Math.abs(liftSolenoidid));
 		tiltSolenoid = new Solenoid(Math.abs(tiltSolenoidid));
@@ -41,21 +39,15 @@ public class Climber extends Subsystem implements CfgInterface{
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
-		// TODO Auto-generated method stub
-		mCfgClass.SetAttribute("liftSolenoid", Integer.toString(liftSolenoidid));
-		mCfgClass.SetAttribute("tiltSolenoid", Integer.toString(tiltSolenoidid));
-	}
-
-	@Override
-	public ConfigurableClass GetCfgClass() {
-		// TODO Auto-generated method stub
-		return mCfgClass;
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
+		element.SetAttribute("liftSolenoid", liftSolenoidid);
+		element.SetAttribute("tiltSolenoid", tiltSolenoidid);
+		
+		return element;
 	}
 
 	@Override
 	public void MakeCfgClassesNull() {
-		// TODO Auto-generated method stub
 		if(liftSolenoid != null){
 			liftSolenoid.free();
 		}
@@ -65,6 +57,12 @@ public class Climber extends Subsystem implements CfgInterface{
 		
 		liftSolenoid = null;
 		tiltSolenoid = null;
+	}
+	
+	@Override
+	public String GetElementTitle()
+	{
+		return "Climber";
 	}
 
 	public void setliftSolenoid(boolean b) {

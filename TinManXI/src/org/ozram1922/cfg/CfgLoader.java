@@ -47,6 +47,11 @@ public class CfgLoader
 	//delete all of the 'things' before we load (to avoid GC not running in time)
 	for(CfgInterface i : mCfgClasses)
 	{
+		if(i == null)
+		{
+			System.out.println("CfgInterface is Null");
+			continue;
+		}
 		i.MakeCfgClassesNull();
 	}
 	
@@ -55,11 +60,22 @@ public class CfgLoader
 	
     // create a new DocumentBuilderFactory
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    if(factory == null)
+    {
+    	System.out.println("Failed to Create Document Factory Builder when Deserializing Config");
+    	return false;
+    }
 
     try
     {
        // use the factory to create a documentbuilder
        DocumentBuilder builder = factory.newDocumentBuilder();
+       if(builder == null)
+       {
+       		System.out.println("Failed to Create Document Builder when Deserializing Config");
+       		return false;
+       }
+       
        Document doc = null;
        if(isFile)
        {
@@ -70,33 +86,56 @@ public class CfgLoader
        {
     	   doc = builder.parse( new InputSource( new StringReader( data ) ) );  
        }
+       if(doc == null)
+       {
+       		System.out.println("Failed to Create Document when Deserializing Config");
+       		return false;
+       }
 
        // get the first element
        Element rootElement = doc.getDocumentElement();
+       if(rootElement == null)
+       {
+       		System.out.println("Failed to Root Element when Deserializing Config");
+       		return false;
+       }
 
        //iterate through the classes and try to find something to load from
        for(CfgInterface cfg : mCfgClasses)
        {
-         //try to find a node with the ID of the class (this is how we know which node is which)
-         //int id = cfg.GetID();
+    	   if(cfg == null)
+    	   {
+    		   System.out.println("CfgInterface is Null when Deserializing Config");
+    	   }
+    	   //try to find a node with the ID of the class (this is how we know which node is which)
+    	   //int id = cfg.GetID();
 
-         String title = cfg.GetCfgClass().GetElementTitle();
+    	   String title = cfg.GetElementTitle();
+    	   if(title == null)
+    	   {
+    		   System.out.println("Element Title String is Null");
+    		   continue;
+    	   }
+         
+    	   //get elements list
+    	   NodeList elements = rootElement.getElementsByTagName(title);
+    	   Element foundElement = null;
 
-        //get elements list
-         NodeList elements = rootElement.getElementsByTagName(title);
-         Element foundElement = null;
+    	   if(elements.getLength() != 0)
+	       {
+    		   foundElement = (Element)elements.item(0);
+	       }
 
-         if(elements.getLength() != 0)
-         {
-           foundElement = (Element)elements.item(0);
-         }
+    	   if(foundElement == null)
+    	   {
+    		   System.out.println("Loaded XML Element is Null");
+    		   continue;
+    	   }
 
-         //if(foundElement == null) DO NOTHING: handling this will be down to the class parsing
-
-         if(!cfg.GetCfgClass().Deserialize(foundElement))
-         {
-        	 System.out.println("Issues loading class!");
-         }
+    	   if(!cfg.Deserialize(new CfgElement(foundElement)))
+    	   {
+    		   System.out.println("Issues loading class: " + title);
+    	   }	
        }
 
     } catch (Exception ex) {
@@ -111,27 +150,65 @@ public class CfgLoader
   {
     // create a new DocumentBuilderFactory
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    if(factory == null)
+    {
+    	System.out.println("Failed to Create Document Factory Builder when Serializing Config");
+    	return false;
+    }
 
     try
     {
        // use the factory to create a documentbuilder
        DocumentBuilder builder = factory.newDocumentBuilder();
+       if(builder == null)
+       {
+    	   System.out.println("Failed to Create Document Factory when Serializing Config");
+    	   return false;
+       }
 
        // create a new document from input source
        //FileInputStream fis = new FileInputStream(filePath);
        //InputSource is = new InputSource(fis);
        Document doc = builder.newDocument();
-
+       if(doc == null)
+       {
+    	   System.out.println("Failed to Create Document when Serializing Config");
+    	   return false;
+       }
+       CfgDocument cfgDoc = new CfgDocument(doc);
+       	
        // get the first element
        Element rootElement = doc.createElement("root");
+       if(rootElement == null)
+       {
+    	   System.out.println("Failed to Create Root Elemenet When Serializing Config");
+    	   return false;
+       }
 
        //iterate through the classes and try to find something to load from
        for(CfgInterface cfg : mCfgClasses)
        {
-           Element element = cfg.GetCfgClass().Serialize(doc);
-           if(element != null)
+    	   if(cfg == null)
+    	   {
+    		   System.out.println("Config Interface Class is Null");
+    		   continue;
+    	   }
+    	   CfgElement blank = new CfgElement(doc.createElement(cfg.GetElementTitle()));
+		   if(blank.mInternalElement == null)
+		   {
+    		   System.out.println("Failed to Create Element");
+    		   continue;
+		   }
+    	   
+    	   CfgElement element = cfg.Serialize(blank,cfgDoc);
+    	   if(element == null)
+    	   {
+    		   System.out.println("CfgElement Returned from Serialize was Null");
+    		   continue;
+    	   }
+           if(element.mInternalElement != null)
            {
-             rootElement.appendChild(element);
+        	   rootElement.appendChild(element.mInternalElement);
            }
        }
 

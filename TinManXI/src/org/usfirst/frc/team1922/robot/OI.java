@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.ozram1922.Tuple;
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
 import org.usfirst.frc.team1922.robot.commands.CommandRetrieval;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -64,7 +64,6 @@ public class OI implements CfgInterface{
 	 * Config Variables
 	 * 
 	 */
-	private ConfigurableClass mCfgInstance = new ConfigurableClass("OI", this);
 	
 	//HashMap<Tuple<Joystick Name, Button Number>, Tuple<Command instance, trigger action type>>
 	protected HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>> mCommandMap = new HashMap<Tuple<String,Integer>, Tuple<Command, TriggerAction>>();
@@ -146,12 +145,12 @@ public class OI implements CfgInterface{
 	 */
 
 	@Override
-	public boolean DeserializeInternal() {
+	public boolean Deserialize(CfgElement element) {
 		//System.out.println("TEST AGAIN");
 		
 		//get children
 		mJoysticks.clear();
-		NodeList joysticks = mCfgInstance.GetChildren("Joystick");
+		NodeList joysticks = element.mInternalElement.getElementsByTagName("Joystick");
 		for(int i = 0; i < joysticks.getLength(); ++i)
 		{
 			Element thisElement = (Element)joysticks.item(i);
@@ -166,7 +165,7 @@ public class OI implements CfgInterface{
 		
 		//make map of buttons and commands
 		mCommandMap.clear();
-		NodeList commands = mCfgInstance.GetChildren("Command");
+		NodeList commands = element.mInternalElement.getElementsByTagName("Command");
 		for(int i = 0; i < commands.getLength(); ++i)
 		{
 			Element thisElement = (Element)commands.item(i);
@@ -186,41 +185,43 @@ public class OI implements CfgInterface{
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
 
 	    Iterator<Entry<String, Tuple<Integer,Joystick>>> it = mJoysticks.entrySet().iterator();
 		while(it.hasNext())
 		{
 			Entry<String, Tuple<Integer,Joystick>> pair = (Entry<String, Tuple<Integer,Joystick>>)it.next();
-			Element ej = doc.createElement("Joystick");
-			ej.setAttribute("Name", pair.getKey());
-			ej.setAttribute("Id", Integer.toString(pair.getValue().x));
-			mCfgInstance.AddChild(ej);
+			CfgElement ej = doc.CreateElement("Joystick");
+			ej.SetAttribute("Name", pair.getKey());
+			ej.SetAttribute("Id", pair.getValue().x);
+			element.AppendChild(ej);
 		}
 
 	    Iterator<Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>>> it0 = mCommandMap.entrySet().iterator();
 		while(it0.hasNext())
 		{
 			Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>> pair = (Entry<Tuple<String,Integer>, Tuple<Command, TriggerAction>>)it0.next();
-			Element ec = doc.createElement("Command");
-			ec.setAttribute("Name", pair.getValue().x.getName());
-			ec.setAttribute("TriggerType", TriggerActionToString(pair.getValue().y));
-			ec.setAttribute("JoystickId", pair.getKey().x);
-			ec.setAttribute("ButtonId", Integer.toString(pair.getKey().y));
-			mCfgInstance.AddChild(ec);
+			CfgElement ec = doc.CreateElement("Command");
+			ec.SetAttribute("Name", pair.getValue().x.getName());
+			ec.SetAttribute("TriggerType", TriggerActionToString(pair.getValue().y));
+			ec.SetAttribute("JoystickId", pair.getKey().x);
+			ec.SetAttribute("ButtonId", pair.getKey().y);
+			element.AppendChild(ec);
 		}
 		
+		return element;		
 	}
 
-	@Override
-	public ConfigurableClass GetCfgClass() {
-		return mCfgInstance;
-	}
 	@Override
 	public void MakeCfgClassesNull() {
 		mCommandMap.clear();
 		mJoysticks.clear();
 		mButtonCommands.clear();		
+	}
+
+	@Override
+	public String GetElementTitle() {
+		return "OI";
 	}
 	
 	//this outputs all of the button mapped commands onto the smart dashboard

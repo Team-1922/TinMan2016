@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
-import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *	
  */
 public class BallRetriever extends Subsystem implements CfgInterface {
-
-	protected ConfigurableClass mCfgClass = new ConfigurableClass("BallRetriever", this);
 	
 	
 	protected BallRetrieverMotor mIntakeWheels;
@@ -52,6 +50,15 @@ public class BallRetriever extends Subsystem implements CfgInterface {
     {
     	mIntakeWheels.SetMotorSpeed(0);
     }
+
+	public void ToggleMotor() 
+	{
+		if(this.mIntakeWheels.GetMotorSpeed() > 0)
+			StopMotor();
+		else
+			StartMotor(true);
+		
+	}
     
     public void SetShortStroke(boolean on)
     {
@@ -74,11 +81,12 @@ public class BallRetriever extends Subsystem implements CfgInterface {
     }
 
 	@Override
-	public boolean DeserializeInternal() {
-		mMotorSpeed = Float.parseFloat(mCfgClass.GetAttribute("MotorSpeed"));
-		mMotorId = Integer.parseInt(mCfgClass.GetAttribute("MotorId"));
-		mShortStrokeId = Integer.parseInt(mCfgClass.GetAttribute("ShortStrokeId"));
-		mLongStrokeId = Integer.parseInt(mCfgClass.GetAttribute("LongStrokeId"));
+	public boolean Deserialize(CfgElement element) {
+		
+		mMotorSpeed = element.GetAttributeF("MotorSpeed");
+		mMotorId = element.GetAttributeI("MotorId");
+		mShortStrokeId = element.GetAttributeI("ShortStrokeId");
+		mLongStrokeId = element.GetAttributeI("LongStrokeId");
 		
 		Reconstruct();
 		
@@ -86,33 +94,24 @@ public class BallRetriever extends Subsystem implements CfgInterface {
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
-		mCfgClass.SetAttribute("MotorSpeed", Float.toString(mMotorSpeed));
-		mCfgClass.SetAttribute("MotorId", Integer.toString(mMotorId));
-		mCfgClass.SetAttribute("ShortStrokeId", Integer.toString(mShortStrokeId));
-		mCfgClass.SetAttribute("LongStrokeId", Integer.toString(mLongStrokeId));
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
+		element.SetAttribute("MotorSpeed", mMotorSpeed);
+		element.SetAttribute("MotorId", mMotorId);
+		element.SetAttribute("ShortStrokeId", mShortStrokeId);
+		element.SetAttribute("LongStrokeId", mLongStrokeId);
 		
-	}
-
-	@Override
-	public ConfigurableClass GetCfgClass() {
-		// TODO Auto-generated method stub
-		return mCfgClass;
+		return element;
 	}
 
 	@Override
 	public void MakeCfgClassesNull() {
-		// TODO Auto-generated method stub
 		mIntakeWheels.MakeCfgClassesNull();
 		mIntakePneumatics.MakeCfgClassesNull();
 	}
 
-	public void ToggleMotor() {
-		if(this.mIntakeWheels.GetMotorSpeed() > 0)
-			StopMotor();
-		else
-			StartMotor(true);
-		
+	@Override
+	public String GetElementTitle() {
+		return "BallRetriever";
 	}
 }
 

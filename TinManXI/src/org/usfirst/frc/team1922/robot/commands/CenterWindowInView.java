@@ -52,7 +52,7 @@ public class CenterWindowInView extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	//what is the best way to do this, because "onTarget()" doesn't seem to work
-        return Robot.mDriveTrain.RotationalOnTarget();
+        return Robot.mDriveTrain.AimingOnTarget();
     	//return false;
     }
 

@@ -1,9 +1,8 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -19,7 +18,6 @@ public class Shooter extends Subsystem implements CfgInterface {
 	 * Member Variables
 	 * 
 	 */
-	protected ConfigurableClass mCfgClass = new ConfigurableClass("Shooter", this);
 	protected ShooterAngleAnalog mShooterAngle;
 	protected ShooterWheels mShooterWheels;
 	protected ShooterFeeder mShooterFeeder;
@@ -171,121 +169,142 @@ public class Shooter extends Subsystem implements CfgInterface {
      */
 
 	@Override
-	public boolean DeserializeInternal() {
+	public boolean Deserialize(CfgElement element) {
 
-		Element shooterAngleElement = (Element) mCfgClass.GetNthChild("Angle", 0);
+		/*
+		 * 
+		 * Angle Config Values
+		 * 
+		 */
+		CfgElement shooterAngleElement = element.GetNthChild("Angle", 0);
 
 		//mAngleSolFront = Integer.parseInt(shooterAngleElement.getAttribute("FrontSol"));
 		//mAngleSolRear = Integer.parseInt(shooterAngleElement.getAttribute("RearSol"));
 
-		mAngleUltraId = Integer.parseInt(shooterAngleElement.getAttribute("UltraId"));
+		mAngleUltraId = shooterAngleElement.GetAttributeI("UltraId");
 		
-		mAngleP = Float.parseFloat(shooterAngleElement.getAttribute("P"));
-		mAngleI = Float.parseFloat(shooterAngleElement.getAttribute("I"));
-		mAngleD = Float.parseFloat(shooterAngleElement.getAttribute("D"));
-		mAngleMotorId = Integer.parseInt(shooterAngleElement.getAttribute("MotorId"));
-		mAnglePotMultRatio = Float.parseFloat(shooterAngleElement.getAttribute("AngleToNorm"));
-		mAnglePotOffset = Float.parseFloat(shooterAngleElement.getAttribute("PotOffset")); 
+		mAngleP = shooterAngleElement.GetAttributeF("P");
+		mAngleI = shooterAngleElement.GetAttributeF("I");
+		mAngleD = shooterAngleElement.GetAttributeF("D");
+		mAngleMotorId = shooterAngleElement.GetAttributeI("MotorId");
+		mAnglePotMultRatio = shooterAngleElement.GetAttributeF("AngleToNorm");
+		mAnglePotOffset = shooterAngleElement.GetAttributeF("PotOffset");
 		
+		/*
+		 * 
+		 * Wheels Config Values
+		 * 
+		 */
+		CfgElement shooterWheelsElement = element.GetNthChild("Wheels", 0);
 		
-		Element shooterWheelsElement = (Element) mCfgClass.GetNthChild("Wheels", 0);
+		mWheelsId = shooterWheelsElement.GetAttributeI("MotorId");
 		
-		mWheelsId = Integer.parseInt(shooterWheelsElement.getAttribute("MotorId"));
+		mWheelsP = shooterWheelsElement.GetAttributeF("P");
+		mWheelsI = shooterWheelsElement.GetAttributeF("I");
+		mWheelsD = shooterWheelsElement.GetAttributeF("D");
+		mWheelsF = shooterWheelsElement.GetAttributeF("F");
 		
-		mWheelsP = Float.parseFloat(shooterWheelsElement.getAttribute("P"));
-		mWheelsI = Float.parseFloat(shooterWheelsElement.getAttribute("I"));
-		mWheelsD = Float.parseFloat(shooterWheelsElement.getAttribute("D"));
-		mWheelsF = Float.parseFloat(shooterWheelsElement.getAttribute("F"));
+		mWheelsSetRpm = shooterWheelsElement.GetAttributeF("ShootRPM");
+		mWheelsIntakeRpm = shooterWheelsElement.GetAttributeF("IntakeRPM");
 		
-		mWheelsSetRpm = Float.parseFloat(shooterWheelsElement.getAttribute("ShootRPM"));
-		mWheelsIntakeRpm = Float.parseFloat(shooterWheelsElement.getAttribute("IntakeRPM"));
-		
-		mWheelsEncToRot = Integer.parseInt(shooterWheelsElement.getAttribute("EncSamplesPerRotation"));
+		mWheelsEncToRot = shooterWheelsElement.GetAttributeI("EncSamplesPerRotation");
 				
 		
+		/*
+		 * 
+		 * Lateral Config Values
+		 * 
+		 */
+		CfgElement shooterLateralElement = element.GetNthChild("Lateral", 0);
 		
-		Element shooterLateralElement = (Element) mCfgClass.GetNthChild("Lateral", 0);
+		mLateralP = shooterLateralElement.GetAttributeF("P");
+		mLateralI = shooterLateralElement.GetAttributeF("I");
+		mLateralD = shooterLateralElement.GetAttributeF("D");
 		
-		mLateralP = Float.parseFloat(shooterLateralElement.getAttribute("P"));
-		mLateralI = Float.parseFloat(shooterLateralElement.getAttribute("I"));
-		mLateralD = Float.parseFloat(shooterLateralElement.getAttribute("D"));
+		mLateralTolerance = shooterLateralElement.GetAttributeF("Tolerance");
 		
-		mLateralTolerance = Float.parseFloat(shooterLateralElement.getAttribute("Tolerance"));
 		
-		Element shooterFeederElement = (Element) mCfgClass.GetNthChild("Feeder", 0);
+		/*
+		 * 
+		 * Feed Config Values
+		 * 
+		 */
+		CfgElement shooterFeederElement = element.GetNthChild("Feeder", 0);
 		
-		mFeedSol = Integer.parseInt(shooterFeederElement.getAttribute("Sol"));
+		mFeedSol = shooterFeederElement.GetAttributeI("Sol");
 		
 		Reconstruct();
 		return true;
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) 
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) 
 	{
 		//Cfg for the Angle
-		Element shooterAngleElement = doc.createElement("Angle");
+		CfgElement shooterAngleElement = doc.CreateElement("Angle");
 		
 		//shooterAngleElement.setAttribute("FrontSol", Float.toString(mAngleSolFront));
 		//shooterAngleElement.setAttribute("RearSol", Float.toString(mAngleSolRear));
 
-		shooterAngleElement.setAttribute("UltraId", Float.toString(mAngleUltraId));
+		shooterAngleElement.SetAttribute("UltraId", mAngleUltraId);
 		
-		shooterAngleElement.setAttribute("P", Float.toString(mAngleP));
-		shooterAngleElement.setAttribute("I", Float.toString(mAngleI));
-		shooterAngleElement.setAttribute("D", Float.toString(mAngleD));
+		shooterAngleElement.SetAttribute("P", mAngleP);
+		shooterAngleElement.SetAttribute("I", mAngleI);
+		shooterAngleElement.SetAttribute("D", mAngleD);
 		
-		shooterAngleElement.setAttribute("MotorId", Integer.toString(mAngleMotorId));
+		shooterAngleElement.SetAttribute("MotorId", mAngleMotorId);
 
-		shooterAngleElement.setAttribute("AngleToNorm", Float.toString(mAnglePotMultRatio));
-		shooterAngleElement.setAttribute("PotOffset", Float.toString(mAnglePotOffset));
+		shooterAngleElement.SetAttribute("AngleToNorm", mAnglePotMultRatio);
+		shooterAngleElement.SetAttribute("PotOffset", mAnglePotOffset);
 		
 		
-		mCfgClass.AddChild(shooterAngleElement);
+		element.AppendChild(shooterAngleElement);
 		
 		
 		//Cfg for the wheels
-		Element shooterWheelsElement = doc.createElement("Wheels");
+		CfgElement shooterWheelsElement = doc.CreateElement("Wheels");
 		
-		shooterWheelsElement.setAttribute("MotorId", Integer.toString(mWheelsId));
+		shooterWheelsElement.SetAttribute("MotorId", mWheelsId);
 		
-		shooterWheelsElement.setAttribute("P", Float.toString(mWheelsP));
-		shooterWheelsElement.setAttribute("I", Float.toString(mWheelsI));
-		shooterWheelsElement.setAttribute("D", Float.toString(mWheelsD));
-		shooterWheelsElement.setAttribute("F", Float.toString(mWheelsF));
+		shooterWheelsElement.SetAttribute("P", mWheelsP);
+		shooterWheelsElement.SetAttribute("I", mWheelsI);
+		shooterWheelsElement.SetAttribute("D", mWheelsD);
+		shooterWheelsElement.SetAttribute("F", mWheelsF);
 		
-		shooterWheelsElement.setAttribute("ShootRPM", Float.toString(mWheelsSetRpm));
-		shooterWheelsElement.setAttribute("IntakeRPM", Float.toString(mWheelsIntakeRpm));
+		shooterWheelsElement.SetAttribute("ShootRPM", mWheelsSetRpm);
+		shooterWheelsElement.SetAttribute("IntakeRPM", mWheelsIntakeRpm);
 		
-		shooterWheelsElement.setAttribute("EncSamplesPerRotation", Integer.toString(mWheelsEncToRot));
+		shooterWheelsElement.SetAttribute("EncSamplesPerRotation", mWheelsEncToRot);
 		
-		mCfgClass.AddChild(shooterWheelsElement);
+		element.AppendChild(shooterWheelsElement);
 
 		
 		//Cfg for the lateral adjustment (this is an interesting one, because it depends potentially on the drive train too)
-		Element shooterLateralElement = doc.createElement("ShooterLateral");
+		CfgElement shooterLateralElement = doc.CreateElement("ShooterLateral");
 		
-		shooterLateralElement.setAttribute("P", Float.toString(mLateralP));
-		shooterLateralElement.setAttribute("I", Float.toString(mLateralI));
-		shooterLateralElement.setAttribute("D", Float.toString(mLateralD));
-		shooterLateralElement.setAttribute("Tolerance", Float.toString(mLateralTolerance));
+		shooterLateralElement.SetAttribute("P", mLateralP);
+		shooterLateralElement.SetAttribute("I", mLateralI);
+		shooterLateralElement.SetAttribute("D", mLateralD);
+		shooterLateralElement.SetAttribute("Tolerance", mLateralTolerance);
 		
-		mCfgClass.AddChild(shooterLateralElement);
+		element.AppendChild(shooterLateralElement);
 		
 		//cfg for the feeder
-		Element shooterFeederElement = doc.createElement("ShooterFeeder");
+		CfgElement shooterFeederElement = doc.CreateElement("ShooterFeeder");
 		
-		shooterFeederElement.setAttribute("Sol", Integer.toString(mFeedSol));
+		shooterFeederElement.SetAttribute("Sol", mFeedSol);
 		
-		mCfgClass.AddChild(shooterFeederElement);
+		element.AppendChild(shooterFeederElement);
 
 		//cfg for the this class
+		
+		return element;
 	}
 
 	@Override
-	public ConfigurableClass GetCfgClass() {
-		// TODO Auto-generated method stub
-		return mCfgClass;
+	public String GetElementTitle()
+	{
+		return "Shooter";
 	}
 
 	@Override

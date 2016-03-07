@@ -3,7 +3,6 @@ package org.usfirst.frc.team1922.robot.subsystems;
 import org.usfirst.frc.team1922.robot.MultiSourcePIDSubsystem;
 import org.usfirst.frc.team1922.robot.Robot;
 import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
-import org.w3c.dom.Document;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -11,8 +10,9 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import java.util.HashMap;
 
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
-import org.ozram1922.cfg.ConfigurableClass;
 /**
  *	WHen using SetSetpoint, MAKE SURE to have the rotation units in INCHES (radians * radius)
  */
@@ -23,8 +23,6 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	 * Config Variables
 	 * 
 	 */
-	
-	private ConfigurableClass mCfgInstance = new ConfigurableClass("DriveTrain", this);
 	
 	protected float mLeftSensitivity = 1.0f;
 	protected float mRightSensitivity = 1.0f;
@@ -163,7 +161,9 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		 * 
 		 * If "Linear": returns tolerance in inches
 		 * 
-		 * If "Rotational": returns tolerance in DEGREES
+		 * If "Rotational": returns tolerance in inches
+		 * 
+		 * If "Aiming": returns pixels
 		 * 
 		 */
 		return GetTolerance(GetActiveControllerName());
@@ -182,15 +182,15 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		}
 	}
 	
-	public boolean RotationalOnTarget()
+	public boolean AimingOnTarget()
 	{
 		//return false; TODO: this should check to see if the camera is centered in the view AND the encoder is on target
 		return onTarget() && (Robot.mGlobShooterLatUtils.GetError() < GetTolerance());
 	}
 	
-	public void SetRotationalTolerance()
+	public void SetAimingTolerance()
 	{
-		GetPIDController("Rotational").setAbsoluteTolerance(GetTolerance());
+		GetPIDController("Aiming").setAbsoluteTolerance(GetTolerance());
 	}
 	
 	public float GetRotationRadius()
@@ -205,27 +205,27 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	 */
 
 	@Override
-	public boolean DeserializeInternal() {
+	public boolean Deserialize(CfgElement element) {
 
-		mLeftSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("LeftSensitivity"));
-		mRightSensitivity = Float.parseFloat(mCfgInstance.GetAttribute("RightSensitivity"));
+		mLeftSensitivity = element.GetAttributeF("LeftSensitivity");
+		mRightSensitivity = element.GetAttributeF("RightSensitivity");
 		
-		mLeftMotorId1 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor1"));
-		mLeftMotorId2 = Integer.parseInt(mCfgInstance.GetAttribute("LeftMotor2"));
-		mRightMotorId1 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor1"));
-		mRightMotorId2 = Integer.parseInt(mCfgInstance.GetAttribute("RightMotor2"));
+		mLeftMotorId1 = element.GetAttributeI("LeftMotor1");
+		mLeftMotorId2 = element.GetAttributeI("LeftMotor2");
+		mRightMotorId1 = element.GetAttributeI("RightMotor1");
+		mRightMotorId2 = element.GetAttributeI("RightMotor2");
 		
-		mMP = Float.parseFloat(mCfgInstance.GetAttribute("MovementP"));
-		mMI = Float.parseFloat(mCfgInstance.GetAttribute("MovementI"));
-		mMD = Float.parseFloat(mCfgInstance.GetAttribute("MovementD"));
-		mMTolerance = Float.parseFloat(mCfgInstance.GetAttribute("MovementTolerance"));
-		mInchesToEncoderUnits = Float.parseFloat(mCfgInstance.GetAttribute("InchesToEncoderUnits"));
-		mTurningRadius = Float.parseFloat(mCfgInstance.GetAttribute("TurningRadius"));
+		mMP = element.GetAttributeF("MovementP");
+		mMI = element.GetAttributeF("MovementI");
+		mMD = element.GetAttributeF("MovementD");
+		mMTolerance = element.GetAttributeF("MovementTolerance");
+		mInchesToEncoderUnits = element.GetAttributeF("InchesToEncoderUnits");
+		mTurningRadius = element.GetAttributeF("TurningRadius");
 		
-		mAP = Float.parseFloat(mCfgInstance.GetAttribute("AimingP"));
-		mAI = Float.parseFloat(mCfgInstance.GetAttribute("AimingI"));
-		mAD = Float.parseFloat(mCfgInstance.GetAttribute("AimingD"));
-		mATolerance = Float.parseFloat(mCfgInstance.GetAttribute("AimingTolerance"));
+		mAP = element.GetAttributeF("AimingP");
+		mAI = element.GetAttributeF("AimingI");
+		mAD = element.GetAttributeF("AimingD");
+		mATolerance = Float.parseFloat(element.GetAttribute("AimingTolerance"));
 		
 		//This may be OK to do.  because enc per angle = (enc/in) * radius
 		mRadiansToEncoderUnits = mInchesToEncoderUnits * mTurningRadius;
@@ -237,34 +237,37 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	}
 
 	@Override
-	public void SerializeInternal(Document doc) {
+	public CfgElement Serialize(CfgElement element, CfgDocument doc) {
 
 
-		mCfgInstance.SetAttribute("LeftSensitivity", Float.toString(mLeftSensitivity));
-		mCfgInstance.SetAttribute("RightSensitivity", Float.toString(mRightSensitivity));
+		element.SetAttribute("LeftSensitivity", mLeftSensitivity);
+		element.SetAttribute("RightSensitivity", mRightSensitivity);
 		
-		mCfgInstance.SetAttribute("LeftMotor1", Integer.toString(mLeftMotorId1));
-		mCfgInstance.SetAttribute("LeftMotor2", Integer.toString(mLeftMotorId2));
-		mCfgInstance.SetAttribute("RightMotor1", Integer.toString(mRightMotorId1));
-		mCfgInstance.SetAttribute("RightMotor2", Integer.toString(mRightMotorId2));
+		element.SetAttribute("LeftMotor1", mLeftMotorId1);
+		element.SetAttribute("LeftMotor2", mLeftMotorId2);
+		element.SetAttribute("RightMotor1", mRightMotorId1);
+		element.SetAttribute("RightMotor2", mRightMotorId2);
 		
-		mCfgInstance.SetAttribute("MovementP", Float.toString(mMP));
-		mCfgInstance.SetAttribute("MovementI", Float.toString(mMI));
-		mCfgInstance.SetAttribute("MovementD", Float.toString(mMD));
-		mCfgInstance.SetAttribute("MovementTolerance", Float.toString(mMTolerance));
-		mCfgInstance.SetAttribute("InchesToEncoderUnits", Float.toString(mInchesToEncoderUnits));
-		mCfgInstance.SetAttribute("TurningRadius", Float.toString(mTurningRadius));
+		element.SetAttribute("MovementP", mMP);
+		element.SetAttribute("MovementI", mMI);
+		element.SetAttribute("MovementD", mMD);
+		element.SetAttribute("MovementTolerance", mMTolerance);
+		element.SetAttribute("InchesToEncoderUnits", mInchesToEncoderUnits);
+		element.SetAttribute("TurningRadius", mTurningRadius);
 		
-		mCfgInstance.SetAttribute("AimingP", Float.toString(mAP));
-		mCfgInstance.SetAttribute("AimingI", Float.toString(mAI));
-		mCfgInstance.SetAttribute("AimingD", Float.toString(mAD));
-		mCfgInstance.SetAttribute("AimingTolerance", Float.toString(mATolerance));
+		element.SetAttribute("AimingP", mAP);
+		element.SetAttribute("AimingI", mAI);
+		element.SetAttribute("AimingD", mAD);
+		element.SetAttribute("AimingTolerance", mATolerance);
 		//mCfgInstance.SetAttribute("RadiansToEncoderUnits", Float.toString(mRadiansToEncoderUnits));
+		
+		return element;
 	}
 
 	@Override
-	public ConfigurableClass GetCfgClass() {
-		return mCfgInstance;
+	public String GetElementTitle()
+	{
+		return "DriveTrain";
 	}
 
     public void initDefaultCommand() {
@@ -287,15 +290,10 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor1 = null;
 		mRightMotor2 = null;
 	}
-	@Override
-	public void setSetpoint(double setpoint) 
-	{
-	    GetActiveController().setSetpoint(setpoint);
-	}
 	
 	//type == 0: Linear (i.e. forward/back)
 	//type == 1: Rotational (coarse)
-	//type == 1: Aiming (TODO:)
+	//type == 2: Aiming (TODO:)
 	public void PIDSwap(int type)
 	{
 		switch(type)
@@ -383,7 +381,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	
 	public void UpdateRotationEncodersWithPixels() 
 	{
-		SetRotationalTolerance();
+		SetAimingTolerance();
 		
 		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
 		
