@@ -37,6 +37,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 	protected float mAnglePotOffset = 0.0f;
 	protected int mAngleMotorId = 5;
 	protected int mAngleUltraId = 0;
+	protected float mAngleIntake;
 	
 	protected int mFeedSol = 0;
 	
@@ -78,7 +79,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mShooterAngle.Reconstruct(mAngleMotorId, 
 				mAngleP, mAngleI, mAngleD, 
 				mAnglePotMultRatio, mAnglePotOffset,
-				mAngleUltraId);
+				mAngleUltraId, mAngleIntake);
 		//mShooterAngle.Reconstruct(mAngleSolFront, mAngleSolRear);
 		mShooterWheels.Reconstruct(mWheelsId, 
 				mWheelsP, mWheelsI, mWheelsD, mWheelsF,
@@ -189,6 +190,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 		mAngleMotorId = shooterAngleElement.GetAttributeI("MotorId");
 		mAnglePotMultRatio = shooterAngleElement.GetAttributeF("AngleToNorm");
 		mAnglePotOffset = shooterAngleElement.GetAttributeF("PotOffset");
+		mAngleIntake = shooterAngleElement.GetAttributeF("IntakeAngle");
 		
 		/*
 		 * 
@@ -256,6 +258,7 @@ public class Shooter extends Subsystem implements CfgInterface {
 
 		shooterAngleElement.SetAttribute("AngleToNorm", mAnglePotMultRatio);
 		shooterAngleElement.SetAttribute("PotOffset", mAnglePotOffset);
+		shooterAngleElement.SetAttribute("IntakeAngle", mAngleIntake);
 		
 		
 		element.AppendChild(shooterAngleElement);

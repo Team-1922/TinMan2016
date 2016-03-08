@@ -19,6 +19,7 @@ public class ShooterAngleAnalog extends Subsystem {
 	protected float mAngleRatio;
 	protected float mAngleOffset;
 	protected float mAngleBaseline = 0.0f;
+	protected float mIntakeAngle;
 	
 	public ShooterAngleAnalog()
 	{
@@ -26,9 +27,11 @@ public class ShooterAngleAnalog extends Subsystem {
 	
 	//mult ratio is in potValue per degree
 	//horizAngle is in normalized encoder units
-	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId)
+	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId, float intakeAngle)
 	{
 		mDistanceFinder = new AnalogUltrasonic(ultraId);
+		
+		mIntakeAngle = intakeAngle;
 		
 		mAngleMotor = new CANTalon(canId);
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
@@ -130,6 +133,10 @@ public class ShooterAngleAnalog extends Subsystem {
 	public void SetPID(double p, double i, double d)
 	{
 		mAngleMotor.setPID(p, i, d);
+	}
+
+	public float GetIntakeAngle() {
+		return mIntakeAngle;
 	}
 }
 
