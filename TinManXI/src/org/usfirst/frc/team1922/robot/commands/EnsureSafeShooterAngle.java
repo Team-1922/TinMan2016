@@ -7,19 +7,18 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class EnableIntakeWheels extends Command {
+public class EnsureSafeShooterAngle extends Command {
 
-	boolean mForward = true;
-    public EnableIntakeWheels(boolean forward) {
+    public EnsureSafeShooterAngle() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	mForward = forward;
-    	requires(Robot.mBallRetriever);
+    	requires(Robot.mShooter.GetShooterAngle());
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mBallRetriever.StartMotor(mForward);
+    	if(Robot.mShooter.GetShooterAngle().GetAngle() > 1 || Robot.mShooter.GetShooterAngle().GetAngle() < .7)
+    		Robot.mShooter.GetShooterAngle().SetAngle(0);  	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -28,11 +27,15 @@ public class EnableIntakeWheels extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+    	if(Robot.mShooter.GetShooterAngle().GetAngle() > 1 || Robot.mShooter.GetShooterAngle().GetAngle() < .7)
+    		return false;
+    	else
+    		return true;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.mShooter.GetShooterAngle().StopPID();
     }
 
     // Called when another command which requires one or more of the same

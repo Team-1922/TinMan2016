@@ -138,5 +138,9 @@ public class ShooterAngleAnalog extends Subsystem {
 	public float GetIntakeAngle() {
 		return mIntakeAngle;
 	}
+
+	public void StopPID() {
+		SetAngle((float) GetAngle());
+	}
 }
 

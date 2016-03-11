@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class PrepShoot extends CommandGroup {
+public class PrepHighGoal extends CommandGroup {
     
-    public  PrepShoot() {
+    public  PrepHighGoal() {
     	addParallel(new SetShooterAngle(-Robot.mShooter.GetShooterAngle().GetIntakeAngle()));
     	addParallel(new SetIntakePositionMedLow());
     	addSequential(new SpinUpShooterWheelsCfg());
