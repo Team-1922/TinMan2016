@@ -10,6 +10,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class SpinUpShooterWheelsCfg extends CommandGroup {
     
     public  SpinUpShooterWheelsCfg() {
-    	addSequential(new SpinUpShooterWheels(Robot.mShooter.GetShooterDefaultSpeed()));
+    	addSequential(new SpinUpShooterWheels(Robot.mShooter.GetShooterWheels().GetShooterDefaultSpeed()));
     }
 }

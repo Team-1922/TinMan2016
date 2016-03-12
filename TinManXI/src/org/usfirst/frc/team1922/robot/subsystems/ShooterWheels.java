@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.OzMath;
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
+import org.ozram1922.cfg.CfgInterface;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
@@ -10,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class ShooterWheels extends Subsystem {
+public class ShooterWheels extends Subsystem implements CfgInterface {
 
 	/*
 	 * 
@@ -18,6 +21,21 @@ public class ShooterWheels extends Subsystem {
 	 * 
 	 */
 	protected CANTalon mWheels;
+	
+	/*
+	 * 
+	 * Config Variables 
+	 * 
+	 */
+
+	protected int mId = 6;
+	protected float mP = 0.0f;
+	protected float mI = 0.0f;
+	protected float mD = 0.0f;
+	protected float mF = 0.0f;
+	protected int mEncToRot = 1;
+	protected float mSetRpm = 0;
+	protected float mIntakeRpm = 1;
 	
 	/*
 	 * 
@@ -30,13 +48,13 @@ public class ShooterWheels extends Subsystem {
 	{
 	}
 	
-	public void Reconstruct(int talonID, float p, float i, float d, float f, int encUnitsPerRot)
+	public void Reconstruct()
 	{
-		System.out.println("Reconstruct Shooter Wheels: " + talonID + "," + p + "," + i + "," + d + "," + f + "," + encUnitsPerRot);
-		mWheels = new CANTalon(talonID);
+		System.out.println("Reconstruct Shooter Wheels: " + mId + "," + mP + "," + mI + "," + mD + "," + mF + "," + mEncToRot);
+		mWheels = new CANTalon(mId);
 		mWheels.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		//mWheels.reverseSensor(true);
-		mWheels.configEncoderCodesPerRev(encUnitsPerRot);
+		mWheels.configEncoderCodesPerRev(mEncToRot);
 		
 		mWheels.reverseOutput(true);
 		
@@ -46,8 +64,8 @@ public class ShooterWheels extends Subsystem {
 		//mWheels.configPeakOutputVoltage(+12.0f, 0.0f);
 		
 		mWheels.setProfile(0);
-		mWheels.setPID(p, i, d);
-		mWheels.setF(f);
+		mWheels.setPID(mP, mI, mD);
+		mWheels.setF(mF);
 	}
 	
 	//Set the speed of the motor in rpm (handled by PID control on the talon
@@ -72,9 +90,8 @@ public class ShooterWheels extends Subsystem {
 	
 	public void SpinDown()
 	{
-		mWheels.set(0.0);
 		mWheels.setEncPosition(0);//zero this out so the value doesn't get too large
-		//mWheels.disable();
+		SoftStop();
 	}
 	
 	public double GetP()
@@ -113,12 +130,6 @@ public class ShooterWheels extends Subsystem {
     }
 
 
-	public void MakeCfgClassesNull() {
-		if(mWheels != null)
-			mWheels.delete();
-		mWheels = null;
-	}
-
 	public double GetSpeed() {
 		return this.mWheels.getSpeed();
 	}
@@ -126,6 +137,84 @@ public class ShooterWheels extends Subsystem {
 	public double GetEncPos()
 	{
 		return this.mWheels.getPosition();
+	}
+
+	public void ToggleIntakeSpin() 
+	{
+		if(GetSetpoint() > 0.0)
+			SetSpeed(mIntakeRpm);
+		else
+			SoftStop();
+	}
+    
+    public float GetShooterDefaultSpeed()
+    {
+    	return mSetRpm;
+    }
+
+	public void StartIntake(boolean pos) {
+		SetSpeed((pos ? 1 : -1) * mIntakeRpm);
+	}
+	
+	public void SoftStop()
+	{
+		mWheels.changeControlMode(TalonControlMode.PercentVbus);
+		mWheels.set(0);
+	}
+	
+	public void HardStop()
+	{
+		SetSpeed(0);
+	}
+
+	@Override
+	public void MakeCfgClassesNull() {
+		if(mWheels != null)
+			mWheels.delete();
+		mWheels = null;
+	}
+	
+	@Override
+	public boolean Deserialize(CfgElement element) {
+		
+		mId = element.GetAttributeI("MotorId");
+		
+		mP = element.GetAttributeF("P");
+		mI = element.GetAttributeF("I");
+		mD = element.GetAttributeF("D");
+		mF = element.GetAttributeF("F");
+		
+		mSetRpm = element.GetAttributeF("ShootRPM");
+		mIntakeRpm = element.GetAttributeF("IntakeRPM");
+		
+		mEncToRot = element.GetAttributeI("EncSamplesPerRotation");
+		
+		Reconstruct();
+		return true;
+	}
+
+	@Override
+	public CfgElement Serialize(CfgElement blank, CfgDocument doc) {
+
+		
+		blank.SetAttribute("MotorId", mId);
+		
+		blank.SetAttribute("P", mP);
+		blank.SetAttribute("I", mI);
+		blank.SetAttribute("D", mD);
+		blank.SetAttribute("F", mF);
+		
+		blank.SetAttribute("ShootRPM", mSetRpm);
+		blank.SetAttribute("IntakeRPM", mIntakeRpm);
+		
+		blank.SetAttribute("EncSamplesPerRotation", mEncToRot);
+		
+		return blank;
+	}
+
+	@Override
+	public String GetElementTitle() {
+		return "Wheels";
 	}
 }
 

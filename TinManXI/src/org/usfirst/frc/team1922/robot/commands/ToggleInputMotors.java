@@ -19,7 +19,7 @@ public class ToggleInputMotors extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.mBallRetriever.ToggleMotor();
-    	Robot.mShooter.ToggleIntakeSpin();
+    	Robot.mShooter.GetShooterWheels().ToggleIntakeSpin();
     }
 
     // Called repeatedly when this Command is scheduled to run

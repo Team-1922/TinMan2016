@@ -19,7 +19,7 @@ public class UseIntakeWheels extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.mBallRetriever.StartMotor(true);
-    	Robot.mShooter.StartIntake(true);
+    	Robot.mShooter.GetShooterWheels().StartIntake(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -34,7 +34,7 @@ public class UseIntakeWheels extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.mBallRetriever.StopMotor();
-    	Robot.mShooter.StopIntake();
+    	Robot.mShooter.GetShooterWheels().SoftStop();
     }
 
     // Called when another command which requires one or more of the same

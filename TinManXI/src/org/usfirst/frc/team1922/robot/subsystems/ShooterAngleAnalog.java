@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.ozram1922.OzMath;
+import org.ozram1922.cfg.CfgDocument;
+import org.ozram1922.cfg.CfgElement;
+import org.ozram1922.cfg.CfgInterface;
 import org.usfirst.frc.team1922.robot.AnalogUltrasonic;
 import org.usfirst.frc.team1922.robot.commands.shooter.JoyCtrlAngle;
 
@@ -12,17 +15,35 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class ShooterAngleAnalog extends Subsystem {
+public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
     
+	/*
+	 * 
+	 * Member Variables
+	 * 
+	 */
 	protected CANTalon mAngleMotor;
 	protected AnalogUltrasonic mDistanceFinder;
+	protected float mAngleBaseline = 0.0f;
+	
+	
+	/*
+	 * 
+	 * Config Variables
+	 * 
+	 */
 	protected float mAngleRatio;
 	protected float mAngleOffset;
-	protected float mAngleBaseline = 0.0f;
 	protected float mIntakeAngle;
 	
 	protected float mMinSafeAngle;
 	protected float mMaxSafeAngle;
+
+	protected float mP = 0.0f;
+	protected float mI = 0.0f;
+	protected float mD = 0.0f;
+	protected int mMotorId = 5;
+	protected int mUltraId = 0;
 	
 	public ShooterAngleAnalog()
 	{
@@ -30,13 +51,12 @@ public class ShooterAngleAnalog extends Subsystem {
 	
 	//mult ratio is in potValue per degree
 	//horizAngle is in normalized encoder units
-	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId, float intakeAngle, float minSafeAngle, float maxSafeAngle)
+	public void Reconstruct()
 	{
-		mDistanceFinder = new AnalogUltrasonic(ultraId);
+		mDistanceFinder = new AnalogUltrasonic(mUltraId);
 		
-		mIntakeAngle = intakeAngle;
 		
-		mAngleMotor = new CANTalon(canId);
+		mAngleMotor = new CANTalon(mMotorId);
 		mAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 		mAngleMotor.changeControlMode(TalonControlMode.Position);
 		mAngleMotor.configPotentiometerTurns(1);
@@ -47,15 +67,9 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleMotor.reverseOutput(false);
 		mAngleMotor.setInverted(true);
 		
-		mAngleMotor.setPID(p, i, d);
+		mAngleMotor.setPID(mP, mI, mD);
 		
 		mAngleMotor.enableLimitSwitch(true, true);
-		
-		mAngleRatio	 = multRatio;
-		mAngleOffset = horizAngle;
-		
-		mMinSafeAngle = minSafeAngle;
-		mMaxSafeAngle = maxSafeAngle;
 	}
 	
 	//angle is relative to horizontal (negative to get to feeding position)
@@ -90,7 +104,7 @@ public class ShooterAngleAnalog extends Subsystem {
 		//System.out.println(mAngleMotor.getSetpoint());
 		//return true;
 		return OzMath.SigmaTest(mAngleMotor.getPosition(), mAngleMotor.getSetpoint(), .01);
-		//the "sigma" here should be in voltage or degrees?
+		//TODO: get the setpoint in radians and do sigma test in radians
 	}
 	
 	//returns in feet
@@ -114,13 +128,6 @@ public class ShooterAngleAnalog extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     	setDefaultCommand(new JoyCtrlAngle());
     }
-	
-	public void MakeCfgClassesNull()
-	{
-		if(mAngleMotor != null)
-			mAngleMotor.delete();
-		mAngleMotor = null;
-	}
 
 	public double GetP() {
 		return mAngleMotor.getP();
@@ -150,6 +157,61 @@ public class ShooterAngleAnalog extends Subsystem {
 
 	public boolean IsWithinSafeRange() {
 		return GetAngle() > mMinSafeAngle && GetAngle() < mMaxSafeAngle;
+	}
+	
+	@Override
+	public void MakeCfgClassesNull()
+	{
+		if(mAngleMotor != null)
+			mAngleMotor.delete();
+		mAngleMotor = null;
+	}
+
+	@Override
+	public boolean Deserialize(CfgElement element) {
+
+
+		mUltraId = element.GetAttributeI("UltraId");
+		
+		mP = element.GetAttributeF("P");
+		mI = element.GetAttributeF("I");
+		mD = element.GetAttributeF("D");
+		mMotorId = element.GetAttributeI("MotorId");
+		mAngleRatio = element.GetAttributeF("AngleToNorm");
+		mAngleOffset = element.GetAttributeF("PotOffset");
+		mIntakeAngle = element.GetAttributeF("IntakeAngle");
+		mMinSafeAngle = element.GetAttributeF("MinSafeAngle");
+		mMaxSafeAngle = element.GetAttributeF("MaxSafeAngle");
+		
+		Reconstruct();
+		return true;
+	}
+
+	@Override
+	public CfgElement Serialize(CfgElement blank, CfgDocument doc) {
+
+
+		blank.SetAttribute("UltraId", mUltraId);
+		
+		blank.SetAttribute("P", mP);
+		blank.SetAttribute("I", mI);
+		blank.SetAttribute("D", mD);
+		
+		blank.SetAttribute("MotorId", mMotorId);
+
+		blank.SetAttribute("AngleToNorm", mAngleRatio);
+		blank.SetAttribute("PotOffset", mAngleOffset);
+		blank.SetAttribute("IntakeAngle", mIntakeAngle);
+		
+		blank.SetAttribute("MinSafeAngle", mMinSafeAngle);
+		blank.SetAttribute("MaxSafeAngle", mMaxSafeAngle);
+		
+		return blank;
+	}
+
+	@Override
+	public String GetElementTitle() {
+		return "Angle";
 	}
 }
 
