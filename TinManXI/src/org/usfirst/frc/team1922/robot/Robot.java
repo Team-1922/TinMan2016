@@ -14,6 +14,7 @@ import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.Climber;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1922.robot.subsystems.DriverCamera;
+import org.usfirst.frc.team1922.robot.subsystems.NonAutonomousShooterCamera;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
 import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
 
@@ -40,6 +41,7 @@ public class Robot extends IterativeRobot {
 	public static String mCsvRangeAngleName = "/home/lvuser/RangeAngleTable.csv";
 	public static Climber mClimber = new Climber();
 	public static DriverCamera mDriverCamera = new DriverCamera();
+	public static NonAutonomousShooterCamera mNonAutoShootCam = new NonAutonomousShooterCamera();
     CameraServer server;
 
     Command autonomousCommand;

@@ -6,6 +6,8 @@ import org.ozram1922.OzMath;
 import org.ozram1922.cfg.CfgDocument;
 import org.ozram1922.cfg.CfgElement;
 import org.ozram1922.cfg.CfgInterface;
+import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.commands.NonAutoShooterCameraAssistant;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -34,6 +36,9 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	protected float mVerticalFOV;
 	protected float mHorizontalFOV;
 	
+	protected boolean mUsingGRIP;
+	protected NonAutoShooterCameraAssistant mNonAutoAssistantCommand;
+	
 	public ShooterLateralUtilities()
 	{
 	}
@@ -43,7 +48,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		table = NetworkTable.getTable(tableName);
 	}
 	
-	public float GetWindage()
+	public int GetWindage()
 	{
 		return mPIDWindageAdj;
 	}
@@ -220,6 +225,15 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		
 		mThrottleZeroPosition = mCameraViewWidth / 2;
 		
+		mUsingGRIP = element.GetAttributeI("UsingGRIP") == 1;
+		
+		if(!mUsingGRIP)
+		{
+			Robot.mNonAutoShootCam.InitVision();
+			mNonAutoAssistantCommand = new NonAutoShooterCameraAssistant();
+			mNonAutoAssistantCommand.start();
+		}
+		
 		SetTableName(mTableName);
 		InvalidateBestWindow();
 		return true;
@@ -246,6 +260,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 	@Override
 	public void MakeCfgClassesNull() {
+		if(mNonAutoAssistantCommand != null)
+			mNonAutoAssistantCommand.cancel();
 	}
 }
 
