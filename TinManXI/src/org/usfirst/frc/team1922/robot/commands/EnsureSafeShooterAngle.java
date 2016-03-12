@@ -17,7 +17,7 @@ public class EnsureSafeShooterAngle extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if(Robot.mShooter.GetShooterAngle().GetAngle() > 1 || Robot.mShooter.GetShooterAngle().GetAngle() < .7)
+    	if(!Robot.mShooter.GetShooterAngle().IsWithinSafeRange())
     		Robot.mShooter.GetShooterAngle().SetAngle(0);  	
     }
 
@@ -27,10 +27,10 @@ public class EnsureSafeShooterAngle extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.mShooter.GetShooterAngle().GetAngle() > 1 || Robot.mShooter.GetShooterAngle().GetAngle() < .7)
-    		return false;
-    	else
+    	if(Robot.mShooter.GetShooterAngle().IsWithinSafeRange())
     		return true;
+    	else
+    		return false;
     }
 
     // Called once after isFinished returns true

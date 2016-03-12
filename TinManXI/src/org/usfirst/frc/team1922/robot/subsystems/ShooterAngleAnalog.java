@@ -21,13 +21,16 @@ public class ShooterAngleAnalog extends Subsystem {
 	protected float mAngleBaseline = 0.0f;
 	protected float mIntakeAngle;
 	
+	protected float mMinSafeAngle;
+	protected float mMaxSafeAngle;
+	
 	public ShooterAngleAnalog()
 	{
 	}
 	
 	//mult ratio is in potValue per degree
 	//horizAngle is in normalized encoder units
-	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId, float intakeAngle)
+	public void Reconstruct(int canId, float p, float i, float d, float multRatio, float horizAngle, int ultraId, float intakeAngle, float minSafeAngle, float maxSafeAngle)
 	{
 		mDistanceFinder = new AnalogUltrasonic(ultraId);
 		
@@ -51,7 +54,8 @@ public class ShooterAngleAnalog extends Subsystem {
 		mAngleRatio	 = multRatio;
 		mAngleOffset = horizAngle;
 		
-
+		mMinSafeAngle = minSafeAngle;
+		mMaxSafeAngle = maxSafeAngle;
 	}
 	
 	//angle is relative to horizontal (negative to get to feeding position)
@@ -139,8 +143,13 @@ public class ShooterAngleAnalog extends Subsystem {
 		return mIntakeAngle;
 	}
 
+	//technically this does not stop the PID controller, it just sets the setpoint to the current position
 	public void StopPID() {
 		SetAngle((float) GetAngle());
+	}
+
+	public boolean IsWithinSafeRange() {
+		return GetAngle() > mMinSafeAngle && GetAngle() < mMaxSafeAngle;
 	}
 }
 
