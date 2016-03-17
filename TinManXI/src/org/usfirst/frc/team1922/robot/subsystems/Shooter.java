@@ -90,7 +90,7 @@ public class Shooter implements CfgInterface {
 		}
 		else
 		{
-			mShooterAngle.Deserialize(shooterWheelsElement);
+			mShooterWheels.Deserialize(shooterWheelsElement);
 		}
 		
 		
