@@ -38,7 +38,7 @@ public class PutWindowInView extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(System.currentTimeMillis() - mStartWaitTime > 1000)
+    	if(System.currentTimeMillis() - mStartWaitTime > Robot.mGlobShooterLatUtils.GetUpdateLatency())
     	{
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		mStartWaitTime = 0;

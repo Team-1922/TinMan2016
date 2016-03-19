@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1922.robot.commands;
 
+import org.usfirst.frc.team1922.robot.Robot;
 import org.usfirst.frc.team1922.robot.commands.shooter.SetShooterAngleAuto;
 import org.usfirst.frc.team1922.robot.commands.shooter.ShootBall;
 import org.usfirst.frc.team1922.robot.commands.shooter.SpinUpShooterWheelsCfg;
@@ -89,6 +90,11 @@ public class Autonomouse extends CommandGroup {
     	addSequential(new SpinUpShooterWheelsCfg());
     	addSequential(new CenterWindowInView());
     	addSequential(new SetShooterAngleAuto());
-    	addSequential(new ShootBall());
+    	
+    	//don't shoot if the window is stale
+    	if(!Robot.mGlobShooterLatUtils.IsBestWindowStale())
+    	{
+    		addSequential(new ShootBall());
+    	}
     }
 }

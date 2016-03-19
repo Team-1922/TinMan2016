@@ -1,7 +1,7 @@
 <grip:Pipeline>
   <sources>
     <grip:Camera>
-      <property name="address" value="http://127.0.0.1:1180/?action=stream"/>
+      <property name="deviceNumber" value="1"/>
     </grip:Camera>
   </sources>
   <steps>

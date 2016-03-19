@@ -36,6 +36,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	protected float mVerticalFOV;
 	protected float mHorizontalFOV;
 	
+	protected double mUpdateLatencyMS;
+	
 	protected boolean mUsingGRIP;
 	protected NonAutoShooterCameraAssistant mNonAutoAssistantCommand;
 	
@@ -51,6 +53,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public int GetWindage()
 	{
 		return mPIDWindageAdj;
+	}
+	
+	public double GetUpdateLatency()
+	{
+		return mUpdateLatencyMS;
 	}
 	
 	public int GetError()
@@ -131,6 +138,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 			mTimeSincePreviousUniqueUpdate = System.currentTimeMillis() - mPreviousUniqueUpdateTime;
 			
 		}
+		
+		potNew.Print();
     	/*
     	 * Flow:
     	 * 
@@ -227,6 +236,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		
 		mUsingGRIP = element.GetAttributeI("UsingGRIP") == 1;
 		
+		mUpdateLatencyMS = element.GetAttributeI("UpdateLatency");
+		
 		if(!mUsingGRIP)
 		{
 			Robot.mNonAutoShootCam.InitVision();
@@ -248,6 +259,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		element.SetAttribute("ViewWidth", mCameraViewWidth);
 		element.SetAttribute("VertFOV", mVerticalFOV);
 		element.SetAttribute("HorizFOV", mHorizontalFOV);
+		element.SetAttribute("UpdateLatency", mUpdateLatencyMS);
 		
 		return element;
 	}

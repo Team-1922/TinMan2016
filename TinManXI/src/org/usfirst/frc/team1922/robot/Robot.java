@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import java.io.IOException;
 
 import org.ozram1922.cfg.CfgLoader;
+import org.usfirst.frc.team1922.robot.commands.tests.TestAimingPID;
+import org.usfirst.frc.team1922.robot.commands.tests.TestMovementPID;
+import org.usfirst.frc.team1922.robot.commands.tests.TestRotationPID;
 import org.usfirst.frc.team1922.robot.subsystems.BallRetriever;
 import org.usfirst.frc.team1922.robot.subsystems.Climber;
 import org.usfirst.frc.team1922.robot.subsystems.DriveTrain;
@@ -89,6 +92,7 @@ public class Robot extends IterativeRobot {
     }
 
 	//TODO: Make this Good
+    @Deprecated
     protected void startGRIP()
     {
         /* Run GRIP in a new process */
@@ -152,6 +156,9 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
     }
 
+    TestAimingPID testAim = new TestAimingPID();
+    TestMovementPID testMovement = new TestMovementPID();
+    TestRotationPID testRotation = new TestRotationPID();
     public void teleopInit() {
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
@@ -181,6 +188,14 @@ public class Robot extends IterativeRobot {
        
         SmartDashboard.putNumber("Wheels Setpoint", 0);
         SmartDashboard.putNumber("Angle Setpoint", 0);*/
+
+        SmartDashboard.putNumber("DT P", mDriveTrain.GetActiveController().getP());
+        SmartDashboard.putNumber("DT I", mDriveTrain.GetActiveController().getI());
+        SmartDashboard.putNumber("DT D", mDriveTrain.GetActiveController().getD());
+        
+        //testAim.start();
+        //testMovement.start();
+        //testRotation.start();
     }
 
     /**
@@ -229,6 +244,12 @@ public class Robot extends IterativeRobot {
         
         //SmartDashboard.putNumber("Ultrasonic", Robot.mShooter.GetShooterAngle().GetUltraDistanceRaw());
         //System.out.println(Robot.mShooter.GetShooterAngle().GetUltraDistanceRaw());
+        
+        //TESTING
+        mDriveTrain.GetActiveController().setPID(SmartDashboard.getNumber("DT P"), SmartDashboard.getNumber("DT I"), SmartDashboard.getNumber("DT D"));
+        
+        SmartDashboard.putNumber("Encode Units To Center", mDriveTrain.PixelsToEncoderUnits(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true));
+        
         UpdateSmartDashboardItems();
     }
     

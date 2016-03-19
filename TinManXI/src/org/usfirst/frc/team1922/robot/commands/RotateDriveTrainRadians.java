@@ -20,7 +20,7 @@ public class RotateDriveTrainRadians extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mDriveTrain.PIDSwap(2);
+    	Robot.mDriveTrain.PIDSwap(1);
     	
     	//make sure to convert the radians into inches so the encoders respond correctly
     	Robot.mDriveTrain.setSetpoint(mRadians * Robot.mDriveTrain.GetRotationRadius());
