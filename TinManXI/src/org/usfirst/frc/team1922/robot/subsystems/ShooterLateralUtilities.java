@@ -124,6 +124,9 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		//	There will still be small variances in some aspect of the window (EXACTLY THE SAME = STALE WINDOW)
 		if(potNew != mBestWindow)
 		{
+
+			potNew.Print();
+			
 			//if not, reset the timer
 			mBestWindow = potNew;
 			
@@ -139,7 +142,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 			
 		}
 		
-		potNew.Print();
     	/*
     	 * Flow:
     	 * 

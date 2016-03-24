@@ -12,6 +12,7 @@ public class CollectBall extends CommandGroup {
     
     public  CollectBall() {
     	addSequential(new EnsureSafeShooterAngle());
+    	addParallel(new SetIntakePositionMedLow());
     	addParallel(new SpinUpShooterWheels(-1500));
     	addParallel(new EnableIntakeWheels(true));
     	addSequential(new SetShooterAngleIntake());

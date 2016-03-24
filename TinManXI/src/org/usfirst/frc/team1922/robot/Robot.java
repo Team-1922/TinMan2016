@@ -247,9 +247,11 @@ public class Robot extends IterativeRobot {
         
         //TESTING
         mDriveTrain.GetActiveController().setPID(SmartDashboard.getNumber("DT P"), SmartDashboard.getNumber("DT I"), SmartDashboard.getNumber("DT D"));
-        
+        SmartDashboard.putNumber("Ultra Distance", mShooter.GetShooterAngle().GetUltraDistance());
+        SmartDashboard.putNumber("Ultra Distance RAW", mShooter.GetShooterAngle().GetUltraDistanceRaw());
         SmartDashboard.putNumber("Encode Units To Center", mDriveTrain.PixelsToEncoderUnits(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true));
         
+        SmartDashboard.putNumber("ANGLE ANGLE", mShooter.GetShooterAngle().GetAngle());
         UpdateSmartDashboardItems();
     }
     

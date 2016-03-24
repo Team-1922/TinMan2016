@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<DriveTrain LeftMotor1="7" LeftMotor2="2" RightMotor1="-3" RightMotor2="-4" LeftSensitivity="1.0" RightSensitivity="1.0" MovementP="0.0" MovementI="0.0" MovementD="0.0" MovementTolerance="1.0" AimingP="1.2" AimingI="0.0" AimingD="0.0" AimingTolerance="0.15" InchesToEncoderUnits="73.34" TurningRadius="12.125" />
+	<DriveTrain LeftMotor1="-7" LeftMotor2="-2" RightMotor1="3" RightMotor2="4" LeftSensitivity="1.0" RightSensitivity="1.0" MovementP="2.0" MovementI="0.0005" MovementD="100.0" MovementTolerance="1.0" AimingP="2.0" AimingI="0.0005" AimingD="100.0" AimingTolerance="0.15" InchesToEncoderUnits="73.34" TurningRadius="12.125" />
 	<OI>
 		<Joystick Name="OpStick" Id="0" />
 		<Joystick Name="LeftStick" Id="1" />
@@ -24,7 +24,7 @@
 	</OI>
 	<ShooterLateralGlobal UpdateLatency="1500" NetTableName="GRIP/myContoursReport" Windage="160" CameraToWindowBase="60" ViewWidth="320" ViewHeight="240" VertFOV="0.628319" HorizFOV="0.837758" UsingGRIP="1" />
 	<Shooter>
-		<Angle P="8.0" I="0.0" D="0.0" AngleToNorm="0.3501" PotOffset="0.735" MotorId="5" UltraId="0" IntakeAngle="-.5" MinSafeAngle="-0.2" MaxSafeAngle="0.2" />
+		<Angle P="8.0" I="0.0" D="0.0" AngleToNorm="0.3501" PotOffset="0.567" MotorId="5" UltraId="0" IntakeAngle="-.88" HighGoalRegister="0.908" MinSafeAngle="-0.2" MaxSafeAngle="0.2" />
 		<Wheels MotorId="6" P="3.0" I="0.0" D="60.0" F=".06315" EncSamplesPerRotation="4096" ShootRPM="2000" IntakeRPM="-1000" />
 		<Lateral P="0.0" I="0.0" D="0.0" Tolerance="0.0" />
 		<Feeder Sol="1" />

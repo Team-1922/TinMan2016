@@ -15,6 +15,7 @@ public class AnalogUltrasonic extends AnalogInput
 	//scalingFactor = volts per inch
 	public AnalogUltrasonic(int id, double scalingFactor)
 	{
+		
 		super(id);
 		mScalingFactor = scalingFactor;
 	}

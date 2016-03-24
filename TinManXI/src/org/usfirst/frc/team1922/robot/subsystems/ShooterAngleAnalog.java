@@ -34,6 +34,8 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 	 */
 	protected float mAngleRatio;
 	protected float mAngleOffset;
+	
+	protected float mHighGoalAngle;
 	protected float mIntakeAngle;
 	
 	protected float mMinSafeAngle;
@@ -64,8 +66,8 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		mAngleMotor.setProfile(0);
 		
 		//mAngleMotor.reverseSensor(true);
-		mAngleMotor.reverseOutput(false);
-		mAngleMotor.setInverted(true);
+		mAngleMotor.reverseOutput(true);
+		mAngleMotor.setInverted(false);
 		
 		mAngleMotor.setPID(mP, mI, mD);
 		
@@ -149,6 +151,10 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 	public float GetIntakeAngle() {
 		return mIntakeAngle;
 	}
+	public float GetHighGoalAngle()
+	{
+		return mHighGoalAngle;
+	}
 
 	//technically this does not stop the PID controller, it just sets the setpoint to the current position
 	public void StopPID() {
@@ -180,6 +186,7 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		mAngleRatio = element.GetAttributeF("AngleToNorm");
 		mAngleOffset = element.GetAttributeF("PotOffset");
 		mIntakeAngle = element.GetAttributeF("IntakeAngle");
+		mHighGoalAngle = element.GetAttributeF("HighGoalRegister");
 		mMinSafeAngle = element.GetAttributeF("MinSafeAngle");
 		mMaxSafeAngle = element.GetAttributeF("MaxSafeAngle");
 		

@@ -56,7 +56,8 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 		//mWheels.reverseSensor(true);
 		mWheels.configEncoderCodesPerRev(mEncToRot);
 		
-		mWheels.reverseOutput(true);
+		mWheels.reverseOutput(false);
+		mWheels.setInverted(true);
 		
 		mWheels.setEncPosition(0);//zero this out so the value doesn't get too large
 
