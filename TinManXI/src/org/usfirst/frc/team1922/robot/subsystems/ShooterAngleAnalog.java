@@ -91,6 +91,16 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		return (mAngleBaseline + mAngleOffset - mAngleMotor.getPosition())/mAngleRatio;
 	}
 	
+	public float GetMinSafeAngle()
+	{
+		return mMinSafeAngle;
+	}
+	
+	public float GetMaxSafeAngle()
+	{
+		return mMaxSafeAngle;
+	}
+	
 	public void SetSpeed(double d)
 	{
 		mAngleMotor.changeControlMode(TalonControlMode.PercentVbus);

@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PrepLowGoal extends CommandGroup {
     
     public  PrepLowGoal() {
-    	addParallel(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetLowGoalAngle()));
+    	addSequential(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetMaxSafeAngle()));
     	addParallel(new SetIntakePositionHigh());
-    	addSequential(new SpinUpShooterWheels(Robot.mShooter.GetShooterWheels().GetLowGoalRPM()));
+    	addParallel(new SpinUpShooterWheels(Robot.mShooter.GetShooterWheels().GetLowGoalRPM()));
+    	addSequential(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetLowGoalAngle()));
     }
 }
