@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import java.io.IOException;
 
 import org.ozram1922.cfg.CfgLoader;
+import org.usfirst.frc.team1922.robot.commands.AutoDrive;
 import org.usfirst.frc.team1922.robot.commands.tests.TestAimingPID;
 import org.usfirst.frc.team1922.robot.commands.tests.TestMovementPID;
 import org.usfirst.frc.team1922.robot.commands.tests.TestRotationPID;
@@ -45,6 +46,7 @@ public class Robot extends IterativeRobot {
 	public static Climber mClimber = new Climber();
 	public static DriverCamera mDriverCamera = new DriverCamera();
 	public static NonAutonomousShooterCamera mNonAutoShootCam = new NonAutonomousShooterCamera();
+	public static AutoDrive mAutoDrive = new AutoDrive();
     CameraServer server;
 
     Command autonomousCommand;
@@ -126,8 +128,10 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-        autonomousCommand = (Command) chooser.getSelected();
+       // autonomousCommand = (Command) chooser.getSelected();
         
+        autonomousCommand = new AutoDrive();
+        autonomousCommand.start();
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
 		case "My Auto":
@@ -140,7 +144,7 @@ public class Robot extends IterativeRobot {
 		} */
     	
     	// schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+       // if (autonomousCommand != null) autonomousCommand.start();
     }
 
     /**
