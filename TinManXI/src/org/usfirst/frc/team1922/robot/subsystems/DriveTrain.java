@@ -110,17 +110,6 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		mRightMotor1 = new CANTalon(Math.abs(mRightMotorId1));
 		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));
 		
-		mLeftMotor1.setInverted(mLeftMotorId1 < 0);
-		mLeftMotor1.reverseOutput(mLeftMotorId1 < 0);
-		
-		mLeftMotor2.setInverted(mLeftMotorId2 < 0);
-		mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
-		
-		mRightMotor1.setInverted(mRightMotorId1 < 0);
-		mRightMotor1.reverseOutput(mRightMotorId1 < 0);
-		
-		mRightMotor2.setInverted(mRightMotorId2 < 0);
-		mRightMotor2.reverseOutput(mRightMotorId2 < 0);
 		
 		//update the PID values
 		//GetPIDController("Movement").setPID(mMP, mMI, mMD);
@@ -333,6 +322,13 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			mLeftMotor2.changeControlMode(TalonControlMode.PercentVbus);
 			mRightMotor1.changeControlMode(TalonControlMode.PercentVbus);
 			mRightMotor2.changeControlMode(TalonControlMode.PercentVbus);
+			
+
+			mLeftMotor1.setInverted(mLeftMotorId1 < 0);
+			mLeftMotor2.setInverted(mLeftMotorId2 < 0);
+			mRightMotor1.setInverted(mRightMotorId1 < 0);
+			mRightMotor2.setInverted(mRightMotorId2 < 0);
+			
 			mEnabledPIDMode = type;
 			break;
 		case "Linear":
@@ -348,14 +344,22 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			mRightMotor2.changeControlMode(TalonControlMode.Follower);
 			mRightMotor2.set(mLeftMotorId1);
 			
+
+			mLeftMotor1.reverseOutput(mLeftMotorId1 < 0);
+			mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
+			mRightMotor1.reverseOutput(mRightMotorId1 < 0);
+			mRightMotor2.reverseOutput(mRightMotorId2 < 0);
+			
 			mEnabledPIDMode = type;
 			break;
 		case "Rotational":
 
 			mLeftMotor1.changeControlMode(TalonControlMode.Position);
 			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			mLeftMotor1.reverseOutput(mLeftMotorId1 < 0);
 			
 			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
+			mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
 			mLeftMotor2.set(mLeftMotorId1);
 			
 			mRightMotor1.changeControlMode(TalonControlMode.Follower);

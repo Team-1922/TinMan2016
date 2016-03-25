@@ -37,10 +37,12 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 	
 	protected float mHighGoalAngle;
 	protected float mIntakeAngle;
+	protected float mLowGoalAngle;
 	
 	protected float mMinSafeAngle;
 	protected float mMaxSafeAngle;
-
+	
+	
 	protected float mP = 0.0f;
 	protected float mI = 0.0f;
 	protected float mD = 0.0f;
@@ -187,6 +189,7 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		mAngleOffset = element.GetAttributeF("PotOffset");
 		mIntakeAngle = element.GetAttributeF("IntakeAngle");
 		mHighGoalAngle = element.GetAttributeF("HighGoalRegister");
+		mLowGoalAngle = element.GetAttributeF("LowGoalAngle");
 		mMinSafeAngle = element.GetAttributeF("MinSafeAngle");
 		mMaxSafeAngle = element.GetAttributeF("MaxSafeAngle");
 		
@@ -209,6 +212,7 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		blank.SetAttribute("AngleToNorm", mAngleRatio);
 		blank.SetAttribute("PotOffset", mAngleOffset);
 		blank.SetAttribute("IntakeAngle", mIntakeAngle);
+		blank.SetAttribute("LowGoalAngle", mLowGoalAngle);
 		
 		blank.SetAttribute("MinSafeAngle", mMinSafeAngle);
 		blank.SetAttribute("MaxSafeAngle", mMaxSafeAngle);
@@ -219,6 +223,10 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 	@Override
 	public String GetElementTitle() {
 		return "Angle";
+	}
+
+	public float GetLowGoalAngle() {
+		return mLowGoalAngle;
 	}
 }
 

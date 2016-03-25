@@ -36,6 +36,7 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 	protected int mEncToRot = 1;
 	protected float mSetRpm = 0;
 	protected float mIntakeRpm = 1;
+	protected float mLowGoalRpm = 0;
 	
 	/*
 	 * 
@@ -187,6 +188,7 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 		
 		mSetRpm = element.GetAttributeF("ShootRPM");
 		mIntakeRpm = element.GetAttributeF("IntakeRPM");
+		mLowGoalRpm = element.GetAttributeF("LowGoalRPM");
 		
 		mEncToRot = element.GetAttributeI("EncSamplesPerRotation");
 		
@@ -207,6 +209,7 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 		
 		blank.SetAttribute("ShootRPM", mSetRpm);
 		blank.SetAttribute("IntakeRPM", mIntakeRpm);
+		blank.SetAttribute("LowGoalRPM", mLowGoalRpm);
 		
 		blank.SetAttribute("EncSamplesPerRotation", mEncToRot);
 		
@@ -216,6 +219,15 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 	@Override
 	public String GetElementTitle() {
 		return "Wheels";
+	}
+
+	public float GetIntakeRPM() {
+		return mIntakeRpm;
+	}
+	
+	public float GetLowGoalRPM()
+	{
+		return mLowGoalRpm;
 	}
 }
 
