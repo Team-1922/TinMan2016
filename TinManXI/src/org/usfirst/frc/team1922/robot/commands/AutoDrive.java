@@ -14,7 +14,7 @@ public class AutoDrive extends CommandGroup {
         // these will run in order.
     	addSequential(new EnsureSafeShooterAngle());
     	addSequential(new SetIntakePositionHigh());
-    	addSequential(new DriveForwardDistance(60));
+    	addSequential(new DriveForward(4, 0.75, 0.75));
     	
         // To run multiple commands at the same time,
         // use addParallel()

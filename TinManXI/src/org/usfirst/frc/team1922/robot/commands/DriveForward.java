@@ -9,15 +9,21 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveForward extends Command {
 
-    public DriveForward() {
+	protected double mTime;
+	protected double mLeftPower;
+	protected double mRightPower;
+    public DriveForward(double time, double leftPower, double rightPower) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	mTime = time;
+    	mLeftPower = leftPower;
+    	mRightPower = rightPower;
     	requires(Robot.mDriveTrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mDriveTrain.SetPower(.5, .5);
+    	Robot.mDriveTrain.SetPower(mLeftPower, mRightPower);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -26,7 +32,7 @@ public class DriveForward extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return this.timeSinceInitialized() > 5;
+    	return this.timeSinceInitialized() > mTime;
     }
 
     // Called once after isFinished returns true
