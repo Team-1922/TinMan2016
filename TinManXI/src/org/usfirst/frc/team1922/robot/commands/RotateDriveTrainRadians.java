@@ -20,11 +20,11 @@ public class RotateDriveTrainRadians extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mDriveTrain.PIDSwap(1);
+    	//Robot.mDriveTrain.PIDSwap("Rotational");
     	
     	//make sure to convert the radians into inches so the encoders respond correctly
-    	Robot.mDriveTrain.setSetpoint(mRadians * Robot.mDriveTrain.GetRotationRadius());
-    	Robot.mDriveTrain.enable();
+    	//Robot.mDriveTrain.SetSetpoint(mRadians * Robot.mDriveTrain.GetRotationRadius());
+    	//Robot.mDriveTrain.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run

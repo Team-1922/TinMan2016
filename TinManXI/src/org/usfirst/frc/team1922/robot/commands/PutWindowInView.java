@@ -29,9 +29,9 @@ public class PutWindowInView extends Command {
     	
     	if(mWillRun)
     	{
-    		Robot.mDriveTrain.SetActiveController("Rotational");
+    		Robot.mDriveTrain.PIDSwap("Rotational");
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
-    		Robot.mDriveTrain.enable();
+    		
     	}
     	
     }

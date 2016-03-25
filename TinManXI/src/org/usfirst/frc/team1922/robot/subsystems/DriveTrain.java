@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.command.Subsystem;
+
 import java.util.HashMap;
 
 import org.ozram1922.cfg.CfgDocument;
@@ -16,7 +20,7 @@ import org.ozram1922.cfg.CfgInterface;
 /**
  *	WHen using SetSetpoint, MAKE SURE to have the rotation units in INCHES (radians * radius)
  */
-public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface {
+public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem implements CfgInterface {
 	
 	/*
 	 * 
@@ -33,6 +37,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	protected int mRightMotorId1 = 3;
 	protected int mRightMotorId2 = 4;
 	
+	protected String mEnabledPIDMode = "Manual";
 	
 	/*
 	 * 
@@ -83,7 +88,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	{
 		super("Drive Train");
 		
-		HashMap<String, PIDOutput> outputs = new HashMap<String, PIDOutput>();
+		/*HashMap<String, PIDOutput> outputs = new HashMap<String, PIDOutput>();
 		HashMap<String, PIDSource> sources = new HashMap<String, PIDSource>();
 		
 		outputs.put("Linear", linearSetter);
@@ -92,7 +97,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		sources.put("Default", getter);
 		
 		AddPIDController("Movement", mMP, mMI, mMD, 0.0f, outputs, sources, "Linear", "Default");
-		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);
+		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);*/
 		
 		//AddPIDController("Aiming", mRP, mRI, mRD, 0.0f, new RotationSetter(), new SpeedGetter());
 		//GetPIDController("Aiming").setAbsoluteTolerance(mRTolerance * mDegreesToEncoderUnits);
@@ -124,16 +129,17 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor2.reverseOutput(mRightMotorId2 < 0);
 		
 		//update the PID values
-		GetPIDController("Movement").setPID(mMP, mMI, mMD);
-		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);
+		//GetPIDController("Movement").setPID(mMP, mMI, mMD);
+		//GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);
 		
 		
 		//default to the linear back-forth motion
-		PIDSwap(0);
+		PIDSwap("Manual");
 	}
 	
 	public void SetPower(double left, double right)
 	{
+		PIDSwap("Manual");
 		mLeftMotor1.set(mClutchRatio * mLeftSensitivity * left);
 		mLeftMotor2.set(mClutchRatio * mLeftSensitivity * left);
 		mRightMotor1.set(mClutchRatio * mRightSensitivity * right);
@@ -150,6 +156,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		return mClutchRatio < 1.0;
 	}
 	
+	@Deprecated
 	public void PIDSetPower(double left, double right)
 	{
 		mLeftMotor1.set(-mLeftSensitivity * left);
@@ -171,15 +178,18 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		 * If "Aiming": returns pixels
 		 * 
 		 */
-		return GetTolerance(GetActiveControllerName());
+		return GetTolerance(mEnabledPIDMode);
 	}
 	
 	public double GetTolerance(String name)
 	{
 		switch(name)
 		{
+		case "Manual":
+			return 0;
 		default:
-		case "Movement":
+		case "Rotational":
+		case "Linear":
 			return mMTolerance;
 		case "Aiming":
 			return mATolerance * Robot.mGlobShooterLatUtils.GetBestWindow().mWidth;
@@ -187,15 +197,20 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		}
 	}
 	
+	public double GetToleranceEnc()
+	{
+		return GetTolerance(mEnabledPIDMode) * mInchesToEncoderUnits;
+	}
+	
 	public boolean AimingOnTarget()
 	{
 		//return false; TODO: this should check to see if the camera is centered in the view AND the encoder is on target
-		return onTarget() && (Robot.mGlobShooterLatUtils.GetError() < GetTolerance());
+		return Robot.mGlobShooterLatUtils.GetError() < GetTolerance();
 	}
 	
 	public void SetAimingTolerance()
 	{
-		GetPIDController("Aiming").setAbsoluteTolerance(GetTolerance());
+		//GetPIDController("Aiming").setAbsoluteTolerance(GetTolerance());
 	}
 	
 	public float GetRotationRadius()
@@ -205,12 +220,12 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	
 	public void SetSetpointInches(double inches)
 	{
-		setSetpoint(inches);
+		mLeftMotor1.set(inches * mInchesToEncoderUnits);
 	}
 	
 	public void SetDeltaSetpointInches(double inches)
 	{
-		setSetpoint(inches + getter.pidGet());
+		mLeftMotor1.set(inches + getter.pidGet());
 	}
 	
 	/*
@@ -305,22 +320,51 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor1 = null;
 		mRightMotor2 = null;
 	}
-	
-	//type == 0: Linear (i.e. forward/back)
-	//type == 1: Rotational (coarse)
-	//type == 2: Aiming (TODO:)
-	public void PIDSwap(int type)
+
+
+	public void PIDSwap(String type)
 	{
 		switch(type)
 		{
 		default:
-		case 0:
-			SetActiveController("Movement");
-			GetActiveControllerModule().SetOutput("Linear");
+		case "Manual":
+			mLeftMotor1.changeControlMode(TalonControlMode.PercentVbus);
+			mLeftMotor2.changeControlMode(TalonControlMode.PercentVbus);
+			mRightMotor1.changeControlMode(TalonControlMode.PercentVbus);
+			mRightMotor2.changeControlMode(TalonControlMode.PercentVbus);
+			mEnabledPIDMode = type;
 			break;
-		case 1:
-			SetActiveController("Movement");
-			GetActiveControllerModule().SetOutput("Rotational");
+		case "Linear":
+			mLeftMotor1.changeControlMode(TalonControlMode.Position);
+			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			
+			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
+			mLeftMotor2.set(mLeftMotorId1);
+			
+			mRightMotor1.changeControlMode(TalonControlMode.Follower);
+			mRightMotor1.set(mLeftMotorId1);
+			
+			mRightMotor2.changeControlMode(TalonControlMode.Follower);
+			mRightMotor2.set(mLeftMotorId1);
+			
+			mEnabledPIDMode = type;
+			break;
+		case "Rotational":
+
+			mLeftMotor1.changeControlMode(TalonControlMode.Position);
+			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			
+			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
+			mLeftMotor2.set(mLeftMotorId1);
+			
+			mRightMotor1.changeControlMode(TalonControlMode.Follower);
+			mRightMotor1.reverseOutput(mRightMotorId1 > 0);
+			mRightMotor1.set(mLeftMotorId1);
+			
+			mRightMotor2.changeControlMode(TalonControlMode.Follower);
+			mRightMotor2.reverseOutput(mRightMotorId2 > 0);
+			mRightMotor2.set(mLeftMotorId1);
+			mEnabledPIDMode = type;
 			break;
 		//case 2:
 			//SetActiveController("Aiming");
@@ -403,6 +447,13 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
 		
 		mLeftMotor1.setEncPosition(PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true));
+	}
+	public void disable() {
+		PIDSwap("Manual");
+	}
+	public boolean onTarget()
+	{
+		return GetToleranceEnc() > mLeftMotor1.getError();
 	}
 
 }

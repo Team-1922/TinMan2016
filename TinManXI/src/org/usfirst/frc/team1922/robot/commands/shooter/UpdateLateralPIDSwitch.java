@@ -20,7 +20,7 @@ public class UpdateLateralPIDSwitch extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mDriveTrain.enable();
+    	//Robot.mDriveTrain.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -22,7 +22,7 @@ public class CenterWindowInView extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	//don't do anything if the window is not in view
-    	System.out.println("Start Centering Window");
+    	/*System.out.println("Start Centering Window");
     	mWillRun = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX != -1;
     	
     	if(mWillRun)
@@ -30,12 +30,12 @@ public class CenterWindowInView extends Command {
     		Robot.mDriveTrain.SetActiveController("Rotational");
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		Robot.mDriveTrain.enable();
-    	}
+    	}*/
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(System.currentTimeMillis() - mStartWaitTime > Robot.mGlobShooterLatUtils.GetUpdateLatency())
+    	/*if(System.currentTimeMillis() - mStartWaitTime > Robot.mGlobShooterLatUtils.GetUpdateLatency())
     	{
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		mStartWaitTime = 0;
@@ -46,13 +46,14 @@ public class CenterWindowInView extends Command {
     	{
     		if(System.currentTimeMillis() - mStartWaitTime < 1)
     			mStartWaitTime = System.currentTimeMillis();
-    	}
+    	}*/
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	//what is the best way to do this, because "onTarget()" doesn't seem to work
-        return Robot.mDriveTrain.AimingOnTarget();
+        //return Robot.mDriveTrain.AimingOnTarget();
+    	return true;
     	//return false;
     }
 

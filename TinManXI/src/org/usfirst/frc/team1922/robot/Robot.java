@@ -193,9 +193,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Wheels Setpoint", 0);
         SmartDashboard.putNumber("Angle Setpoint", 0);*/
 
-        SmartDashboard.putNumber("DT P", mDriveTrain.GetActiveController().getP());
-        SmartDashboard.putNumber("DT I", mDriveTrain.GetActiveController().getI());
-        SmartDashboard.putNumber("DT D", mDriveTrain.GetActiveController().getD());
         
         //testAim.start();
         //testMovement.start();
@@ -250,7 +247,7 @@ public class Robot extends IterativeRobot {
         //System.out.println(Robot.mShooter.GetShooterAngle().GetUltraDistanceRaw());
         
         //TESTING
-        mDriveTrain.GetActiveController().setPID(SmartDashboard.getNumber("DT P"), SmartDashboard.getNumber("DT I"), SmartDashboard.getNumber("DT D"));
+        //mDriveTrain.GetActiveController().setPID(SmartDashboard.getNumber("DT P"), SmartDashboard.getNumber("DT I"), SmartDashboard.getNumber("DT D"));
         SmartDashboard.putNumber("Ultra Distance", mShooter.GetShooterAngle().GetUltraDistance());
         SmartDashboard.putNumber("Ultra Distance RAW", mShooter.GetShooterAngle().GetUltraDistanceRaw());
         SmartDashboard.putNumber("Encode Units To Center", mDriveTrain.PixelsToEncoderUnits(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true));
