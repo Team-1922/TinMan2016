@@ -125,7 +125,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		if(potNew != mBestWindow)
 		{
 
-			potNew.Print();
+			//potNew.Print();
 			
 			//if not, reset the timer
 			mBestWindow = potNew;

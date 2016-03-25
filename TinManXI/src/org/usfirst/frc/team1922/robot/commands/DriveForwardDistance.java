@@ -21,7 +21,7 @@ public class DriveForwardDistance extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.mDriveTrain.PIDSwap(0);
-    	Robot.mDriveTrain.setSetpoint(mDistanceInches);
+    	Robot.mDriveTrain.SetDeltaSetpointInches(mDistanceInches);
     	Robot.mDriveTrain.enable();
     }
 

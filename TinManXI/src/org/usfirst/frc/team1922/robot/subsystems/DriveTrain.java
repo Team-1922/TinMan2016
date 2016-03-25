@@ -92,7 +92,7 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		sources.put("Default", getter);
 		
 		AddPIDController("Movement", mMP, mMI, mMD, 0.0f, outputs, sources, "Linear", "Default");
-		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance * mInchesToEncoderUnits);
+		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);
 		
 		//AddPIDController("Aiming", mRP, mRI, mRD, 0.0f, new RotationSetter(), new SpeedGetter());
 		//GetPIDController("Aiming").setAbsoluteTolerance(mRTolerance * mDegreesToEncoderUnits);
@@ -123,6 +123,11 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 		mRightMotor2.setInverted(mRightMotorId2 < 0);
 		mRightMotor2.reverseOutput(mRightMotorId2 < 0);
 		
+		//update the PID values
+		GetPIDController("Movement").setPID(mMP, mMI, mMD);
+		GetPIDController("Movement").setAbsoluteTolerance(mMTolerance);
+		
+		
 		//default to the linear back-forth motion
 		PIDSwap(0);
 	}
@@ -147,10 +152,10 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	
 	public void PIDSetPower(double left, double right)
 	{
-		mLeftMotor1.set(mLeftSensitivity * left);
-		mLeftMotor2.set(mLeftSensitivity * left);
-		mRightMotor1.set(mRightSensitivity * right);
-		mRightMotor2.set(mRightSensitivity * right);
+		mLeftMotor1.set(-mLeftSensitivity * left);
+		mLeftMotor2.set(-mLeftSensitivity * left);
+		mRightMotor1.set(-mRightSensitivity * right);
+		mRightMotor2.set(-mRightSensitivity * right);
 	}
 
 	public double GetTolerance()
@@ -196,6 +201,16 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 	public float GetRotationRadius()
 	{
 		return mTurningRadius;
+	}
+	
+	public void SetSetpointInches(double inches)
+	{
+		setSetpoint(inches);
+	}
+	
+	public void SetDeltaSetpointInches(double inches)
+	{
+		setSetpoint(inches + getter.pidGet());
 	}
 	
 	/*
@@ -326,6 +341,8 @@ public class DriveTrain extends MultiSourcePIDSubsystem implements CfgInterface 
 
 		@Override
 		public double pidGet() {
+			//System.out.println(mLeftMotor1.getEncPosition());
+			System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
 			return Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits;		
 		}
 
