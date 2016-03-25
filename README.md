@@ -12,3 +12,12 @@ open `build.xml` in the eclipse project, and replace all of the text with the te
 ###Deploying without Running Eclipse
 Sometimes it might be useful to deploy without having to open eclipse.  Eclipse must still be installed, or else ant would not work, however loading times might be invonvenient.
 Simply run `Deploy.bat` or `ReUploadCfg.bat`
+
+###Coms with Computer and PI
+By default, the ip address of the driver station computers, or the pi are on DHCP, but to get comms, they must be on static IP mode.  This can be acieved on windows by doing network and sharing center -> Ethernet -> ipv4 -> static IP: (10.TE.AM.anything), mask: (255.0.0.0).  On PI: open /etc/network/interfaces and replace all parts of the file which reference "eth0" with :
+`auto eth0`
+`allow-hotplug eth0`
+`iface eth0 inet static`
+`address 10.TE.AM.whatever`
+`netmask 255.0.0.0`
+`network 10.TE.AM.0`
