@@ -11,6 +11,8 @@
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="4" Name="shooter.SpinDownShooterWheels" />	
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="5" Name="SetIntakePositionMedLow" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="6" Name="SetIntakePositionMedHigh" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="7" Name="PrepHighGoal" />
+		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="8" Name="PrepLowGoal" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="9" Name="CollectBall"/>
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="10" Name="HomeConfig" />
 		<Command TriggerType="WhenPressed" Joystick="OpStick" Button="11" Name="SetIntakePositionLow" />
