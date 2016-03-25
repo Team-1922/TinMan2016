@@ -1,18 +1,12 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
-import org.usfirst.frc.team1922.robot.MultiSourcePIDSubsystem;
 import org.usfirst.frc.team1922.robot.Robot;
 import org.usfirst.frc.team1922.robot.commands.TeleopDrive;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
-import java.util.HashMap;
 
 import org.ozram1922.cfg.CfgDocument;
 import org.ozram1922.cfg.CfgElement;
@@ -225,7 +219,14 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	
 	public void SetDeltaSetpointInches(double inches)
 	{
-		mLeftMotor1.set(inches + getter.pidGet());
+		mLeftMotor1.set(inches + GetEncPosInches());
+	}
+	
+	public double GetEncPosInches()
+	{
+		System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
+		return Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits;		
+		
 	}
 	
 	/*
@@ -372,46 +373,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		}
 	}
 	
-	/*
-	 * There only needs to be one source
-	 */
-	protected PIDSource getter = new PIDSource()
-	{
-
-		@Override
-		public PIDSourceType getPIDSourceType() {
-			return PIDSourceType.kDisplacement;
-		}
-
-		@Override
-		public double pidGet() {
-			//System.out.println(mLeftMotor1.getEncPosition());
-			System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
-			return Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits;		
-		}
-
-		@Override
-		public void setPIDSourceType(PIDSourceType pidSource) {
-		}
-	};
-	protected PIDOutput rotationalSetter = new PIDOutput()
-	{
-
-		@Override
-		public void pidWrite(double output) {
-			Robot.mDriveTrain.PIDSetPower(output, -output);
-		}
-		
-	};
-	protected PIDOutput linearSetter = new PIDOutput()
-	{
-
-		@Override
-		public void pidWrite(double output) {
-			Robot.mDriveTrain.PIDSetPower(output, output);
-		}
-		
-	};
+	
 	
 	//if isHorizontal == false, it is vertical; bottom=distance from bottom extrema to the BOTTOM of "pixels"
 	public int PixelsToEncoderUnits(int pixels, int bottom, boolean isHorizontal)
