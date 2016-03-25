@@ -59,12 +59,12 @@ public class MultiSourcePIDSubsystemModule
 		}
 	}
 	
-	public void AddOutput(String name, PIDOutput output)
+	public synchronized void AddOutput(String name, PIDOutput output)
 	{
 		mOutputs.put(name, output);
 	}
 	
-	public void AddSource(String name, PIDSource source)
+	public synchronized void AddSource(String name, PIDSource source)
 	{
 		mSources.put(name, source);
 	}
@@ -87,12 +87,12 @@ public class MultiSourcePIDSubsystemModule
 
 	public PIDOutput GetActiveOutput()
 	{
-		return mOutputs.get(mActiveOutput);
+		return mActiveOutput;
 	}
 	
 	public PIDSource GetActiveSource()
 	{
-		return mSources.get(mActiveSource);
+		return mActiveSource;
 	}
 	
 	protected synchronized double ReturnPIDInput()

@@ -88,7 +88,6 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   *$
 	   * @param deltaSetpoint the change in the setpoint
 	   */
-	  //THIS IS BROKEN
 	  public void setSetpointRelative(double deltaSetpoint) {
 		if(GetActiveController() == null)
 			return;
@@ -125,7 +124,9 @@ public abstract class MultiSourcePIDSubsystem extends Subsystem implements Senda
 	   * @return the current position
 	   */
 	  public double getPosition() {
-		if(GetActiveController() == null)
+		if(GetActiveControllerModule() == null)
+			return Double.NaN;
+		if(GetActiveControllerModule().GetActiveSource() == null)
 			return Double.NaN;
 	    return GetActiveControllerModule().GetActiveSource().pidGet();
 	  }
