@@ -90,10 +90,10 @@ public class Robot extends IterativeRobot {
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
 
-        server = CameraServer.getInstance();
+        /*server = CameraServer.getInstance();
         server.setQuality(50);
         //the camera name (ex "cam0") can be found through the roborio web interface
-        server.startAutomaticCapture("cam0");
+        server.startAutomaticCapture("cam0");*/
 		
 		//startGRIP();
     }

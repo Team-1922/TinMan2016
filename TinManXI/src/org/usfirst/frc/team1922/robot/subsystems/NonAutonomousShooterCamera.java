@@ -1,11 +1,14 @@
 package org.usfirst.frc.team1922.robot.subsystems;
 
 import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.commands.NonAutoShooterCameraAssistant;
 
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.Point;
+import com.ni.vision.NIVision.ShapeMode;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -32,11 +35,14 @@ public class NonAutonomousShooterCamera extends Subsystem {
         session = NIVision.IMAQdxOpenCamera("cam0",
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
         NIVision.IMAQdxConfigureGrab(session);
+        CameraServer.getInstance().setQuality(25);
 	}
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
+    	if(!Robot.mGlobShooterLatUtils.IsUsingGRIP())
+    		setDefaultCommand(new NonAutoShooterCameraAssistant());
     }
     
     public void StartCapture()
@@ -52,17 +58,31 @@ public class NonAutonomousShooterCamera extends Subsystem {
     public void UpdateFrame()
     {
         /**
-         * grab an image, draw the circle, and provide it for the camera server
-         * which will in turn send it to the dashboard.
+         * draw the two lines for ligning up the window at the "bump" point (by defense)
+         * 	(they are actually rects so the thickness is more than one pixel
          */
+    	
+    	System.out.println("Drawing Frame");
     	int windage = Robot.mGlobShooterLatUtils.GetWindage();
     	int height = Robot.mGlobShooterLatUtils.GetCameraViewHeight();
+    	
+    	int elevation = height - Robot.mGlobShooterLatUtils.GetPresetElevation();
+    	int width = Robot.mGlobShooterLatUtils.GetCameraViewWidth();
 
         NIVision.IMAQdxGrab(session, frame, 1);
-        NIVision.imaqDrawLineOnImage(frame, frame, 
-        		DrawMode.DRAW_VALUE,  
-        		new Point(windage, 0), new Point(windage, height), 
-        		0xFF0000);
+        NIVision.imaqDrawShapeOnImage(frame, frame, 
+        		new NIVision.Rect(height, windage - 3, height, 6), 
+        		DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
+        
+        //TODO: also update the "center X" for the window
+        //int bestCenterX = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX;
+        
+        //NIVision.imaqDrawLineOnImage(frame, frame, DrawMode.DRAW_VALUE, new Point(bestCenterX, 0), new Point(bestCenterX, height), 0xFF0000);
+        
+        //Draw the horizontal line
+        NIVision.imaqDrawShapeOnImage(frame, frame, 
+        		new NIVision.Rect(elevation + 3, 0, 6, width), 
+        		DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
         
         CameraServer.getInstance().setImage(frame);
     
