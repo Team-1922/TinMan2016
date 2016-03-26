@@ -54,10 +54,6 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	 */
 	//this is in PERCENT OF THE WINDOW WIDTH
 	protected float mATolerance;
-	
-	protected float mAP;
-	protected float mAI;
-	protected float mAD;
 	protected float mRadiansToEncoderUnits;
 	
 	
@@ -109,6 +105,8 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		mLeftMotor2 = new CANTalon(Math.abs(mLeftMotorId2));
 		mRightMotor1 = new CANTalon(Math.abs(mRightMotorId1));
 		mRightMotor2 = new CANTalon(Math.abs(mRightMotorId2));
+		
+		mLeftMotor1.setPID(mMP, mMI, mMD);
 		
 		
 		//update the PID values
@@ -182,15 +180,20 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	
 	public double GetToleranceEnc()
 	{
-		return GetTolerance(mEnabledPIDMode) * mInchesToEncoderUnits;
+		return GetToleranceEnc(mEnabledPIDMode);
+	}
+	
+	public double GetToleranceEnc(String mode)
+	{
+		return GetTolerance(mode) * mInchesToEncoderUnits;
 	}
 	
 	public boolean AimingOnTarget()
 	{
-		//return false; TODO: this should check to see if the camera is centered in the view AND the encoder is on target
-		return Robot.mGlobShooterLatUtils.GetError() < GetTolerance();
+		return Robot.mGlobShooterLatUtils.GetError() < GetTolerance() && onTarget("Rotational");
 	}
 	
+	@Deprecated
 	public void SetAimingTolerance()
 	{
 		//GetPIDController("Aiming").setAbsoluteTolerance(GetTolerance());
@@ -201,14 +204,44 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		return mTurningRadius;
 	}
 	
-	public void SetSetpointInches(double inches)
+	//call "PIDSwap" before this for defined behavior
+	//if rotational: radians
+	//if linear: inches
+	//if aiming: n/a
+	public void SetSetpoint(double units)
 	{
-		mLeftMotor1.set(inches * mInchesToEncoderUnits);
+		switch(mEnabledPIDMode)
+		{
+		case "Manual":
+			break;
+		case "Linear":
+			mLeftMotor1.set(units * mInchesToEncoderUnits);
+			break;
+		case "Rotational":
+			mLeftMotor1.set(units * mRadiansToEncoderUnits);
+			break;
+		case "Aiming":
+			mLeftMotor1.set(0);
+			break;
+		}
 	}
 	
-	public void SetDeltaSetpointInches(double inches)
+	public void SetDeltaSetpoint(double units)
 	{
-		mLeftMotor1.set(inches + GetEncPosInches());
+		switch(mEnabledPIDMode)
+		{
+		case "Manual":
+			break;
+		case "Linear":
+			mLeftMotor1.set(units * mInchesToEncoderUnits + mLeftMotor1.getEncPosition());
+			break;
+		case "Rotational":
+			mLeftMotor1.set(units * mRadiansToEncoderUnits + mLeftMotor1.getEncPosition());
+			break;
+		case "Aiming":
+			mLeftMotor1.set(0);
+			break;
+		}
 	}
 	
 	public double GetEncPosInches()
@@ -242,9 +275,6 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		mInchesToEncoderUnits = element.GetAttributeF("InchesToEncoderUnits");
 		mTurningRadius = element.GetAttributeF("TurningRadius");
 		
-		mAP = element.GetAttributeF("AimingP");
-		mAI = element.GetAttributeF("AimingI");
-		mAD = element.GetAttributeF("AimingD");
 		mATolerance = Float.parseFloat(element.GetAttribute("AimingTolerance"));
 		
 		//This may be OK to do.  because enc per angle = (enc/in) * radius
@@ -275,9 +305,6 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		element.SetAttribute("InchesToEncoderUnits", mInchesToEncoderUnits);
 		element.SetAttribute("TurningRadius", mTurningRadius);
 		
-		element.SetAttribute("AimingP", mAP);
-		element.SetAttribute("AimingI", mAI);
-		element.SetAttribute("AimingD", mAD);
 		element.SetAttribute("AimingTolerance", mATolerance);
 		//mCfgInstance.SetAttribute("RadiansToEncoderUnits", Float.toString(mRadiansToEncoderUnits));
 		
@@ -352,23 +379,28 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			
 			mEnabledPIDMode = type;
 			break;
+		case "Aiming":
 		case "Rotational":
+			
+			//REMEMBER: Positive angle = CCW!
 
 			mLeftMotor1.changeControlMode(TalonControlMode.Position);
 			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-			mLeftMotor1.reverseOutput(mLeftMotorId1 < 0);
 			
 			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
-			mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
 			mLeftMotor2.set(mLeftMotorId1);
 			
 			mRightMotor1.changeControlMode(TalonControlMode.Follower);
-			mRightMotor1.reverseOutput(mRightMotorId1 > 0);
 			mRightMotor1.set(mLeftMotorId1);
 			
 			mRightMotor2.changeControlMode(TalonControlMode.Follower);
-			mRightMotor2.reverseOutput(mRightMotorId2 > 0);
 			mRightMotor2.set(mLeftMotorId1);
+
+			mLeftMotor1.reverseOutput(mLeftMotorId1 > 0);
+			mLeftMotor2.reverseOutput(mLeftMotorId2 > 0);
+			mRightMotor1.reverseOutput(mRightMotorId1 < 0);
+			mRightMotor2.reverseOutput(mRightMotorId2 < 0);
+			
 			mEnabledPIDMode = type;
 			break;
 		//case 2:
@@ -408,18 +440,31 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	
 	public void UpdateRotationEncodersWithPixels() 
 	{
-		SetAimingTolerance();
+		//SetAimingTolerance();
 		
 		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
 		
-		mLeftMotor1.setEncPosition(PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true));
+		int pixels = Robot.mGlobShooterLatUtils.GetError();
+		int base = bestWindow.mCenterX;
+		int encoderUnits = PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true);
+		
+		System.out.println("Updating DT Encoders with Pixel Conversions: Pixels=" + pixels + "; base=" + base + "; encoder Units=" + encoderUnits + ";");
+		mLeftMotor1.setEncPosition(encoderUnits);
 	}
 	public void disable() {
 		PIDSwap("Manual");
 	}
+	public boolean onTarget(String mode)
+	{
+		if(mode == "Aiming")
+		{
+			return GetToleranceEnc(mode) > Robot.mGlobShooterLatUtils.GetError();
+		}
+		return GetToleranceEnc(mode) > mLeftMotor1.getError();
+	}
 	public boolean onTarget()
 	{
-		return GetToleranceEnc() > mLeftMotor1.getError();
+		return onTarget(mEnabledPIDMode);
 	}
 
 }

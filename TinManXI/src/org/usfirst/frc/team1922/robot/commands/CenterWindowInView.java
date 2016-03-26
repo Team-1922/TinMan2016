@@ -27,13 +27,15 @@ public class CenterWindowInView extends Command {
     	
     	if(mWillRun)
     	{
-    		Robot.mDriveTrain.PIDSwap("Rotational");
+    		Robot.mDriveTrain.PIDSwap("Aiming");
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
+    		Robot.mDriveTrain.SetSetpoint(0);//the parameter here doesn't matter
     	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	//this keeps happening until on target, but can be aborted by the driver
     	if(System.currentTimeMillis() - mStartWaitTime > Robot.mGlobShooterLatUtils.GetUpdateLatency())
     	{
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
@@ -41,9 +43,9 @@ public class CenterWindowInView extends Command {
     	}
     		
     	//if the encoder PID is on target, start wait timer
-    	if(Robot.mDriveTrain.onTarget())
+    	if(Robot.mDriveTrain.onTarget("Rotational"))
     	{
-    		if(System.currentTimeMillis() - mStartWaitTime < 1)
+    		if(mStartWaitTime == 0)
     			mStartWaitTime = System.currentTimeMillis();
     	}
     }
@@ -51,7 +53,7 @@ public class CenterWindowInView extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	//what is the best way to do this, because "onTarget()" doesn't seem to work
-        return Robot.mDriveTrain.AimingOnTarget();
+        return Robot.mDriveTrain.AimingOnTarget() || !mWillRun;
     	//return true;
     	//return false;
     }
