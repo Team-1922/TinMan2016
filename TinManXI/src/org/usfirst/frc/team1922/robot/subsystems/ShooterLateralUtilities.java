@@ -26,6 +26,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	//zero is NOT centered, the center of the image is 320 (i think 640 wide)
 	protected int mPIDWindageAdj;
+	protected int mPresetElevation;
+	
 	protected String mTableName;
 	protected double mCameraToBaseWindowHeight; //the base of the TAPE
 	
@@ -39,7 +41,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	protected double mUpdateLatencyMS;
 	
 	protected boolean mUsingGRIP;
-	protected NonAutoShooterCameraAssistant mNonAutoAssistantCommand;
 	
 	public ShooterLateralUtilities()
 	{
@@ -54,6 +55,10 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	{
 		return mPIDWindageAdj;
 	}
+
+	public int GetPresetElevation() {
+		return mPresetElevation;
+	}
 	
 	public double GetUpdateLatency()
 	{
@@ -63,6 +68,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	public int GetError()
 	{
 		return Math.abs(mPIDWindageAdj - mBestWindow.mCenterX);
+	}
+	
+	public boolean IsUsingGRIP()
+	{
+		return mUsingGRIP;
 	}
 	
 	//this will between -1 and 1
@@ -227,6 +237,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 		mTableName = element.GetAttribute("NetTableName");
 		mPIDWindageAdj = element.GetAttributeI("Windage");
+		mPresetElevation = element.GetAttributeI("Elevation");
 		mCameraToBaseWindowHeight = element.GetAttributeF("CameraToWindowBase");
 		mCameraViewWidth = element.GetAttributeI("ViewWidth");
 		mCameraViewHeight = element.GetAttributeI("ViewHeight");
@@ -243,8 +254,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		if(!mUsingGRIP)
 		{
 			Robot.mNonAutoShootCam.InitVision();
-			mNonAutoAssistantCommand = new NonAutoShooterCameraAssistant();
-			mNonAutoAssistantCommand.start();
 		}
 		
 		SetTableName(mTableName);
@@ -257,6 +266,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 		element.SetAttribute("NetTableName", mTableName);
 		element.SetAttribute("Windage", mPIDWindageAdj);
+		element.SetAttribute("Elevation", mPresetElevation);
 		element.SetAttribute("CameraToWindowBase", mCameraToBaseWindowHeight);
 		element.SetAttribute("ViewWidth", mCameraViewWidth);
 		element.SetAttribute("VertFOV", mVerticalFOV);
@@ -274,8 +284,6 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 	@Override
 	public void MakeCfgClassesNull() {
-		if(mNonAutoAssistantCommand != null)
-			mNonAutoAssistantCommand.cancel();
 	}
 }
 

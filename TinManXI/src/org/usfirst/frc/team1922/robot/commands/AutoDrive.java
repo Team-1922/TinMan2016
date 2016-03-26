@@ -7,14 +7,29 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoDrive extends CommandGroup {
     
-    public  AutoDrive() {
+	public enum Direction
+	{
+		kForward,
+		kReverse
+	}
+	
+    public  AutoDrive(Direction dir) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
         // these will run in order.
     	addSequential(new EnsureSafeShooterAngle());
     	addSequential(new SetIntakePositionHigh());
-    	addSequential(new DriveForward(3.5, 0.75, 0.75));
+    	
+    	switch(dir)
+    	{
+    	case kForward:
+    		addSequential(new DriveForward(3.5, 0.75, 0.75));
+    		break;
+    	case kReverse:
+			addSequential(new DriveForward(3.5, -0.75, -0.75));
+    		break;
+    	}
     	
         // To run multiple commands at the same time,
         // use addParallel()

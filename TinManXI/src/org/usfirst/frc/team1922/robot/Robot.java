@@ -46,7 +46,6 @@ public class Robot extends IterativeRobot {
 	public static Climber mClimber = new Climber();
 	public static DriverCamera mDriverCamera = new DriverCamera();
 	public static NonAutonomousShooterCamera mNonAutoShootCam = new NonAutonomousShooterCamera();
-	public static AutoDrive mAutoDrive = new AutoDrive();
     CameraServer server;
 
     Command autonomousCommand;
@@ -85,10 +84,16 @@ public class Robot extends IterativeRobot {
 		//System.out.println("TEST");
 		
 
-        server = CameraServer.getInstance();
+        chooser = new SendableChooser();
+        chooser.addDefault("Forward Auto", new AutoDrive(AutoDrive.Direction.kForward));
+        chooser.addObject("Reverse Auto", new AutoDrive(AutoDrive.Direction.kReverse));
+//        chooser.addObject("My Auto", new MyAutoCommand());
+        SmartDashboard.putData("Auto mode", chooser);
+
+        /*server = CameraServer.getInstance();
         server.setQuality(50);
         //the camera name (ex "cam0") can be found through the roborio web interface
-        server.startAutomaticCapture("cam1");
+        server.startAutomaticCapture("cam0");*/
 		
 		//startGRIP();
     }
@@ -128,9 +133,9 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-       // autonomousCommand = (Command) chooser.getSelected();
+        autonomousCommand = (Command) chooser.getSelected();
         
-        autonomousCommand = new AutoDrive();
+        //autonomousCommand = new AutoDrive();
         autonomousCommand.start();
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
@@ -144,7 +149,7 @@ public class Robot extends IterativeRobot {
 		} */
     	
     	// schedule the autonomous command (example)
-       // if (autonomousCommand != null) autonomousCommand.start();
+        if (autonomousCommand != null) autonomousCommand.start();
     }
 
     /**
