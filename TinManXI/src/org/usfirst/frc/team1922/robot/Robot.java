@@ -260,7 +260,7 @@ public class Robot extends IterativeRobot {
     {
     	SmartDashboard.putBoolean("Shooter Wheels Spun Up", mShooter.GetShooterWheels().IsSpunUp());
     	SmartDashboard.putNumber("Window Alignment Error (Pixels)", mGlobShooterLatUtils.GetError());
-    	SmartDashboard.putNumber("Window Alignment Error (Enc Units)", mDriveTrain.GetEncoderOffsetFromPixels());
+    	SmartDashboard.putNumber("Window Alignment Error (Degrees)", mDriveTrain.GetEncoderOffsetFromPixels());
     	SmartDashboard.putNumber("Aiming Tolerance", mDriveTrain.GetTolerance("Aiming"));
     	SmartDashboard.putBoolean("Window Aligned?", mDriveTrain.GetTolerance("Aiming") > mGlobShooterLatUtils.GetError());
     }
