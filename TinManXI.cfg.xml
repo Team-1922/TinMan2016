@@ -22,6 +22,7 @@
 		<Command TriggerType="WhileHeld" Joystick="RightStick" Button="1" Name="RotateCameraServoNeg" />
 		<Command TriggerType="WhileHeld" Joystick="RightStick" Button="2" Name="SensitivityClutch" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="6" Name="AbortAll" />
+		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="7" Name="CenterWindowInView" />
 		<!--<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="5" Name="Tilt" />
 		<Command TriggerType="WhenPressed" Joystick="LeftStick" Button="6" Name="Lift" /> -->
 	</OI>

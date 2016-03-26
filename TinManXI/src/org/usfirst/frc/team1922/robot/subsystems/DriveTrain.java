@@ -441,7 +441,11 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	public void UpdateRotationEncodersWithPixels() 
 	{
 		//SetAimingTolerance();
-		
+		mLeftMotor1.setEncPosition(GetEncoderOffsetFromPixels());
+	}
+	
+	public int GetEncoderOffsetFromPixels()
+	{		
 		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
 		
 		int pixels = Robot.mGlobShooterLatUtils.GetError();
@@ -449,8 +453,9 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		int encoderUnits = PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true);
 		
 		System.out.println("Updating DT Encoders with Pixel Conversions: Pixels=" + pixels + "; base=" + base + "; encoder Units=" + encoderUnits + ";");
-		mLeftMotor1.setEncPosition(encoderUnits);
+		return encoderUnits;
 	}
+	
 	public void disable() {
 		PIDSwap("Manual");
 	}
