@@ -253,6 +253,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Encode Units To Center", mDriveTrain.PixelsToEncoderUnits(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true));
         
         SmartDashboard.putNumber("ANGLE ANGLE", mShooter.GetShooterAngle().GetAngle());
+        SmartDashboard.putNumber("Angle RAW", mShooter.GetShooterAngle().GetAngleRaw());
         UpdateSmartDashboardItems();
     }
     

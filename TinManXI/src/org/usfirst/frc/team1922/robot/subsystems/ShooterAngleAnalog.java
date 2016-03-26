@@ -91,6 +91,11 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 		return (mAngleBaseline + mAngleOffset - mAngleMotor.getPosition())/mAngleRatio;
 	}
 	
+	public double GetAngleRaw()
+	{
+		return mAngleMotor.getPosition();
+	}
+	
 	public float GetMinSafeAngle()
 	{
 		return mMinSafeAngle;
