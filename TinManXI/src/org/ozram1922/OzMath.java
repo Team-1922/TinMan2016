@@ -50,5 +50,27 @@ public class OzMath {
 	    }
 	    return true;
 	}
-
+	
+	
+	public static Vec2 Add(Vec2 vec1, Vec2 vec2)
+	{
+		return new Vec2(vec1.x + vec2.x, vec1.y + vec2.y);
+	}
+	
+	public static Vec2 Subtract(Vec2 vec1, Vec2 vec2)
+	{
+		return new Vec2(vec1.x - vec2.x, vec1.y - vec2.y);
+	}
+	
+	public static double DotProd(Vec2 vec1, Vec2 vec2)
+	{
+		return vec1.x * vec2.x + vec1.y * vec2.y;
+	}
+	
+	public static Vec2 Rotate(Vec2 vec, double angle)
+	{
+		double cs = Math.cos(angle);
+		double sn = Math.sin(angle);
+		return new Vec2(vec.x * cs - vec.y * sn, vec.x * sn + vec.y * cs);
+	}
 }
