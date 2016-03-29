@@ -102,6 +102,7 @@ public class ProceduralIntegrationManager
 		for(IProcIntegrationModule thisMod : mProcIntegrationModules)
 		{
 			thisMod.RunLoopProc();
+			thisMod.UpdateModuleData();
 		}
 	}
 	
