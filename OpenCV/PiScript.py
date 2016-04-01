@@ -2,6 +2,42 @@ import random
 import cv2
 import numpy as np
 
+
+#begin network tables
+import sys
+import time
+from networktables import NetworkTable
+
+# To see messages from networktables, you must setup logging
+#import logging
+#logging.basicConfig(level=logging.DEBUG)
+
+#if len(sys.argv) != 2:
+#    print("Error: specify an IP to connect to!")
+#    exit(0)
+
+#ip = sys.argv[1]
+ip='127.0.0.1'
+
+NetworkTable.setIPAddress(ip)
+NetworkTable.setClientMode()
+NetworkTable.initialize()
+
+class ConnectionListener:
+
+    def connected(self, table):
+        print("Connected to", table.getRemoteAddress(), table)
+
+    def disconnected(self, table):
+        print("Disconnected", table)
+
+c_listener = ConnectionListener()
+
+sd = NetworkTable.getTable("GRIP/myContoursReport")
+sd.addConnectionListener(c_listener)
+
+#END NETWORKTABLES
+
 def FindBestContour(countours, testContour):
     if len(countours) == 0:
         return -1,-1
@@ -47,6 +83,18 @@ def GetHullsFromContours(contours):
         hulls.append(cv2.conexHull(contours[i]))
     return hulls
 
+def SendBestToNetworkTables(contour):
+    area = cv2.contourArea(contour)
+    x,y,w,h = cv2.boundingRect(contour)
+    centerX = x + w/2.0
+    centerY = y + h/2.0
+    sd.putNumber('width',w)
+    sd.putNumber('height',h)
+    sd.putNumber('centerX', centerX)
+    sd.putNumber('centerY', centerY)
+    sd.putNumber('area', area)
+    pass
+
 cap = cv2.VideoCapture(1)
 img1 = cv2.imread('C:/Users/kjmac/Documents/GitHub/TinMan2016/OpenCV/TestWindow.jpg')
 frame = cv2.imread('C:/Users/kjmac/Pictures/RealFullField/3.jpg')
@@ -65,11 +113,11 @@ def nothing(x):
 
 cv2.namedWindow('image')
 cv2.createTrackbar('H Min','image',69,255,nothing)
-cv2.createTrackbar('H Max','image',90,255,nothing)
-cv2.createTrackbar('S Min','image',26,255,nothing)
-cv2.createTrackbar('S Max','image',95,255,nothing)
-cv2.createTrackbar('V Min','image',200,255,nothing)
-cv2.createTrackbar('V Max','image',255,255,nothing)
+cv2.createTrackbar('H Max','image',105,255,nothing)
+cv2.createTrackbar('S Min','image',93,255,nothing)
+cv2.createTrackbar('S Max','image',255,255,nothing)
+cv2.createTrackbar('V Min','image',85,255,nothing)
+cv2.createTrackbar('V Max','image',219,255,nothing)
 
 while(True):
 
@@ -135,6 +183,7 @@ while(True):
         pass
     else:
 
+        DrawContours(frame, contours)
         # get the best contour
         bestContour,bestMatch = FindBestContour(contours, testContour)
         if bestMatch == -1:# or bestMatch > 5:
@@ -143,7 +192,7 @@ while(True):
         else:
             # put the biggest contour on the frame
             cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
-
+            SendBestToNetworkTables(bestContour)
 
 
     cv2.imshow('frame',frame)
