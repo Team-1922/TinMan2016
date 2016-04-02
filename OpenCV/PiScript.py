@@ -38,7 +38,7 @@ sd.addConnectionListener(c_listener)
 
 #END NETWORKTABLES
 
-def FindBestContour(countours, testContour):
+def FindBestContour(countours, testContour, testContourHeight):
     if len(countours) == 0:
         return -1,-1
     print "Getting Best Contour"
@@ -46,6 +46,11 @@ def FindBestContour(countours, testContour):
     bestContour = -1
     bestMatchVal = 5000
     for i in range(0,len(contours)):
+        #resize the test contour
+        #_,_,_,height = cv2.boundingRect(contours[i])
+        #ratio = (float(height) / float(testContourHeight))
+        #resizedContour = testContour * ratio
+        #print ratio
         thisMatchVal = cv2.matchShapes(testContour, contours[i], 1, 0.0)
         print thisMatchVal
         if thisMatchVal < bestMatchVal:
@@ -83,64 +88,69 @@ def GetHullsFromContours(contours):
         hulls.append(cv2.conexHull(contours[i]))
     return hulls
 
-def SendBestToNetworkTables(contour):
-    area = cv2.contourArea(contour)
-    x,y,w,h = cv2.boundingRect(contour)
-    centerX = x + w/2.0
-    centerY = y + h/2.0
+def SendBestToNetworkTables(contour, matchVal, isBadContour):
+    if isBadContour == -1:
+        area = -1
+        w = -1
+        h = -1
+        centerX = -1
+        centerY = -1
+    else:
+        area = cv2.contourArea(contour)
+        x,y,w,h = cv2.boundingRect(contour)
+        centerX = x + w/2.0
+        centerY = y + h/2.0
     sd.putNumber('width',w)
     sd.putNumber('height',h)
     sd.putNumber('centerX', centerX)
     sd.putNumber('centerY', centerY)
     sd.putNumber('area', area)
-    pass
+    sd.putNumber('matchVal', matchVal)
 
 cap = cv2.VideoCapture(1)
-img1 = cv2.imread('C:/Users/kjmac/Documents/GitHub/TinMan2016/OpenCV/TestWindow.jpg')
-frame = cv2.imread('C:/Users/kjmac/Pictures/RealFullField/3.jpg')
+cap.set(cv2.CAP_PROP_BRIGHTNESS, 1)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) 
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) 
+img1 = cv2.imread('C:/Users/kjmac/Documents/GitHub/TinMan2016/OpenCV/TestWindow.jpg',0)
 
 # define range of green color in HSV (backup)
-lower_green = np.array([69,26,200])
-upper_green = np.array([90,95,255])
+#lower_green = np.array([69,26,200])
+#upper_green = np.array([90,95,255])
 
-hsvTest = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
-threshTest = cv2.inRange(hsvTest, np.array([0,0,127]), np.array([255,50,255]))
+#gryTest = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
+_,threshTest = cv2.threshold(img1,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 _,contours, hierarchy = cv2.findContours(threshTest,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 testContour = contours[0]
+_,_,_,testContourHeight = cv2.boundingRect(testContour)
 
 def nothing(x):
     pass
 
-cv2.namedWindow('image')
-cv2.createTrackbar('H Min','image',69,255,nothing)
-cv2.createTrackbar('H Max','image',105,255,nothing)
-cv2.createTrackbar('S Min','image',93,255,nothing)
-cv2.createTrackbar('S Max','image',255,255,nothing)
-cv2.createTrackbar('V Min','image',85,255,nothing)
-cv2.createTrackbar('V Max','image',219,255,nothing)
+#cv2.namedWindow('image')
+#cv2.createTrackbar('Sigma','image',0,255,nothing)
+#cv2.createTrackbar('Grey Max','image',255,255,nothing)
 
+num = 60
 while(True):
 
-    hm = cv2.getTrackbarPos('H Min','image')
-    sm = cv2.getTrackbarPos('S Min','image')
-    vm = cv2.getTrackbarPos('V Min','image')
+    #hm = cv2.getTrackbarPos('Sigma','image')
+    #sm = cv2.getTrackbarPos('Grey Min','image')
 
-    hM = cv2.getTrackbarPos('H Max','image')
-    sM = cv2.getTrackbarPos('S Max','image')
-    vM = cv2.getTrackbarPos('V Max','image')
-
-    lower_green = np.array([hm, sm, vm])
-    upper_green = np.array([hM, sM, vM])
+    #lower_green = np.array([hm, sm, vm])
+    #upper_green = np.array([hM, sM, vM])
 
     # Take each frame
-    #_, frame = cap.read()
-    frame = cv2.imread('C:/Users/kjmac/Pictures/RealFullField/3.jpg')
+    _, frame = cap.read()
+    #frame = cv2.imread(''.join(['C:/Users/kjmac/Pictures/RealFullField/', str(num), '.jpg']))
 
     # Convert BGR to HSV
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    #hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    gry = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Threshold the HSV image to get only green colors
-    mask = cv2.inRange(hsv, lower_green, upper_green)
+    #mask = cv2.inRange(hsv, lower_green, upper_green)
+    #blur = cv2.GaussianBlur(gry,(3,3),0)
+    ret3,mask = cv2.threshold(gry,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= mask)
@@ -178,27 +188,29 @@ while(True):
     #DrawContours(frame,contours)
 
     #filter the contours
-    contours = FilterContours(contours, 100)
+    contours = FilterContours(contours, 200)
     if contours == -1:
         pass
     else:
 
         DrawContours(frame, contours)
         # get the best contour
-        bestContour,bestMatch = FindBestContour(contours, testContour)
-        if bestMatch == -1:# or bestMatch > 5:
+        bestContour,bestMatch = FindBestContour(contours, testContour, testContourHeight)
+        if bestMatch == -1 or bestMatch > 12:
             #no contours found
+            SendBestToNetworkTables(0,bestMatch,-1)
             pass
         else:
             # put the biggest contour on the frame
             cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
-            SendBestToNetworkTables(bestContour)
+            SendBestToNetworkTables(bestContour,bestMatch,0)
 
 
     cv2.imshow('frame',frame)
     cv2.imshow('res',res)
     cv2.imshow('Base',img1)
     k = cv2.waitKey(5)# & 0xFF
+    num += 1
     if k == 27:
         break
 
