@@ -21,6 +21,7 @@ import org.usfirst.frc.team1922.robot.subsystems.DriverCamera;
 import org.usfirst.frc.team1922.robot.subsystems.NonAutonomousShooterCamera;
 import org.usfirst.frc.team1922.robot.subsystems.Shooter;
 import org.usfirst.frc.team1922.robot.subsystems.ShooterLateralUtilities;
+import org.usfirst.frc.team1922.robot.subsystems.DriveTrain.PIDMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -197,6 +198,9 @@ public class Robot extends IterativeRobot {
        
         SmartDashboard.putNumber("Wheels Setpoint", 0);
         SmartDashboard.putNumber("Angle Setpoint", 0);*/
+        
+        SmartDashboard.putNumber("DT Setpoint", 0);
+        mDriveTrain.PIDSwap(PIDMode.kLinear);
 
         
         //testAim.start();
@@ -214,6 +218,12 @@ public class Robot extends IterativeRobot {
     	mGlobShooterLatUtils.UpdateCycle();
     	
         Scheduler.getInstance().run();
+        
+        double DTSetpoint = SmartDashboard.getNumber("DTSetpoint");
+        if(DTSetpoint > 0.1)
+        {
+        	mDriveTrain.SetSetpoint(DTSetpoint);
+        }
         
         /*Robot.mShooter.GetShooterWheels().SetPID(
         		SmartDashboard.getNumber("Wheels P"),
@@ -267,8 +277,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putBoolean("Shooter Wheels Spun Up", mShooter.GetShooterWheels().IsSpunUp());
     	SmartDashboard.putNumber("Window Alignment Error (Pixels)", mGlobShooterLatUtils.GetError());
     	SmartDashboard.putNumber("Window Alignment Error (Degrees)", mDriveTrain.GetEncoderOffsetFromPixels());
-    	SmartDashboard.putNumber("Aiming Tolerance", mDriveTrain.GetTolerance("Aiming"));
-    	SmartDashboard.putBoolean("Window Aligned?", mDriveTrain.GetTolerance("Aiming") > mGlobShooterLatUtils.GetError());
+    	SmartDashboard.putNumber("Aiming Tolerance", mDriveTrain.GetTolerance(PIDMode.kAiming));
+    	SmartDashboard.putBoolean("Window Aligned?", mDriveTrain.GetTolerance(PIDMode.kAiming) > mGlobShooterLatUtils.GetError());
     }
     
     /**

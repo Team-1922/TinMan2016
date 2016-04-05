@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	NetworkTable table;
-	double[] defaultValue = new double[0];
 	StrongholdWindow mBestWindow;
 	
 	long mTimeSincePreviousUniqueUpdate = 0;
@@ -84,51 +83,14 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	//call this BEFORE the command updater, 
 	public void UpdateCycle()
 	{
-		double[] areas      = table.getNumberArray("area", defaultValue);
-		double[] widths     = table.getNumberArray("width", defaultValue);
-		double[] heights    = table.getNumberArray("height", defaultValue);
-		double[] centerXs   = table.getNumberArray("centerX", defaultValue);
-		double[] centerYs   = table.getNumberArray("centerY", defaultValue);
-		double[] solidities = table.getNumberArray("solidity", defaultValue);
+		double area      = table.getNumber("area", 0);
+		double width     = table.getNumber("width", 0);
+		double height    = table.getNumber("height", 0);
+		double centerX   = table.getNumber("centerX", 0);
+		double centerY   = table.getNumber("centerY", 0);
+		double matchVal  = table.getNumber("matchVal", 0);
 		
-		//in that somewhat likely case which there is a LOWER number of some value
-		//	due to asynchronous access, make sure we DON"T update this frame
-		if(!OzMath.AreAllEqual(Array.getLength(areas), Array.getLength(widths), Array.getLength(heights), Array.getLength(centerXs), Array.getLength(centerYs), Array.getLength(solidities)))
-		{
-			return;
-		}
-    	
-		/*
-		 * 
-		 * 
-		 * 
-		 * TODO: IMPORTANT: check that the width is greater than the height
-		 * 			to prevent unwanted objects being detected (to start with)
-		 * 
-		 * 
-		 * 
-		 */
-		
-
-		//InvalidateBestWindow();
-		/*if(Array.getLength(areas) == 0)
-		{
-		}
-		else*/
-		//are any of the areas significantly BETTER than the current best
-		StrongholdWindow potNew = new StrongholdWindow(-1, -1, -1, -1, -1, -1);
-		for(int i = 0; i < Array.getLength(areas); ++i)
-		{
-			if(widths[i] > heights[i])
-			{
-				if(areas[i] > potNew.mArea/* + 100*/)
-				{
-					potNew = new StrongholdWindow(
-							areas[i], widths[i], heights[i],
-							centerXs[i], centerYs[i], solidities[i]);
-				}
-			}
-		}
+		StrongholdWindow potNew = new StrongholdWindow(area, width, height, centerX, centerY, matchVal);
 		
 		//is this "best" window the same as the old best window? (This is for timing purposes)  Even if the camera position stays the same
 		//	There will still be small variances in some aspect of the window (EXACTLY THE SAME = STALE WINDOW)

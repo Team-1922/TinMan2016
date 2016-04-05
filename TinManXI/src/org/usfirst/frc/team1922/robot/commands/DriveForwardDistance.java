@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.subsystems.DriveTrain.PIDMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -20,7 +21,7 @@ public class DriveForwardDistance extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.mDriveTrain.PIDSwap("Linear");
+    	Robot.mDriveTrain.PIDSwap(PIDMode.kLinear);
     	Robot.mDriveTrain.SetDeltaSetpoint(mDistanceInches);
     }
 

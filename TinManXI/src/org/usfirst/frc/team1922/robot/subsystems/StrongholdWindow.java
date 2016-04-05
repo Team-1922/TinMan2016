@@ -8,35 +8,35 @@ public class StrongholdWindow
 	public final int mHeight;
 	public final int mCenterX;
 	public final int mCenterY;
-	public final int mSolidity; //i don't know what this is, but why not
+	public final int mMatchVal;
 	
 	public StrongholdWindow(
 			int area, int width, int height, 
-			int centerX, int centerY, int solidity)
+			int centerX, int centerY, int matchVal)
 	{
 		mArea = area;
 		mWidth = width;
 		mHeight = height;
 		mCenterX = centerX;
 		mCenterY = centerY;
-		mSolidity = solidity;
+		mMatchVal = matchVal;
 	}
 	
 	public StrongholdWindow(
 			double area, double width, double height, 
-			double centerX, double centerY, double solidity)
+			double centerX, double centerY, double matchVal)
 	{
 		mArea = (int) area;
 		mWidth = (int) width;
 		mHeight = (int) height;
 		mCenterX = (int) centerX;
 		mCenterY = (int) centerY;
-		mSolidity = (int) solidity;
+		mMatchVal = (int) matchVal;
 	}
 	
 	public void Print()
 	{
-		System.out.println("Window: \n Area: " + mArea + " \n Width: " + mWidth + "\n Height: " + mHeight + "\n CenterX: " + mCenterX + "\n CenterY: " + mCenterY + "\n Solidity: " + mSolidity + "\n");
+		System.out.println("Window: \n Area: " + mArea + " \n Width: " + mWidth + "\n Height: " + mHeight + "\n CenterX: " + mCenterX + "\n CenterY: " + mCenterY + "\n MatchVal: " + mMatchVal + "\n");
 	}
 	
 	/*public static ArrayList<StrongholdWindow> MakeWindows(

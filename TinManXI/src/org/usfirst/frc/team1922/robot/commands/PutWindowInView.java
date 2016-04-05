@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.subsystems.DriveTrain.PIDMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -29,7 +31,7 @@ public class PutWindowInView extends Command {
     	
     	if(mWillRun)
     	{
-    		Robot.mDriveTrain.PIDSwap("Rotational");
+    		Robot.mDriveTrain.PIDSwap(PIDMode.kAiming);
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		
     	}

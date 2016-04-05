@@ -31,7 +31,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	protected int mRightMotorId1 = 3;
 	protected int mRightMotorId2 = 4;
 	
-	protected String mEnabledPIDMode = "Manual";
+	protected PIDMode mEnabledPIDMode = PIDMode.kManual;
 	
 	/*
 	 * 
@@ -115,12 +115,12 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		
 		
 		//default to the linear back-forth motion
-		PIDSwap("Manual");
+		PIDSwap(PIDMode.kManual);
 	}
 	
 	public void SetPower(double left, double right)
 	{
-		PIDSwap("Manual");
+		PIDSwap(PIDMode.kManual);
 		mLeftMotor1.set(mClutchRatio * mLeftSensitivity * left);
 		mLeftMotor2.set(mClutchRatio * mLeftSensitivity * left);
 		mRightMotor1.set(mClutchRatio * mRightSensitivity * right);
@@ -162,17 +162,17 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		return GetTolerance(mEnabledPIDMode);
 	}
 	
-	public double GetTolerance(String name)
+	public double GetTolerance(PIDMode name)
 	{
 		switch(name)
 		{
-		case "Manual":
+		case kManual:
 			return 0;
 		default:
-		case "Rotational":
-		case "Linear":
+		case kRotational:
+		case kLinear:
 			return mMTolerance;
-		case "Aiming":
+		case kAiming:
 			return mATolerance * Robot.mGlobShooterLatUtils.GetBestWindow().mWidth;
 			//return OzMath.GetPixelCountFromDistanceAndLength(mATolerance, OzMath.GetHyp(Robot.mShooter.mShooterAngle.GetUltraDistance(), Robot.mGlobShooterLatUtils.GetCameraToWindowBaseHeight()), Robot.mGlobShooterLatUtils.GetCameraViewWidth());
 		}
@@ -183,14 +183,14 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		return GetToleranceEnc(mEnabledPIDMode);
 	}
 	
-	public double GetToleranceEnc(String mode)
+	public double GetToleranceEnc(PIDMode mode)
 	{
 		return GetTolerance(mode) * mInchesToEncoderUnits;
 	}
 	
 	public boolean AimingOnTarget()
 	{
-		return Robot.mGlobShooterLatUtils.GetError() < GetTolerance() && onTarget("Rotational");
+		return Robot.mGlobShooterLatUtils.GetError() < GetTolerance() && onTarget(PIDMode.kRotational);
 	}
 	
 	@Deprecated
@@ -212,15 +212,15 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	{
 		switch(mEnabledPIDMode)
 		{
-		case "Manual":
+		case kManual:
 			break;
-		case "Linear":
+		case kLinear:
 			mLeftMotor1.set(units * mInchesToEncoderUnits);
 			break;
-		case "Rotational":
+		case kRotational:
 			mLeftMotor1.set(units * mRadiansToEncoderUnits);
 			break;
-		case "Aiming":
+		case kAiming:
 			mLeftMotor1.set(0);
 			break;
 		}
@@ -230,15 +230,15 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	{
 		switch(mEnabledPIDMode)
 		{
-		case "Manual":
+		case kManual:
 			break;
-		case "Linear":
+		case kLinear:
 			mLeftMotor1.set(units * mInchesToEncoderUnits + mLeftMotor1.getEncPosition());
 			break;
-		case "Rotational":
+		case kRotational:
 			mLeftMotor1.set(units * mRadiansToEncoderUnits + mLeftMotor1.getEncPosition());
 			break;
-		case "Aiming":
+		case kAiming:
 			mLeftMotor1.set(0);
 			break;
 		}
@@ -338,13 +338,20 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		mRightMotor2 = null;
 	}
 
+	public enum PIDMode
+	{
+		kManual,
+		kLinear,
+		kRotational,
+		kAiming,
+	}
 
-	public void PIDSwap(String type)
+	public void PIDSwap(PIDMode type)
 	{
 		switch(type)
 		{
 		default:
-		case "Manual":
+		case kManual:
 			mLeftMotor1.changeControlMode(TalonControlMode.PercentVbus);
 			mLeftMotor2.changeControlMode(TalonControlMode.PercentVbus);
 			mRightMotor1.changeControlMode(TalonControlMode.PercentVbus);
@@ -358,7 +365,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			
 			mEnabledPIDMode = type;
 			break;
-		case "Linear":
+		case kLinear:
 			mLeftMotor1.changeControlMode(TalonControlMode.Position);
 			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 			
@@ -379,8 +386,8 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			
 			mEnabledPIDMode = type;
 			break;
-		case "Aiming":
-		case "Rotational":
+		case kAiming:
+		case kRotational:
 			
 			//REMEMBER: Positive angle = CCW!
 
@@ -438,6 +445,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		return (int) ((mu - tACotTerm - bACotTerm) * mRadiansToEncoderUnits);
 	}
 	
+	//this is only relevent in PIDMode.kAiming mode
 	public void UpdateRotationEncodersWithPixels() 
 	{
 		//SetAimingTolerance();
@@ -457,11 +465,11 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	}
 	
 	public void disable() {
-		PIDSwap("Manual");
+		PIDSwap(PIDMode.kManual);
 	}
-	public boolean onTarget(String mode)
+	public boolean onTarget(PIDMode mode)
 	{
-		if(mode == "Aiming")
+		if(mode == PIDMode.kAiming)
 		{
 			return GetToleranceEnc(mode) > Robot.mGlobShooterLatUtils.GetError();
 		}

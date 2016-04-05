@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.subsystems.DriveTrain.PIDMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -27,7 +29,7 @@ public class CenterWindowInView extends Command {
     	
     	if(mWillRun)
     	{
-    		Robot.mDriveTrain.PIDSwap("Aiming");
+    		Robot.mDriveTrain.PIDSwap(PIDMode.kAiming);
     		Robot.mDriveTrain.UpdateRotationEncodersWithPixels();
     		Robot.mDriveTrain.SetSetpoint(0);//the parameter here doesn't matter
     	}
@@ -43,7 +45,7 @@ public class CenterWindowInView extends Command {
     	}
     		
     	//if the encoder PID is on target, start wait timer
-    	if(Robot.mDriveTrain.onTarget("Rotational"))
+    	if(Robot.mDriveTrain.onTarget(PIDMode.kRotational))
     	{
     		if(mStartWaitTime == 0)
     			mStartWaitTime = System.currentTimeMillis();
