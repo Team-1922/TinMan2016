@@ -65,14 +65,10 @@ public class Shooter implements CfgInterface {
 		 * Angle Config Values
 		 * 
 		 */
-		CfgElement shooterAngleElement = element.GetNthChild(mShooterAngle.GetElementTitle(), 0);
-		if(shooterAngleElement == null)
+		if(!element.DeserializeChild(mShooterAngle))
 		{
 			System.out.println("Failed to Load Angle Subelement");
-		}
-		else
-		{
-			mShooterAngle.Deserialize(shooterAngleElement);
+			return false;
 		}
 
 		//mAngleSolFront = Integer.parseInt(shooterAngleElement.getAttribute("FrontSol"));
@@ -83,14 +79,10 @@ public class Shooter implements CfgInterface {
 		 * Wheels Config Values
 		 * 
 		 */
-		CfgElement shooterWheelsElement = element.GetNthChild(mShooterWheels.GetElementTitle(), 0);
-		if(shooterWheelsElement == null)
+		if(!element.DeserializeChild(mShooterWheels))
 		{
-			System.out.println("Failed to Load Shooter Wheels Subelement");
-		}
-		else
-		{
-			mShooterWheels.Deserialize(shooterWheelsElement);
+			System.out.println("Failed to Load Wheels Subelement");
+			return false;
 		}
 		
 		
@@ -99,14 +91,10 @@ public class Shooter implements CfgInterface {
 		 * Feed Config Values
 		 * 
 		 */
-		CfgElement shooterFeederElement = element.GetNthChild(mShooterFeeder.GetElementTitle(), 0);
-		if(shooterFeederElement == null)
+		if(!element.DeserializeChild(mShooterFeeder))
 		{
 			System.out.println("Failed to Load Feeder Subelement");
-		}
-		else
-		{
-			mShooterFeeder.Deserialize(shooterFeederElement);
+			return false;
 		}
 		
 		return true;
@@ -116,20 +104,13 @@ public class Shooter implements CfgInterface {
 	public CfgElement Serialize(CfgElement element, CfgDocument doc) 
 	{
 		//Cfg for the Angle
-		CfgElement shooterAngleElement = doc.CreateElement(mShooterAngle.GetElementTitle());
-		mShooterAngle.Serialize(shooterAngleElement, doc);
-		element.AppendChild(shooterAngleElement);
-		
+		element.SerializeChild(mShooterAngle, doc);		
 		
 		//Cfg for the Wheels
-		CfgElement shooterWheelsElement = doc.CreateElement("Wheels");
-		mShooterAngle.Serialize(shooterWheelsElement, doc);
-		element.AppendChild(shooterWheelsElement);
+		element.SerializeChild(mShooterWheels, doc);
 		
 		//cfg for the Feeder
-		CfgElement shooterFeederElement = doc.CreateElement("ShooterFeeder");
-		mShooterFeeder.Serialize(shooterFeederElement, doc);
-		element.AppendChild(shooterFeederElement);
+		element.SerializeChild(mShooterFeeder, doc);
 		
 		return element;
 	}

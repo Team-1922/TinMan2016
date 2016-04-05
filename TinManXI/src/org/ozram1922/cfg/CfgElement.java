@@ -117,4 +117,33 @@ public class CfgElement
 	{
 		SetAttribute(name, Integer.toString(value));
 	}
+	
+	public boolean DeserializeChild(CfgInterface child)
+	{
+		CfgElement childElement = GetNthChild(child.GetElementTitle(), 0);
+		if(childElement == null)
+		{
+			return false;
+		}
+		else
+		{
+			return child.Deserialize(childElement);
+		}
+	}
+	
+	public boolean SerializeChild(CfgInterface child, CfgDocument doc)
+	{
+		CfgElement childElement = doc.CreateElement(child.GetElementTitle());
+		childElement = child.Serialize(childElement, doc);
+		
+		if(childElement == null)
+		{
+			return false;
+		}
+		else
+		{
+			AppendChild(childElement);
+			return true;
+		}
+	}
 }
