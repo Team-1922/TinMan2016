@@ -16,8 +16,8 @@ from networktables import NetworkTable
 #    print("Error: specify an IP to connect to!")
 #    exit(0)
 
-#ip = sys.argv[1]
-ip='10.19.22.2'
+ip = sys.argv[1]
+#ip='10.19.22.2'
 
 NetworkTable.setIPAddress(ip)
 NetworkTable.setClientMode()
@@ -108,14 +108,14 @@ def SendBestToNetworkTables(contour, matchVal, isBadContour):
     sd.putNumber('matchVal', matchVal)
 
 #Setup the Camera Settings
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_BRIGHTNESS, 1)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) 
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) 
 
 #Load the Test Image
-img1 = cv2.imread('C:/Users/kjmac/Documents/GitHub/TinMan2016/OpenCV/TestWindow.jpg',0)
-#img1 = cv2.imread('/home/pi/vision/TestWindow.jpg',0)
+#img1 = cv2.imread('C:/Users/kjmac/Documents/GitHub/TinMan2016/OpenCV/TestWindow.jpg',0)
+img1 = cv2.imread('/home/pi/vision/TestWindow.jpg',0)
 
 _,threshTest = cv2.threshold(img1,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 _,contours, hierarchy = cv2.findContours(threshTest,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
@@ -124,26 +124,10 @@ _,_,_,testContourHeight = cv2.boundingRect(testContour)
 
 def nothing(x):
     pass
-cv2.namedWindow('image')
-cv2.createTrackbar('H Min','image',52,255,nothing)
-cv2.createTrackbar('H Max','image',105,255,nothing)
-cv2.createTrackbar('S Min','image',18,255,nothing)
-cv2.createTrackbar('S Max','image',255,255,nothing)
-cv2.createTrackbar('V Min','image',85,255,nothing)
-cv2.createTrackbar('V Max','image',219,255,nothing)
+lower_green = np.array([52, 18, 85])
+upper_green = np.array([105,255,219])
 
-num = 60
 while(True):
-    hm = cv2.getTrackbarPos('H Min','image')
-    sm = cv2.getTrackbarPos('S Min','image')
-    vm = cv2.getTrackbarPos('V Min','image')
-
-    hM = cv2.getTrackbarPos('H Max','image')
-    sM = cv2.getTrackbarPos('S Max','image')
-    vM = cv2.getTrackbarPos('V Max','image')
-
-    lower_green = np.array([hm, sm, vm])
-    upper_green = np.array([hM, sM, vM])
     
     # Take each frame
     _, frame = cap.read()
@@ -167,27 +151,28 @@ while(True):
     #DrawContours(frame,contours)
 
     #filter the contours
-    contours = FilterContours(contours, 200)
+    contours = FilterContours(contours, 100)
     if contours == -1:
         pass
     else:
 
-        DrawContours(frame, contours)
+        #DrawContours(frame, contours)
         # get the best contour
         bestContour,bestMatch = FindBestContour(contours, testContour, testContourHeight)
-        if bestMatch == -1:# or bestMatch > 12:
+        #Should there be a minimum here?  We don't want to try to look for a window that doesn't exist, but what is that min value? 20?
+        if bestMatch == -1 or bestMatch == 5000:
             #no contours found
             SendBestToNetworkTables(0,bestMatch,-1)
             pass
         else:
-            # put the biggest contour on the frame
-            cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
+            # put the big\gest contour on the frame
+            #cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
             SendBestToNetworkTables(bestContour,bestMatch,0)
 
 
-    cv2.imshow('frame',frame)
-    cv2.imshow('res',res)
-    cv2.imshow('Base',img1)
+    #cv2.imshow('frame',frame)
+    #cv2.imshow('res',res)
+    #cv2.imshow('Base',img1)
     k = cv2.waitKey(5)# & 0xFF
     if k == 27:
         break
