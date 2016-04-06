@@ -207,7 +207,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	//call "PIDSwap" before this for defined behavior
 	//if rotational: radians
 	//if linear: inches
-	//if aiming: n/a
+	//if aiming: encoder units
 	public void SetSetpoint(double units)
 	{
 		switch(mEnabledPIDMode)
@@ -221,7 +221,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			mLeftMotor1.set(units * mRadiansToEncoderUnits);
 			break;
 		case kAiming:
-			mLeftMotor1.set(0);
+			mLeftMotor1.set(units);
 			break;
 		}
 	}
@@ -239,7 +239,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			mLeftMotor1.set(units * mRadiansToEncoderUnits + mLeftMotor1.getEncPosition());
 			break;
 		case kAiming:
-			mLeftMotor1.set(0);
+			mLeftMotor1.set(units + mLeftMotor1.getEncPosition());
 			break;
 		}
 	}
@@ -249,6 +249,24 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
 		return Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits;		
 		
+	}
+	
+	public double GetP()
+	{
+		return mLeftMotor1.getP();
+	}
+	public double GetI()
+	{
+		return mLeftMotor1.getI();
+	}
+	public double GetD()
+	{
+		return mLeftMotor1.getD();
+	}
+	
+	public void SetPID(double p, double i, double d)
+	{
+		mLeftMotor1.setPID(p, i, d);
 	}
 	
 	/*
@@ -449,7 +467,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	public void UpdateRotationEncodersWithPixels() 
 	{
 		//SetAimingTolerance();
-		mLeftMotor1.setEncPosition(GetEncoderOffsetFromPixels());
+		SetDeltaSetpoint(GetEncoderOffsetFromPixels());
 	}
 	
 	public int GetEncoderOffsetFromPixels()

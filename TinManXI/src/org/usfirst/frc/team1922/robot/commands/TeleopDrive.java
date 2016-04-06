@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1922.robot.commands;
 
 import org.usfirst.frc.team1922.robot.Robot;
+import org.usfirst.frc.team1922.robot.subsystems.DriveTrain.PIDMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -16,6 +17,7 @@ public class TeleopDrive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.mDriveTrain.PIDSwap(PIDMode.kManual);
     }
 
     // Called repeatedly when this Command is scheduled to run
