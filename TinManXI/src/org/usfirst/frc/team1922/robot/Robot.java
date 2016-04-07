@@ -199,9 +199,12 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Wheels Setpoint", 0);
         SmartDashboard.putNumber("Angle Setpoint", 0);*/
         
-        SmartDashboard.putNumber("DT Setpoint", 0);
-        mDriveTrain.PIDSwap(PIDMode.kLinear);
+        //SmartDashboard.putNumber("Drive Train Setpoint Inches", 0);
+        //mDriveTrain.PIDSwap(PIDMode.kRotational);
 
+        //SmartDashboard.putNumber("Drive Train P", Robot.mDriveTrain.GetP());
+        //SmartDashboard.putNumber("Drive Train I", Robot.mDriveTrain.GetI());
+        //SmartDashboard.putNumber("Drive Train D", Robot.mDriveTrain.GetD());
         
         //testAim.start();
         //testMovement.start();
@@ -219,11 +222,16 @@ public class Robot extends IterativeRobot {
     	
         Scheduler.getInstance().run();
         
-        double DTSetpoint = SmartDashboard.getNumber("DTSetpoint");
-        if(DTSetpoint > 0.1)
-        {
-        	mDriveTrain.SetSetpoint(DTSetpoint);
-        }
+        /*double DTSetpoint = SmartDashboard.getNumber("Drive Train Setpoint Inches");
+        //if(DTSetpoint != 0)
+        //{
+        //	mDriveTrain.SetSetpoint(DTSetpoint);
+        //}
+        Robot.mDriveTrain.SetPID(
+        		SmartDashboard.getNumber("Drive Train P"),
+        		SmartDashboard.getNumber("Drive Train I"), 
+        		SmartDashboard.getNumber("Drive Train D"));
+        SmartDashboard.putNumber("Drive Train Inches", mDriveTrain.GetEncPosInches());
         
         /*Robot.mShooter.GetShooterWheels().SetPID(
         		SmartDashboard.getNumber("Wheels P"),
@@ -246,7 +254,7 @@ public class Robot extends IterativeRobot {
         }
         SmartDashboard.putNumber("Angle", Robot.mShooter.GetShooterAngle().GetAngle());*/
         
-        //SmartDashboard.putNumber("WHeels Raw", mShooter.GetShooterWheels().GetSpeed());
+        //SmartDashboard.putNumber("WHeels Raw", mShooter.GetShooterWheels().GetSpeed()); 
         
         //Robot.mShooter.GetShooterWheels().GetController().set(2000);
         //Robot.mShooter.GetShooterWheels().SetSpeed(SmartDashboard.getNumber("Wheels Setpoint"));
@@ -265,7 +273,7 @@ public class Robot extends IterativeRobot {
         //mDriveTrain.GetActiveController().setPID(SmartDashboard.getNumber("DT P"), SmartDashboard.getNumber("DT I"), SmartDashboard.getNumber("DT D"));
         SmartDashboard.putNumber("Ultra Distance", mShooter.GetShooterAngle().GetUltraDistance());
         SmartDashboard.putNumber("Ultra Distance RAW", mShooter.GetShooterAngle().GetUltraDistanceRaw());
-        SmartDashboard.putNumber("Encode Units To Center", mDriveTrain.PixelsToEncoderUnits(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true));
+        SmartDashboard.putNumber("Degrees To Center", mDriveTrain.PixelsToRadians(mGlobShooterLatUtils.GetError(), mGlobShooterLatUtils.GetBestWindow().mCenterX, true) * (180.0/3.1415));
         
         SmartDashboard.putNumber("ANGLE ANGLE", mShooter.GetShooterAngle().GetAngle());
         SmartDashboard.putNumber("Angle RAW", mShooter.GetShooterAngle().GetAngleRaw());
@@ -276,7 +284,7 @@ public class Robot extends IterativeRobot {
     {
     	SmartDashboard.putBoolean("Shooter Wheels Spun Up", mShooter.GetShooterWheels().IsSpunUp());
     	SmartDashboard.putNumber("Window Alignment Error (Pixels)", mGlobShooterLatUtils.GetError());
-    	SmartDashboard.putNumber("Window Alignment Error (Degrees)", mDriveTrain.GetEncoderOffsetFromPixels());
+    	SmartDashboard.putNumber("Window Alignment Error (Degrees)", mDriveTrain.GetRadianOffsetFromPixels() * (180.0/3.1415));
     	SmartDashboard.putNumber("Aiming Tolerance", mDriveTrain.GetTolerance(PIDMode.kAiming));
     	SmartDashboard.putBoolean("Window Aligned?", mDriveTrain.GetTolerance(PIDMode.kAiming) > mGlobShooterLatUtils.GetError());
     }
