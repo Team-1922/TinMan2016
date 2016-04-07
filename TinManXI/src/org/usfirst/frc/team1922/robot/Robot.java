@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.ozram1922.cfg.CfgLoader;
 import org.usfirst.frc.team1922.robot.commands.AutoDrive;
+import org.usfirst.frc.team1922.robot.commands.ShovelTheFries;
 import org.usfirst.frc.team1922.robot.commands.tests.TestAimingPID;
 import org.usfirst.frc.team1922.robot.commands.tests.TestMovementPID;
 import org.usfirst.frc.team1922.robot.commands.tests.TestRotationPID;
@@ -87,7 +88,8 @@ public class Robot extends IterativeRobot {
         chooser = new SendableChooser();
         chooser.addDefault("Forward Auto", new AutoDrive(AutoDrive.Direction.kForward));
         chooser.addObject("Reverse Auto", new AutoDrive(AutoDrive.Direction.kReverse));
-//        chooser.addObject("My Auto", new MyAutoCommand());
+        chooser.addObject("Shovel the Fries", new ShovelTheFries());
+        //chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
 
         /*server = CameraServer.getInstance();
