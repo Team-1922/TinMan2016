@@ -62,7 +62,7 @@ public class NonAutonomousShooterCamera extends Subsystem {
          * 	(they are actually rects so the thickness is more than one pixel
          */
     	
-    	System.out.println("Drawing Frame");
+    	//System.out.println("Drawing Frame");
     	int windage = Robot.mGlobShooterLatUtils.GetWindage();
     	int height = Robot.mGlobShooterLatUtils.GetCameraViewHeight();
     	
@@ -71,8 +71,8 @@ public class NonAutonomousShooterCamera extends Subsystem {
 
         NIVision.IMAQdxGrab(session, frame, 1);
         NIVision.imaqDrawShapeOnImage(frame, frame, 
-        		new NIVision.Rect(height, windage - 3, height, 6), 
-        		DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
+        		new NIVision.Rect(0, windage - 2, height, 4), 
+        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
         
         //TODO: also update the "center X" for the window
         //int bestCenterX = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX;
@@ -81,8 +81,8 @@ public class NonAutonomousShooterCamera extends Subsystem {
         
         //Draw the horizontal line
         NIVision.imaqDrawShapeOnImage(frame, frame, 
-        		new NIVision.Rect(elevation + 3, 0, 6, width), 
-        		DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
+        		new NIVision.Rect(elevation + 2, 0, 4, width), 
+        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
         
         CameraServer.getInstance().setImage(frame);
     

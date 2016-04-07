@@ -22,7 +22,7 @@ public class UpdateWindageFromThrottle extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.mGlobShooterLatUtils.SetWindage((int)((float)Robot.mGlobShooterLatUtils.GetCameraViewWidth() * ((Robot.oi.GetJoystick("OpStick").getThrottle() + 1)/2 - Robot.mGlobShooterLatUtils.GetZeroWindowPos())));
+    	Robot.mGlobShooterLatUtils.RezeroWindage();
     }
 
     // Make this return true when this Command no longer needs to run execute()

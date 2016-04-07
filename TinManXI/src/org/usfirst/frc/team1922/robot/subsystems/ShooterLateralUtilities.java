@@ -25,6 +25,8 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	//zero is NOT centered, the center of the image is 320 (i think 640 wide)
 	protected int mPIDWindageAdj;
+	protected int mWindageCfg;
+	protected double mInitThrottleVal = -5;
 	protected int mPresetElevation;
 	
 	protected String mTableName;
@@ -92,6 +94,14 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		
 		StrongholdWindow potNew = new StrongholdWindow(area, width, height, centerX, centerY, matchVal);
 		
+		if(mInitThrottleVal != -5)
+		{
+			mPIDWindageAdj = (int) ((Robot.oi.GetJoystick("Operator").getThrottle() - mInitThrottleVal) * (mCameraViewWidth / 2) + mWindageCfg);
+		}
+		else
+		{
+			mInitThrottleVal = Robot.oi.GetJoystick("Operator").getThrottle();
+		}
 		//is this "best" window the same as the old best window? (This is for timing purposes)  Even if the camera position stays the same
 		//	There will still be small variances in some aspect of the window (EXACTLY THE SAME = STALE WINDOW)
 		if(potNew != mBestWindow)
@@ -154,6 +164,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		mPIDWindageAdj = windage;
 	}
 	
+	public void RezeroWindage()
+	{
+		mInitThrottleVal = Robot.oi.GetJoystick("Operator").getThrottle();
+	}
+	
 	public double GetHorizontalFOV()
 	{
 		return mHorizontalFOV;
@@ -199,6 +214,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 
 		mTableName = element.GetAttribute("NetTableName");
 		mPIDWindageAdj = element.GetAttributeI("Windage");
+		mWindageCfg = mPIDWindageAdj;
 		mPresetElevation = element.GetAttributeI("Elevation");
 		mCameraToBaseWindowHeight = element.GetAttributeF("CameraToWindowBase");
 		mCameraViewWidth = element.GetAttributeI("ViewWidth");
