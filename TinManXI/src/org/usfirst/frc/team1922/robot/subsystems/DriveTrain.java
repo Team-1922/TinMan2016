@@ -207,7 +207,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	//call "PIDSwap" before this for defined behavior
 	//if rotational: radians
 	//if linear: inches
-	//if aiming: encoder units
+	//if aiming: encoder units (INTERNAL USE ONLY)
 	public void SetSetpoint(double units)
 	{
 		switch(mEnabledPIDMode)
@@ -217,11 +217,9 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		case kLinear:
 			mLeftMotor1.set(units * mInchesToEncoderUnits);
 			break;
+		case kAiming:
 		case kRotational:
 			mLeftMotor1.set(units * mRadiansToEncoderUnits);
-			break;
-		case kAiming:
-			mLeftMotor1.set(units);
 			break;
 		}
 	}
@@ -235,18 +233,16 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		case kLinear:
 			mLeftMotor1.set(units * mInchesToEncoderUnits + mLeftMotor1.getEncPosition());
 			break;
+		case kAiming:
 		case kRotational:
 			mLeftMotor1.set(units * mRadiansToEncoderUnits + mLeftMotor1.getEncPosition());
-			break;
-		case kAiming:
-			mLeftMotor1.set(units + mLeftMotor1.getEncPosition());
 			break;
 		}
 	}
 	
 	public double GetEncPosInches()
 	{
-		System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
+		//System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
 		return Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits;		
 		
 	}
@@ -337,7 +333,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new TeleopDrive());
+        //setDefaultCommand(new TeleopDrive());
     }
 	@Override
 	public void MakeCfgClassesNull() {
@@ -386,6 +382,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		case kLinear:
 			mLeftMotor1.changeControlMode(TalonControlMode.Position);
 			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			mLeftMotor1.reverseSensor(false);
 			
 			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
 			mLeftMotor2.set(mLeftMotorId1);
@@ -411,6 +408,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 
 			mLeftMotor1.changeControlMode(TalonControlMode.Position);
 			mLeftMotor1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			mLeftMotor1.reverseSensor(true);
 			
 			mLeftMotor2.changeControlMode(TalonControlMode.Follower);
 			mLeftMotor2.set(mLeftMotorId1);
@@ -422,9 +420,9 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 			mRightMotor2.set(mLeftMotorId1);
 
 			mLeftMotor1.reverseOutput(mLeftMotorId1 > 0);
-			mLeftMotor2.reverseOutput(mLeftMotorId2 > 0);
-			mRightMotor1.reverseOutput(mRightMotorId1 < 0);
-			mRightMotor2.reverseOutput(mRightMotorId2 < 0);
+			mLeftMotor2.reverseOutput(mLeftMotorId2 < 0);
+			mRightMotor1.reverseOutput(mRightMotorId1 > 0);
+			mRightMotor2.reverseOutput(mRightMotorId2 > 0);
 			
 			mEnabledPIDMode = type;
 			break;
@@ -437,7 +435,7 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 	
 	
 	//if isHorizontal == false, it is vertical; bottom=distance from bottom extrema to the BOTTOM of "pixels"
-	public int PixelsToEncoderUnits(int pixels, int bottom, boolean isHorizontal)
+	public double PixelsToRadians(int pixels, int bottom, boolean isHorizontal)
 	{
 		//see Kevin for this equation
 		double mu = 0;
@@ -460,26 +458,27 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		double tACotTerm = Math.atan(1/(hpxOverSinMu/t - tanMuOver2));
 		double bACotTerm = Math.atan(1/(hpxOverSinMu/b - tanMuOver2));
 		
-		return (int) ((mu - tACotTerm - bACotTerm) * mRadiansToEncoderUnits);
+		return (mu - tACotTerm - bACotTerm);
 	}
 	
 	//this is only relevent in PIDMode.kAiming mode
 	public void UpdateRotationEncodersWithPixels() 
 	{
 		//SetAimingTolerance();
-		SetDeltaSetpoint(GetEncoderOffsetFromPixels());
+		SetDeltaSetpoint(GetRadianOffsetFromPixels());
 	}
 	
-	public int GetEncoderOffsetFromPixels()
+	public double GetRadianOffsetFromPixels()
 	{		
 		StrongholdWindow bestWindow = Robot.mGlobShooterLatUtils.GetBestWindow();
 		
-		int pixels = Robot.mGlobShooterLatUtils.GetError();
-		int base = bestWindow.mCenterX;
-		int encoderUnits = PixelsToEncoderUnits(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true);
+		//int pixels = Robot.mGlobShooterLatUtils.GetError();
+		//int base = bestWindow.mCenterX;
+		//use the negative, becuase this is the encoder units delta TO the error point, to get FROM the error point, it must be the negative
+		double radians = -PixelsToRadians(Robot.mGlobShooterLatUtils.GetError(), bestWindow.mCenterX, true);
 		
-		System.out.println("Updating DT Encoders with Pixel Conversions: Pixels=" + pixels + "; base=" + base + "; encoder Units=" + encoderUnits + ";");
-		return encoderUnits;
+		//System.out.println("Updating DT Encoders with Pixel Conversions: Pixels=" + pixels + "; base=" + base + "; encoder Units=" + encoderUnits + ";");
+		return radians;
 	}
 	
 	public void disable() {
