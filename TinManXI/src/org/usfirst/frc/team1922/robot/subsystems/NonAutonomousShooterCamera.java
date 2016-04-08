@@ -11,6 +11,7 @@ import com.ni.vision.NIVision.ShapeMode;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /**
  *
@@ -20,7 +21,7 @@ public class NonAutonomousShooterCamera extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    protected int session;
+    protected USBCamera targetCam;
     protected Image frame;
     
 	public void InitVision()
@@ -32,9 +33,14 @@ public class NonAutonomousShooterCamera extends Subsystem {
         //TODO: how do we set camera quality to avoid using too much bandwidth?
         
         // the camera name (ex "cam0") can be found through the roborio web interface
-        session = NIVision.IMAQdxOpenCamera("cam0",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        NIVision.IMAQdxConfigureGrab(session);
+    	targetCam = new USBCamera("cam0");
+    	targetCam.setBrightness(50);
+//     We actually still had trouble setting exposure. It didn't actually like values 0-100. We found that setting the brightness did enough though.
+//    	targetCam.setExposureManual(g_exp); 
+    	targetCam.updateSettings();
+        //session = NIVision.IMAQdxOpenCamera("cam0",
+        //        NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+    	
         CameraServer.getInstance().setQuality(25);
 	}
 
@@ -47,12 +53,13 @@ public class NonAutonomousShooterCamera extends Subsystem {
     
     public void StartCapture()
     {
-        NIVision.IMAQdxStartAcquisition(session);
+    	targetCam.openCamera();
+        CameraServer.getInstance().startAutomaticCapture(targetCam);
     }
     
     public void StopCapture()
     {
-        NIVision.IMAQdxStopAcquisition(session);
+    	targetCam.closeCamera();
     }
     
     public void UpdateFrame()
@@ -69,7 +76,8 @@ public class NonAutonomousShooterCamera extends Subsystem {
     	int elevation = height - Robot.mGlobShooterLatUtils.GetPresetElevation();
     	int width = Robot.mGlobShooterLatUtils.GetCameraViewWidth();
 
-        NIVision.IMAQdxGrab(session, frame, 1);
+        //NIVision.IMAQdxGrab(session, frame, 1);
+        targetCam.getImage(frame);
         NIVision.imaqDrawShapeOnImage(frame, frame, 
         		new NIVision.Rect(0, windage - 2, height, 4), 
         		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 

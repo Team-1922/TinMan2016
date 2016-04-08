@@ -124,8 +124,13 @@ _,_,_,testContourHeight = cv2.boundingRect(testContour)
 
 def nothing(x):
     pass
-lower_green = np.array([52, 18, 85])
-upper_green = np.array([105,255,219])
+lower_green_home = np.array([52, 18, 85])
+upper_green_home = np.array([105,255,219])
+lower_green_lewiston = np.array([52, 11, 100])
+upper_green_lewiston = np.array([105,255,175])
+
+lower_green = lower_green_lewiston
+upper_green = upper_green_lewiston
 
 while(True):
     
