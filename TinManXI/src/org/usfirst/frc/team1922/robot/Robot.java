@@ -225,10 +225,10 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
         
         /*double DTSetpoint = SmartDashboard.getNumber("Drive Train Setpoint Inches");
-        //if(DTSetpoint != 0)
-        //{
-        //	mDriveTrain.SetSetpoint(DTSetpoint);
-        //}
+        if(DTSetpoint != 0)
+        {
+        	mDriveTrain.SetSetpoint(DTSetpoint);
+        }
         Robot.mDriveTrain.SetPID(
         		SmartDashboard.getNumber("Drive Train P"),
         		SmartDashboard.getNumber("Drive Train I"), 

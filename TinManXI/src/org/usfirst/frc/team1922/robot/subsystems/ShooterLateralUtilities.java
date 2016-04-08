@@ -96,11 +96,11 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		
 		if(mInitThrottleVal != -5)
 		{
-			mPIDWindageAdj = (int) ((Robot.oi.GetJoystick("Operator").getThrottle() - mInitThrottleVal) * (mCameraViewWidth / 2) + mWindageCfg);
+			mPIDWindageAdj = (int) ((Robot.oi.GetJoystick("OpStick").getThrottle() - mInitThrottleVal) * (mCameraViewWidth / 2) + mWindageCfg);
 		}
 		else
 		{
-			mInitThrottleVal = Robot.oi.GetJoystick("Operator").getThrottle();
+			mInitThrottleVal = Robot.oi.GetJoystick("OpStick").getThrottle();
 		}
 		//is this "best" window the same as the old best window? (This is for timing purposes)  Even if the camera position stays the same
 		//	There will still be small variances in some aspect of the window (EXACTLY THE SAME = STALE WINDOW)
@@ -166,7 +166,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 	
 	public void RezeroWindage()
 	{
-		mInitThrottleVal = Robot.oi.GetJoystick("Operator").getThrottle();
+		mInitThrottleVal = Robot.oi.GetJoystick("OpStick").getThrottle();
 	}
 	
 	public double GetHorizontalFOV()
