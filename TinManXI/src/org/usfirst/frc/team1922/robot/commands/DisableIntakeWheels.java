@@ -17,6 +17,7 @@ public class DisableIntakeWheels extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.mBallRetriever.GetMotorSubsystem().SetMotorSpeed(0);
     }
 
     // Called repeatedly when this Command is scheduled to run

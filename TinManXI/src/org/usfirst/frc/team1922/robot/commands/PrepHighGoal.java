@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PrepHighGoal extends CommandGroup {
     
     public  PrepHighGoal() {
+    	addParallel(new DisableIntakeWheels());
     	addParallel(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetHighGoalAngle()));
     	addParallel(new SetIntakePositionMedLow());
     	addSequential(new SpinUpShooterWheelsCfg());

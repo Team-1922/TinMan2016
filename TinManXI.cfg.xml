@@ -29,7 +29,7 @@
 	</OI>
 	<ShooterLateralGlobal UpdateLatency="750" NetTableName="GRIP/myContoursReport" Windage="375" Elevation="24" CameraToWindowBase="60" ViewWidth="640" ViewHeight="480" VertFOV="0.628319" HorizFOV="0.837758" UsingGRIP="0" />
 	<Shooter>
-		<Angle P="10.0" I="0.0" D="0.0" AngleToNorm="0.3501" PotOffset="0.598" MotorId="5" UltraId="0" LowGoalAngle="0.05" IntakeAngle="-.95" HighGoalRegister="0.64" MinSafeAngle="-0.75" MaxSafeAngle="0.2" />
+		<Angle P="10.0" I="0.0" D="0.0" AngleToNorm="0.3501" PotOffset="0.598" MotorId="5" UltraId="0" LowGoalAngle="0.05" IntakeAngle="-.95" HighGoalRegister="0.66" MinSafeAngle="-0.75" MaxSafeAngle="0.2" />
 		<Wheels MotorId="6" P="3.0" I="0.0" D="60.0" F=".06315" EncSamplesPerRotation="4096" ShootRPM="2000" IntakeRPM="-1700" LowGoalRPM="1000" />
 		<Lateral P="0.0" I="0.0" D="0.0" Tolerance="0.0" />
 		<Feeder Sol="1" />

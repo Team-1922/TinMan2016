@@ -96,7 +96,7 @@ public class ShooterLateralUtilities extends Subsystem implements CfgInterface {
 		
 		if(mInitThrottleVal != -5)
 		{
-			mPIDWindageAdj = (int) ((Robot.oi.GetJoystick("OpStick").getThrottle() - mInitThrottleVal) * (mCameraViewWidth / 2) + mWindageCfg);
+			//mPIDWindageAdj = (int) ((Robot.oi.GetJoystick("OpStick").getThrottle() - mInitThrottleVal) * (mCameraViewWidth / 2) + mWindageCfg);
 		}
 		else
 		{
