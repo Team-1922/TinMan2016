@@ -166,6 +166,12 @@ public class Robot extends IterativeRobot {
     	mGlobShooterLatUtils.UpdateCycle();
     	
         Scheduler.getInstance().run();
+        
+
+        
+        //SmartDashboard.putString("DT Mode", Robot.mDriveTrain.GetPIDModeString());
+        //SmartDashboard.putNumber("DT Position Inches", mDriveTrain.GetEncPosInches());
+        //SmartDashboard.putNumber("DT Setpoint", mDriveTrain.GetSetpoint());
     }
 
     TestAimingPID testAim = new TestAimingPID();

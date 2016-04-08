@@ -13,7 +13,8 @@ public class PrepLowGoal extends CommandGroup {
     public  PrepLowGoal() {
     	addSequential(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetMaxSafeAngle()));
     	addParallel(new SetIntakePositionHigh());
-    	addParallel(new SpinUpShooterWheels(Robot.mShooter.GetShooterWheels().GetLowGoalRPM()));
+    	addSequential(new SpinUpShooterWheels(Robot.mShooter.GetShooterWheels().GetLowGoalRPM()));
+    	addSequential(new WaitTime(0.75));
     	addSequential(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetLowGoalAngle()));
     }
 }

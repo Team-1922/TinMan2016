@@ -15,6 +15,9 @@ public class PrepHighGoal extends CommandGroup {
     	addParallel(new DisableIntakeWheels());
     	addParallel(new SetShooterAngle(Robot.mShooter.GetShooterAngle().GetHighGoalAngle()));
     	addParallel(new SetIntakePositionMedLow());
+    	addSequential(new EnableIntakeWheels(true));
+    	addSequential(new WaitTime(.05));
+    	addSequential(new DisableIntakeWheels());
     	addSequential(new SpinUpShooterWheelsCfg());
     }
 }

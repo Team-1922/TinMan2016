@@ -240,6 +240,11 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		}
 	}
 	
+	public double GetSetpoint()
+	{
+		return mLeftMotor1.getSetpoint();
+	}
+	
 	public double GetEncPosInches()
 	{
 		//System.out.println(Robot.mDriveTrain.mLeftMotor1.getEncPosition() / Robot.mDriveTrain.mInchesToEncoderUnits);
@@ -358,6 +363,28 @@ public class DriveTrain /*extends MultiSourcePIDSubsystem*/extends Subsystem imp
 		kLinear,
 		kRotational,
 		kAiming,
+	}
+	
+	public PIDMode GetPIDMode()
+	{
+		return mEnabledPIDMode;
+	}
+	
+	public String GetPIDModeString()
+	{
+		switch(mEnabledPIDMode)
+		{
+		case kAiming:
+			return "Aiming";
+		case kLinear:
+			return "Linear";
+		case kManual:
+			return "Manual";
+		case kRotational:
+			return "Rotational";
+		default:
+			return "Error";
+		}
 	}
 
 	public void PIDSwap(PIDMode type)
