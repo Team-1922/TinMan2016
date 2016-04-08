@@ -25,9 +25,11 @@ public class AutoDrive extends CommandGroup {
     	{
     	case kForward:
     		addSequential(new DriveForward(3.5, 0.75, 0.75));
+    		//addSequential(new DriveForwardDistance(84));
     		break;
     	case kReverse:
 			addSequential(new DriveForward(3.5, -0.75, -0.75));
+    		//addSequential(new DriveForwardDistance(-84));
     		break;
     	}
     	

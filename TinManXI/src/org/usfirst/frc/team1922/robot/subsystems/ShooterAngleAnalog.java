@@ -122,7 +122,7 @@ public class ShooterAngleAnalog extends Subsystem implements CfgInterface {
 	{
 		//System.out.println(mAngleMotor.getSetpoint());
 		//return true;
-		return OzMath.SigmaTest(mAngleMotor.getPosition(), mAngleMotor.getSetpoint(), .01);
+		return OzMath.SigmaTest(mAngleMotor.getPosition(), mAngleMotor.getSetpoint(), .02);
 		//TODO: get the setpoint in radians and do sigma test in radians
 	}
 	

@@ -11,11 +11,11 @@ public class ShovelTheFries extends CommandGroup {
 		addSequential(new EnsureSafeShooterAngle());
 		
 		//This distance is currently unknown but will be updated with some testing
-    	addSequential(new DriveForwardDistance(72));
+    	addSequential(new DriveForwardDistance(53));
     	addSequential(new SetIntakePositionLow());
     	
     	//Is 40 inches too little or too much??
-    	addParallel(new DriveForwardDistance(72));
+    	addParallel(new DriveForwardDistance(48));
     	addParallel(new SetIntakePositionHigh());
     }
     }

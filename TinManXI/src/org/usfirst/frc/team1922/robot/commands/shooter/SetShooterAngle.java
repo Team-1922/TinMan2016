@@ -39,7 +39,7 @@ public class SetShooterAngle extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.println("End SetShooterAngle");
+    	//System.out.println("End SetShooterAngle");
     	//do this to keep the motor from "growling"
     	Robot.mShooter.GetShooterAngle().SetSpeed(0);
     }
