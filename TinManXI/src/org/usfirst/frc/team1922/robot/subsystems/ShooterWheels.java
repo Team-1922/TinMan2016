@@ -124,7 +124,10 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 	
 	public boolean IsSpunUp()
 	{
-		return OzMath.SigmaTest(mWheels.getEncVelocity(), mWheels.getSetpoint(), 50);
+		//compensate for untuned PID controller
+		//return mWheels.getEncVelocity() > 2500;
+		return false;
+		//return OzMath.SigmaTest(mWheels.getEncVelocity(), mWheels.getSetpoint(), 50);
 	}
 
     public void initDefaultCommand() 

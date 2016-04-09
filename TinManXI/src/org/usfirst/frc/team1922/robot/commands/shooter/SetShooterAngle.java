@@ -42,6 +42,7 @@ public class SetShooterAngle extends Command {
     	//System.out.println("End SetShooterAngle");
     	//do this to keep the motor from "growling"
     	//TESTING: try NOT doing this to see if it still growls
+    	Robot.mShooter.GetShooterAngle().SetSpeed(0);
     }
 
     // Called when another command which requires one or more of the same
