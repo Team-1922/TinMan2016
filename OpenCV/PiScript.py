@@ -12,12 +12,31 @@ from networktables import NetworkTable
 #import logging
 #logging.basicConfig(level=logging.DEBUG)
 
-#if len(sys.argv) != 2:
-#    print("Error: specify an IP to connect to!")
-#    exit(0)
+lower_green_home = np.array([52, 18, 85])
+upper_green_home = np.array([105,255,219])
+lower_green_lewiston = np.array([52, 11, 100])
+upper_green_lewiston = np.array([105,255,175])
 
-ip = sys.argv[1]
-#ip='10.19.22.2'
+argc = len(sys.argv)
+if argc != 8 and argc != 2:
+    print("Error: Invalid Number of Arguments!")
+    exit(0)
+
+if argc >= 2:
+    ip = sys.argv[1]
+    #ip='10.19.22.2'
+    if argc == 8:
+        lower_green = np.array([int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4])])
+        upper_green = np.array([int(sys.argv[5]),int(sys.argv[6]),int(sys.argv[7])])
+    elif argc == 3:
+        if sys.argv[3] == "lewiston":            
+            lower_green = lower_green_lewiston
+            upper_green = upper_green_lewiston
+        elif sys.argv[3] == "home":
+            lower_green = lower_green_home
+            upper_green = upper_green_home
+
+
 
 NetworkTable.setIPAddress(ip)
 NetworkTable.setClientMode()
@@ -46,11 +65,6 @@ def FindBestContour(countours, testContour, testContourHeight):
     bestContour = -1
     bestMatchVal = 5000
     for i in range(0,len(contours)):
-        #resize the test contour
-        #_,_,_,height = cv2.boundingRect(contours[i])
-        #ratio = (float(height) / float(testContourHeight))
-        #resizedContour = testContour * ratio
-        #print ratio
         thisMatchVal = cv2.matchShapes(testContour, contours[i], 1, 0.0)
         print thisMatchVal
         if thisMatchVal < bestMatchVal:
@@ -124,13 +138,6 @@ _,_,_,testContourHeight = cv2.boundingRect(testContour)
 
 def nothing(x):
     pass
-lower_green_home = np.array([52, 18, 85])
-upper_green_home = np.array([105,255,219])
-lower_green_lewiston = np.array([52, 11, 100])
-upper_green_lewiston = np.array([105,255,175])
-
-lower_green = lower_green_lewiston
-upper_green = upper_green_lewiston
 
 while(True):
     
@@ -178,7 +185,7 @@ while(True):
     #cv2.imshow('frame',frame)
     #cv2.imshow('res',res)
     #cv2.imshow('Base',img1)
-    k = cv2.waitKey(5)# & 0xFF
+    k = cv2.waitKey(20)# & 0xFF
     if k == 27:
         break
 
