@@ -21,6 +21,7 @@ public class NonAutonomousShooterCamera extends Subsystem {
     // here. Call these from Commands.
 
     protected int session;
+    protected boolean mIsInitialized = false;
     protected Image frame;
     
 	public void InitVision()
@@ -33,10 +34,19 @@ public class NonAutonomousShooterCamera extends Subsystem {
         
         // the camera name (ex "cam0") can be found through the roborio web interface
         
-        session = NIVision.IMAQdxOpenCamera("cam0",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        NIVision.IMAQdxConfigureGrab(session);
-        CameraServer.getInstance().setQuality(25);
+        try
+        {
+	        session = NIVision.IMAQdxOpenCamera("cam0",
+	                NIVision.IMAQdxCameraControlMode.CameraControlModeListener);
+	        NIVision.IMAQdxConfigureGrab(session);
+	        System.out.println("Timeout Value: " + NIVision.IMAQdxGetAttributeU32(session, "Timeout"));
+	        CameraServer.getInstance().setQuality(25);
+	    	mIsInitialized = true; 
+        }
+        catch(Exception e)
+        {
+        	System.out.println(e.getMessage());
+        }
 	}
 
     public void initDefaultCommand() {
@@ -48,16 +58,22 @@ public class NonAutonomousShooterCamera extends Subsystem {
     
     public void StartCapture()
     {
+    	if(!mIsInitialized)
+    		return;
         NIVision.IMAQdxStartAcquisition(session);
     }
     
     public void StopCapture()
     {
+    	if(!mIsInitialized)
+    		return;
         NIVision.IMAQdxStopAcquisition(session);
     }
     
     public void UpdateFrame()
     {
+    	if(!mIsInitialized)
+    		return;
         /**
          * draw the two lines for ligning up the window at the "bump" point (by defense)
          * 	(they are actually rects so the thickness is more than one pixel
@@ -70,22 +86,32 @@ public class NonAutonomousShooterCamera extends Subsystem {
     	int elevation = height - Robot.mGlobShooterLatUtils.GetPresetElevation();
     	int width = Robot.mGlobShooterLatUtils.GetCameraViewWidth();
 
-        NIVision.IMAQdxGrab(session, frame, 1);
-        NIVision.imaqDrawShapeOnImage(frame, frame, 
-        		new NIVision.Rect(0, windage - 2, height, 4), 
-        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
-        
-        //TODO: also update the "center X" for the window
-        //int bestCenterX = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX;
-        
-        //NIVision.imaqDrawLineOnImage(frame, frame, DrawMode.DRAW_VALUE, new Point(bestCenterX, 0), new Point(bestCenterX, height), 0xFF0000);
-        
-        //Draw the horizontal line
-        NIVision.imaqDrawShapeOnImage(frame, frame, 
-        		new NIVision.Rect(elevation + 2, 0, 4, width), 
-        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
-        
-        CameraServer.getInstance().setImage(frame);
+    	try
+    	{
+	        NIVision.IMAQdxGrab(session, frame, 1);
+	        NIVision.imaqDrawShapeOnImage(frame, frame, 
+	        		new NIVision.Rect(0, windage - 2, height, 4), 
+	        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
+	        
+	        //TODO: also update the "center X" for the window
+	        //int bestCenterX = Robot.mGlobShooterLatUtils.GetBestWindow().mCenterX;
+	        
+	        //NIVision.imaqDrawLineOnImage(frame, frame, DrawMode.DRAW_VALUE, new Point(bestCenterX, 0), new Point(bestCenterX, height), 0xFF0000);
+	        
+	        //Draw the horizontal line
+	        NIVision.imaqDrawShapeOnImage(frame, frame, 
+	        		new NIVision.Rect(elevation + 2, 0, 4, width), 
+	        		DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 0xFF0000); 
+	        
+	        CameraServer.getInstance().setImage(frame);
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    		
+    		//if this fails ONCE, then NEVER call this again
+    		mIsInitialized = false;
+    	}
     
     }
 }

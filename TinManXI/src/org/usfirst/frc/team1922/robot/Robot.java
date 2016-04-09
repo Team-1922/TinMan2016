@@ -285,6 +285,9 @@ public class Robot extends IterativeRobot {
         
         SmartDashboard.putNumber("ANGLE ANGLE", mShooter.GetShooterAngle().GetAngle());
         SmartDashboard.putNumber("Angle RAW", mShooter.GetShooterAngle().GetAngleRaw());
+        
+        SmartDashboard.putNumber("Wheels Speed", mShooter.GetShooterWheels().GetSpeed());
+        SmartDashboard.putNumber("Wheels Setpoint Speed", mShooter.GetShooterWheels().GetSetpoint());
         UpdateSmartDashboardItems();
     }
     

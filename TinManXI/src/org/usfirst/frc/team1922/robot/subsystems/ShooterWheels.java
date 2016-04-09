@@ -124,7 +124,7 @@ public class ShooterWheels extends Subsystem implements CfgInterface {
 	
 	public boolean IsSpunUp()
 	{
-		return OzMath.SigmaTest(mWheels.getSpeed(), mWheels.getSetpoint(), 50);
+		return OzMath.SigmaTest(mWheels.getEncVelocity(), mWheels.getSetpoint(), 50);
 	}
 
     public void initDefaultCommand() 

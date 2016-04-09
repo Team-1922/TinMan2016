@@ -13,12 +13,13 @@ public class DriveForward extends Command {
 	protected double mLeftPower;
 	protected double mRightPower;
     public DriveForward(double time, double leftPower, double rightPower) {
-        // Use requires() here to declare subsystem dependencies
+        // Use re quires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	mTime = time;
     	mLeftPower = leftPower;
     	mRightPower = rightPower;
     	requires(Robot.mDriveTrain);
+    	setTimeout(mTime);
     }
 
     // Called just before this Command runs the first time
@@ -32,7 +33,7 @@ public class DriveForward extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return this.timeSinceInitialized() > mTime;
+    	return isTimedOut();
     }
 
     // Called once after isFinished returns true
